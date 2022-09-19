@@ -10,6 +10,14 @@ const eventTicketingSystemContract = new ethers.Contract(
   provider
 );
 
+async function checkRemoveTransaction(address, eventId){
+  let signer = new ethers.VoidSigner(address, provider);
+  let contract = new ethers.Contract(  EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS, schema.abi, signer);
+  let result = await contract.callStatic.removeEvent(eventId);
+  return result;
+}
+
 export {
   eventTicketingSystemContract,
+  checkRemoveTransaction,
 };
