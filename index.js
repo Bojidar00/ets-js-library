@@ -1,6 +1,7 @@
 import {uploadDataToIpfs , fetchEventsMetadata , deleteDataFromService} from "./src/utils/ipfs.utils.js"
 import { eventTicketingSystemContract,provider,EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,ABI} from './src/configs/contract.config.js';
 import { ethers } from "ethers";
+import axios from 'axios';
 
 
 
@@ -110,3 +111,17 @@ export async function removeTeamMember(eventId, role, address){
   }
   
 }
+
+export async function fetchAllEventsFromServer(serverURL, JWT_SECRET,params){
+  try{
+ let response = await axios.post(`${serverURL}/api/v1/events`, params,
+ {headers:{'Authorization': `Bearer ${JWT_SECRET}`}});
+ return response;
+  }
+  catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
+
+console.log(await fetchAllEventsFromServer("http://192.168.0.101:1337","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvamtvIiwiaWF0IjoxNjYzNjYxMjQ4LCJleHAiOjE2NjM3NDc2NDh9.OZYqJTwMYA3YELuVMQvFYFXTdNeW3yfJXe-5ezYjaH4",{}));
