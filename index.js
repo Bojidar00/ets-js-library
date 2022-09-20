@@ -124,4 +124,3 @@ export async function fetchAllEventsFromServer(serverURL, JWT_SECRET,params){
 }
 
 
-console.log(await fetchAllEventsFromServer("http://192.168.0.101:1337","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvamtvIiwiaWF0IjoxNjYzNjYxMjQ4LCJleHAiOjE2NjM3NDc2NDh9.OZYqJTwMYA3YELuVMQvFYFXTdNeW3yfJXe-5ezYjaH4",{}));
