@@ -1,9 +1,14 @@
-import {uploadDataToIpfs , fetchEventsMetadata , deleteDataFromService} from "./src/utils/ipfs.utils.js"
-import { eventTicketingSystemContract,provider,EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,ABI} from './src/configs/contract.config.js';
+import {uploadDataToIpfs , fetchEventsMetadata , deleteDataFromService} from "./utils/ipfs.utils.js"
+import {AVALANCHE_TESTNET_API,EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,ABI} from './configs/contract.config.js';
 import { ethers } from "ethers";
 import axios from 'axios';
 
-
+const provider = ethers.getDefaultProvider(AVALANCHE_TESTNET_API);
+const eventTicketingSystemContract = new ethers.Contract(
+  EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
+  ABI,
+  provider
+);
 
 async function checkRemoveTransaction(address, eventId){
   let signer = new ethers.VoidSigner(address, provider);

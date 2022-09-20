@@ -1,10 +1,14 @@
 import { NFTStorage } from 'nft.storage';
 import axios from 'axios';
+import { ethers } from "ethers";
+import {AVALANCHE_TESTNET_API,EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,ABI,IPFS_GATEWAY_PROVIDER_URL} from '../configs/contract.config.js';
 
-import { eventTicketingSystemContract} from '../configs/contract.config.js';
-
-
-const IPFS_GATEWAY_PROVIDER_URL = "https://nftstorage.link/ipfs/";
+const provider = ethers.getDefaultProvider(AVALANCHE_TESTNET_API);
+const eventTicketingSystemContract = new ethers.Contract(
+  EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
+  ABI,
+  provider
+);
 
 function makeGatewayUrl(ipfsURI) {
   return ipfsURI.replace(/^ipfs:\/\//, IPFS_GATEWAY_PROVIDER_URL);
