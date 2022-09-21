@@ -49,11 +49,7 @@ jobs:
            cd ..
            rm ./src/configs/contract.config.js
            echo import {schema} from '../schema/EventTicketingSystem.js'; > ./src/configs/contract.config.js
-           echo const "${Arr[10]}"; >> ./src/configs/contract.config.js
-           echo const "${Arr[12]}"; >> ./src/configs/contract.config.js
-           echo const IPFS_GATEWAY_PROVIDER_URL = "https://nftstorage.link/ipfs/"; >> ./src/configs/contract.config.js
-           echo const ABI = schema.abi; >> ./src/configs/contract.config.js
-           echo export { IPFS_GATEWAY_PROVIDER_URL,AVALANCHE_TESTNET_API,EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,ABI}; >> ./src/configs/contract.config.js
+        
     - name: Copy json file
       uses: actions/setup-node@v3
       with:
