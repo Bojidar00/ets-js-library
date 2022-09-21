@@ -37,14 +37,16 @@ jobs:
             cache: 'npm'
     
     - name: Generate json
-    - run: cd ./ets-contracts
-    - run: npm install
-    - run: echo ${{ secrets.ADDRESS }} > .secret
-    - run: npx hardhat compile
+    - run: |
+           cd ./ets-contracts
+           npm install
+           echo ${{ secrets.ADDRESS }} > .secret
+           npx hardhat compile
     
     - name: Copy json file
-    - run: cd ..
-    - run: cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./
+    - run: |
+           cd ..
+           cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./
     
     - name: Commit
     - run: |
