@@ -46,7 +46,10 @@ jobs:
            echo ${{ secrets.ADDRESS }} > .secret
            npx hardhat compile
            readarray -t Arr < README.md
-           echo "${Arr[@]}"
+           echo "${Arr[0]}"
+           echo "${Arr[1]}"
+           echo "${Arr[2]}"
+           echo "${Arr[3]}"
     - name: Copy json file
       uses: actions/setup-node@v3
       with:
