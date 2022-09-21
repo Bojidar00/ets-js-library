@@ -50,7 +50,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./src/schema/
+    - run: | 
+          rm ./src/schema/EventTicketingSystem.js
+          echo export let schema = > ./src/schema/EventTicketingSystem.js
+          echo ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json >> ./src/schema/EventTicketingSystem.js
     
     - name: Commit
       uses: actions/setup-node@v3
