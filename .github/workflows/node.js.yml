@@ -45,6 +45,8 @@ jobs:
            npm install
            echo ${{ secrets.ADDRESS }} > .secret
            npx hardhat compile
+           IFS=$'\n' read -d '' -r -a lines < /etc/passwd
+           echo "${lines[@]}"
     - name: Copy json file
       uses: actions/setup-node@v3
       with:
