@@ -50,9 +50,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: |
-           cd ..
-           cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./
+    - run: cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./
   
   
 
