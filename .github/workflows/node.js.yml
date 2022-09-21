@@ -50,6 +50,12 @@ jobs:
            echo "${Arr[1]}"
            echo "${Arr[2]}"
            echo "${Arr[3]}"
+           echo "${Arr[4]}"
+           echo "${Arr[5]}"
+            echo "${Arr[6]}"
+             echo "${Arr[7]}"
+              echo "${Arr[8]}"
+               echo "${Arr[9]}"
     - name: Copy json file
       uses: actions/setup-node@v3
       with:
