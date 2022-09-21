@@ -45,6 +45,14 @@ jobs:
            npm install
            echo ${{ secrets.ADDRESS }} > .secret
            npx hardhat compile
+    - name: Copy json file
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: |
+           cd ..
+           cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./
   
   
 
