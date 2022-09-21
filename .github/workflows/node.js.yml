@@ -50,7 +50,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./
+    - run: cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./src/schema/
     
     - name: Commit
       uses: actions/setup-node@v3
@@ -58,6 +58,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: |
+            rm -r ets-contracts
             git add * 
             git config user.name github-actions
             git config user.email github-actions@github.com
