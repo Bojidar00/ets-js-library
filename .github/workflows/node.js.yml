@@ -48,7 +48,7 @@ jobs:
            readarray -t Arr < README.md
            cd ..
            rm ./src/configs/contract.config.js
-           echo import {schema} from '../schema/EventTicketingSystem.js'/е; > ./src/configs/contract.config.js
+           echo import /е{schema/е} from '../schema/EventTicketingSystem.js'/е; > ./src/configs/contract.config.js
         
     - name: Copy json file
       uses: actions/setup-node@v3
