@@ -51,6 +51,18 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: cp ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json ./
+    
+    - name: Commit
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: |
+            git add * 
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git commit -am "Fetch json from contracts"
+            git push
   
   
 
