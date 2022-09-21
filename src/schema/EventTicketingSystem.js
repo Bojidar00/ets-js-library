@@ -1,2 +1,2 @@
 export let schema =
-./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json
+cat ./ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json
