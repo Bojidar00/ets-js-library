@@ -46,16 +46,10 @@ jobs:
            echo ${{ secrets.ADDRESS }} > .secret
            npx hardhat compile
            readarray -t Arr < README.md
-           echo "${Arr[0]}"
-           echo "${Arr[1]}"
-           echo "${Arr[2]}"
-           echo "${Arr[3]}"
-           echo "${Arr[4]}"
-           echo "${Arr[5]}"
-            echo "${Arr[6]}"
-             echo "${Arr[7]}"
-              echo "${Arr[8]}"
+          
                echo "${Arr[9]}"
+                echo "${Arr[10]}"
+                echo "${Arr[11]}"
     - name: Copy json file
       uses: actions/setup-node@v3
       with:
@@ -76,7 +70,7 @@ jobs:
             git add * 
             git config user.name github-actions
             git config user.email github-actions@github.com
-            git commit -am "Fetch json from contracts"
+            git diff-index --quiet HEAD || git commit "Fetch json from contracts"
             git push
   
   
