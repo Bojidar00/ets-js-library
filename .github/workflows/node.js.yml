@@ -50,6 +50,10 @@ jobs:
            rm ./src/configs/contract.config.js
            echo "import {schema} from '../schema/EventTicketingSystem.js';" > ./src/configs/contract.config.js
            echo "const ${Arr[10]};" >> ./src/configs/contract.config.js
+           echo "const ${Arr[12]};" >> ./src/configs/contract.config.js
+           echo "const IPFS_GATEWAY_PROVIDER_URL = 'https://nftstorage.link/ipfs/;' >> ./src/configs/contract.config.js
+ 
+     
 
         
     - name: Copy json file
