@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Applied-Blockchain-Lab/event-ticketing-system-js-library#readme",
   "dependencies": {
     "axios": "^0.27.2",
+    "axios-mock-adapter": "^1.21.2",
     "ethers": "^5.7.1",
     "nft.storage": "^7.0.0",
     "node-blob": "^0.0.2"
@@ -31,6 +32,7 @@
     "ts-jest": "^29.0.1"
   },
   "jest": {
-    "testTimeout": 40000
+    "testTimeout": 40000,
+    "transform": {}
   }
 }
