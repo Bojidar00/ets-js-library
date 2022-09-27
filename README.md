@@ -161,4 +161,17 @@ let address = "Address of team member.";
 let role = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
 let transaction = await removeTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
-```
+````
+
+## Conventions and standards
+
+Commit message format
+
+```bash
+feat: Add beta sequence
+^--^ ^---------------^
+| |
+| +-> Summary in present tense.
+|
++-------> Type: chore, docs, feat, fix, update, refactor, style, or test.
+````
