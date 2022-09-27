@@ -30,7 +30,7 @@ async function uploadDataToIpfs(nftStorageApiKey, metadata, image) {
 async function deleteDataFromService(nftStorageApiKey, eventId) {
   const eventUri = await eventTicketingSystemContract.tokenURI(eventId);
 
-  let cid = eventUri.split("/")[2];
+  const cid = eventUri.split("/")[2];
 
   const client = new NFTStorage({ token: nftStorageApiKey });
 

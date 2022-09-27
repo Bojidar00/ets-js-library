@@ -52,10 +52,10 @@ describe("user", () => {
       },
     };
 
-    let image = await fetch(
+    const image = await fetch(
       "https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png"
     );
-    let imageBlob = await image.blob();
+    const imageBlob = await image.blob();
 
     const tx = await createEvent(NFT_STORAGE_API_KEY, metadata, imageBlob, 10);
     const functionSig = ethers.utils
@@ -138,8 +138,8 @@ describe("user", () => {
         "ipfs://bafybeiaxbpxaxxizq2s6vvodocbo2ahvh4dbrgnrwvmw4afnjgesza22ee/blob",
     };
     mock.onGet(metadataURI).reply(200, mockedData);
-    let res = await fetchEvents([20]);
-    
-    expect(mockedData.toString()).toBe(res[0].toString())
+    const res = await fetchEvents([20]);
+
+    expect(mockedData.toString()).toBe(res[0].toString());
   });
 });
