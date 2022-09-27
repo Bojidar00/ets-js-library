@@ -1,5 +1,7 @@
 # event-ticketing-system-library
-This is a java script library for interacting with event-ticketing system.
+
+## About
+This is a JavaScript library for interacting with event-ticketing system. It creates unsigned transactions and fetches data from smart contract and ipfs.
 
 ## How to use
 
