@@ -4,8 +4,4 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-     allow:
-      - dependency-name: "ets-contracts"
-    ignore:
-      - dependency-name: "ets-contracts"
-        update-types: ["version-update:semver-majar"]
+    
