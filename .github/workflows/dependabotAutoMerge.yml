@@ -9,6 +9,12 @@ jobs:
 
     if: github.actor == 'dependabot[bot]'
     steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1.1.1
+        with:
+          github-token: "${{ secrets.GH_TOKEN }}"
+        if: ${{contains(steps.metadata.outputs.dependency-names, 'ets-contracts') && (steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor')}}
       - name: automerge
         uses: actions/github-script@0.2.0
         with:
