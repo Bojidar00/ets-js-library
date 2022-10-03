@@ -15,4 +15,7 @@ updates:
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: "daily"
+    allow:
+      # Allow updates for Lodash
+      - dependency-name: "ets-contracts"
     
