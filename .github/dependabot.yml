@@ -6,13 +6,10 @@ registries:
     username: ${{secrets.GH_USERNAME}}
     password: ${{secrets.GH_TOKEN}}
 updates:
-  # Enable version updates for npm
   - package-ecosystem: "npm"
-    # Look for `package.json` and `lock` files in the `root` directory
     directory: "/"
     registries:
       - github
-    
     schedule:
       interval: "daily"
     allow:
