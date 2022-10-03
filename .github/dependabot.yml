@@ -12,6 +12,5 @@ updates:
       - github
     schedule:
       interval: "daily"
-      
     allow:
       - dependency-name: "ets-contracts"
