@@ -18,4 +18,3 @@ updates:
     allow:
       # Allow updates for Lodash
       - dependency-name: "ets-contracts"
-    
