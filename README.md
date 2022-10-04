@@ -1,8 +1,8 @@
-# event-ticketing-system-library
+# ets-js-library
 
 ## About
 
-This is a JavaScript library for interacting with event-ticketing system. It creates unsigned transactions and fetches data from smart contracts and ipfs.
+This is a JavaScript library for interacting with event ticketing system. It creates unsigned transactions and fetches data from smart contracts and ipfs.
 
 ## How to use
 
@@ -13,6 +13,7 @@ Add this to package.json:
 ```bash
 "ets-js-library": "github:Applied-Blockchain-Lab/ets-js-library"
 ```
+
 ```bash
 npm install
 ```
