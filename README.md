@@ -10,12 +10,10 @@ Install:
 
 ```bash
 npm install event-ticketing-system-js-library
-
-or
-
-add this to package.json
-
-event-ticketing-system-js-library: "github:Applied-Blockchain-Lab/ets-js-library"
+```
+Or add this to package.json:
+```bash
+"event-ticketing-system-js-library": "github:Applied-Blockchain-Lab/ets-js-library"
 ```
 
 Create event:
