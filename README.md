@@ -2,7 +2,7 @@
 
 ## About
 
-This is a JavaScript library for interacting with event-ticketing system. It creates unsigned transactions and fetches data from smart contract and ipfs.
+This is a JavaScript library for interacting with event-ticketing system. It creates unsigned transactions and fetches data from smart contracts and ipfs.
 
 ## How to use
 
@@ -10,6 +10,12 @@ Install:
 
 ```bash
 npm install event-ticketing-system-js-library
+
+or
+
+add this to package.json
+
+event-ticketing-system-js-library: "github:Applied-Blockchain-Lab/ets-js-library"
 ```
 
 Create event:
@@ -173,5 +179,5 @@ feat: Add beta sequence
 | |
 | +-> Summary in present tense.
 |
-+-------> Type: chore, docs, feat, fix, update, refactor, style, or test.
++-------> Type: chore, docs, feat, fix, refactor, style, or test.
 ```
