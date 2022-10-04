@@ -8,18 +8,19 @@ This is a JavaScript library for interacting with event-ticketing system. It cre
 
 Install:
 
+Add this to package.json:
+
 ```bash
-npm install event-ticketing-system-js-library
+"ets-js-library": "github:Applied-Blockchain-Lab/ets-js-library"
 ```
-Or add this to package.json:
 ```bash
-"event-ticketing-system-js-library": "github:Applied-Blockchain-Lab/ets-js-library"
+npm install
 ```
 
 Create event:
 
 ```js
-import { createEvent } from "event-ticketing-system-js-library";
+import { createEvent } from "ets-js-library";
 
 const metadata = {
   name: "Event1",
@@ -52,7 +53,7 @@ let transaction = await createEvent(key, metadata, image, maxTicketsPerClient);
 Update event:
 
 ```js
-import { updateEvent } from "event-ticketing-system-js-library";
+import { updateEvent } from "ets-js-library";
 const metadata = {
   name: "Event1",
   eventId,
@@ -87,7 +88,7 @@ let transaction = await updateEvent(key, eventId, metadata, image, address);
 Remove event
 
 ```js
-import { removeEvent } from "event-ticketing-system-js-library";
+import { removeEvent } from "ets-js-library";
 
 let key = "API key for NFT.storage";
 let eventId = "Id of event in smart contract";
@@ -100,7 +101,7 @@ let transaction = await removeEvent(key, eventId, address);
 Fetch events by Ids
 
 ```js
-import { fetchEvents } from "event-ticketing-system-js-library";
+import { fetchEvents } from "ets-js-library";
 
 //Ids of events in smart contract.
 let eventIds = [1, 2, 3];
@@ -111,7 +112,7 @@ let events = fetchEvents(eventIds);
 Fetch owned events
 
 ```js
-import { fetchOwnedEvents } from "event-ticketing-system-js-library";
+import { fetchOwnedEvents } from "ets-js-library";
 
 let address = "Address of events owner.";
 
@@ -121,7 +122,7 @@ let events = fetchOwnedEvents(address);
 Fetch cached events from server
 
 ```js
-import {fetchAllEventsFromServer} from 'event-ticketing-system-js-library';
+import {fetchAllEventsFromServer} from 'ets-js-library';
 
 let params = {
   title: "",
@@ -144,7 +145,7 @@ let events = fetchAllEventsFromServer(serverUrl, JWT_SECRET, params);
 Add team member to event
 
 ```js
-import { addTeamMember } from "event-ticketing-system-js-library";
+import { addTeamMember } from "ets-js-library";
 import { utils } from "ethers";
 
 let eventId = "Id of event in smart contract";
@@ -157,7 +158,7 @@ let transaction = await addTeamMember(eventId, role, address);
 Remove team member from event
 
 ```js
-import { removeTeamMember } from "event-ticketing-system-js-library";
+import { removeTeamMember } from "ets-js-library";
 import { utils } from "ethers";
 
 let eventId = "Id of event in smart contract";
