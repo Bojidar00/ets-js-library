@@ -46,6 +46,7 @@ async function fetchEventsMetadata(eventIds) {
       const url = makeGatewayUrl(eventUri);
 
       const eventMetadata = await axios.get(url);
+      eventMetadata.eventId=eventId;
 
       eventsMetadata.push(eventMetadata.data);
     } catch (error) {
