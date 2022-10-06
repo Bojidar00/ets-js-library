@@ -145,10 +145,32 @@ export async function removeTeamMember(eventId, role, address) {
   }
 }
 
-export async function fetchAllEventsFromServer(serverURL, JWT_SECRET, params) {
+export async function fetchCountriesFromServer(serverUrl, jwtSecret) {
   try {
-    const response = await axios.post(`${serverURL}/api/v1/events`, params, {
-      headers: { Authorization: `Bearer ${JWT_SECRET}` },
+    const response = await axios.get(`${serverUrl}/api/v1/countries`, {
+      headers: { Authorization: `Bearer ${jwtSecret}` },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchPlacesFromServer(serverUrl, jwtSecret, params) {
+  try {
+    const response = await axios.post(`${serverUrl}/api/v1/places`, params, {
+      headers: { Authorization: `Bearer ${jwtSecret}` },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchAllEventsFromServer(serverUrl, jwtSecret, params) {
+  try {
+    const response = await axios.post(`${serverUrl}/api/v1/events`, params, {
+      headers: { Authorization: `Bearer ${jwtSecret}` },
     });
     return response;
   } catch (error) {
