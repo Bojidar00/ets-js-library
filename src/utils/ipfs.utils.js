@@ -27,14 +27,17 @@ async function uploadDataToIpfs(nftStorageApiKey, metadata, image) {
   return cid.url;
 }
 
-async function deleteDataFromService(nftStorageApiKey, eventId) {
-  const eventUri = await eventTicketingSystemContract.tokenURI(eventId);
-
+async function deleteDataFromService(nftStorageApiKey, eventUri) {
   const cid = eventUri.split("/")[2];
 
   const client = new NFTStorage({ token: nftStorageApiKey });
 
   await client.delete(cid);
+}
+
+async function getIpfsUrl(nftStorageApiKey, eventId) {
+  const eventUri = await eventTicketingSystemContract.tokenURI(eventId);
+  return eventUri;
 }
 
 async function fetchEventsMetadata(eventIds) {
@@ -57,4 +60,9 @@ async function fetchEventsMetadata(eventIds) {
   return eventsMetadata;
 }
 
-export { uploadDataToIpfs, deleteDataFromService, fetchEventsMetadata };
+export {
+  uploadDataToIpfs,
+  deleteDataFromService,
+  fetchEventsMetadata,
+  getIpfsUrl,
+};

@@ -2,6 +2,7 @@ import {
   uploadDataToIpfs,
   fetchEventsMetadata,
   deleteDataFromService,
+  getIpfsUrl,
 } from "./utils/ipfs.utils.js";
 import {
   AVALANCHE_TESTNET_API,
@@ -81,10 +82,8 @@ export async function fetchOwnedEvents(address) {
   return events;
 }
 
-export async function removeEvent(nftStorageApiKey, eventId, address) {
+export async function removeEvent(eventId) {
   try {
-    await checkRemoveTransaction(address, eventId);
-    await deleteDataFromService(nftStorageApiKey, eventId);
     const tx =
       await eventTicketingSystemContract.populateTransaction.removeEvent(
         eventId
@@ -95,16 +94,8 @@ export async function removeEvent(nftStorageApiKey, eventId, address) {
   }
 }
 
-export async function updateEvent(
-  nftStorageApiKey,
-  eventId,
-  metadata,
-  image,
-  address
-) {
+export async function updateEvent(nftStorageApiKey, eventId, metadata, image) {
   try {
-    const result = await checkUpdateTransaction(address, eventId);
-    await deleteDataFromService(nftStorageApiKey, eventId);
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
     const tx =
       await eventTicketingSystemContract.populateTransaction.updateEventTokenUri(
@@ -112,6 +103,19 @@ export async function updateEvent(
         url
       );
     return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getEventIpfsUri(eventId) {
+  const uri = await getIpfsUrl(eventId);
+  return uri;
+}
+
+export async function deleteFromIpfs(nftStorageApiKey, ipfsUri) {
+  try {
+    await deleteDataFromService(nftStorageApiKey, ipfsUri);
   } catch (error) {
     throw error;
   }
