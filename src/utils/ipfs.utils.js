@@ -45,9 +45,8 @@ async function fetchEventsMetadata(eventIds) {
       const eventUri = await eventTicketingSystemContract.tokenURI(eventId);
       const url = makeGatewayUrl(eventUri);
 
-      let eventMetadata = await axios.get(url);
+      const eventMetadata = await axios.get(url);
       eventMetadata.data.eventId = eventId;
-      
 
       eventsMetadata.push(eventMetadata.data);
     } catch (error) {
