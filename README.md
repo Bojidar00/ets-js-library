@@ -54,7 +54,7 @@ let transaction = await createEvent(key, metadata, image, maxTicketsPerClient);
 Update event:
 
 ```js
-import { updateEvent } from "ets-js-library";
+import { updateEvent, getEventIpfsUri } from "ets-js-library";
 const metadata = {
   name: "Event1",
   eventId,
@@ -80,10 +80,17 @@ const metadata = {
 };
 let key = "API key for NFT.storage";
 let eventId = "Id of event in smart contract";
-let address = "Address of transaction sender.";
 
-let transaction = await updateEvent(key, eventId, metadata, image, address);
-//You need to sign and send the transaction after this.
+ let metadataUri = await getEventIpfsUri(eventId);
+
+  try {
+
+let transaction = await updateEvent(key, eventId, metadata, image);
+//You need to sign and send the transaction here.
+deleteFromIpfs(localStorage.apiToken, metadataUri);
+  } catch (error) {
+    console.log(error);
+  }
 ```
 
 Remove event
@@ -93,10 +100,18 @@ import { removeEvent } from "ets-js-library";
 
 let key = "API key for NFT.storage";
 let eventId = "Id of event in smart contract";
-let address = "Address of transaction sender.";
 
-let transaction = await removeEvent(key, eventId, address);
-//You need to sign and send the transaction after this.
+
+let metadataUri = await getEventIpfsUri(eventId);
+
+  try {
+
+let transaction = await removeEvent(eventId);
+//You need to sign and send the transaction here.
+deleteFromIpfs(key, metadataUri);
+  } catch (error) {
+    console.log(error);
+  }
 ```
 
 Fetch events by Ids

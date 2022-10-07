@@ -162,10 +162,7 @@ export async function fetchAllEventsFromServer(serverUrl, jwtSecret, params) {
 
 export async function getEventMembers(eventId) {
   try {
-    const members =
-      await eventTicketingSystemContract.getEventMembers(
-        eventId
-      );
+    const members = await eventTicketingSystemContract.getEventMembers(eventId);
     return members;
   } catch (error) {
     throw error;
