@@ -35,7 +35,7 @@ async function deleteDataFromService(nftStorageApiKey, eventUri) {
   await client.delete(cid);
 }
 
-async function getIpfsUrl(nftStorageApiKey, eventId) {
+async function getIpfsUrl(eventId) {
   const eventUri = await eventTicketingSystemContract.tokenURI(eventId);
   return eventUri;
 }

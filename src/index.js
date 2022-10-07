@@ -19,27 +19,7 @@ const eventTicketingSystemContract = new ethers.Contract(
   provider
 );
 
-async function checkRemoveTransaction(address, eventId) {
-  const signer = new ethers.VoidSigner(address, provider);
-  const contract = new ethers.Contract(
-    EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
-    ABI,
-    signer
-  );
-  const result = await contract.callStatic.removeEvent(eventId);
-  return result;
-}
 
-async function checkUpdateTransaction(address, eventId) {
-  const signer = new ethers.VoidSigner(address, provider);
-  const contract = new ethers.Contract(
-    EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
-    ABI,
-    signer
-  );
-  const result = await contract.callStatic.updateEventTokenUri(eventId, "");
-  return result;
-}
 
 export async function createEvent(
   nftStorageApiKey,
