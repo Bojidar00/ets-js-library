@@ -19,8 +19,6 @@ const eventTicketingSystemContract = new ethers.Contract(
   provider
 );
 
-
-
 export async function createEvent(
   nftStorageApiKey,
   metadata,
@@ -157,6 +155,18 @@ export async function fetchAllEventsFromServer(serverUrl, jwtSecret, params) {
       headers: { Authorization: `Bearer ${jwtSecret}` },
     });
     return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getEventMembers(eventId){
+  try {
+    const tx =
+      await eventTicketingSystemContract.populateTransaction.getEventMembers(
+        eventId,
+      );
+    return tx;
   } catch (error) {
     throw error;
   }
