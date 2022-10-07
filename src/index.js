@@ -160,13 +160,13 @@ export async function fetchAllEventsFromServer(serverUrl, jwtSecret, params) {
   }
 }
 
-export async function getEventMembers(eventId){
+export async function getEventMembers(eventId) {
   try {
-    const tx =
-      await eventTicketingSystemContract.populateTransaction.getEventMembers(
-        eventId,
+    const members =
+      await eventTicketingSystemContract.getEventMembers(
+        eventId
       );
-    return tx;
+    return members;
   } catch (error) {
     throw error;
   }
