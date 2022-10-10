@@ -81,16 +81,15 @@ const metadata = {
 let key = "API key for NFT.storage";
 let eventId = "Id of event in smart contract";
 
- let metadataUri = await getEventIpfsUri(eventId);
+let metadataUri = await getEventIpfsUri(eventId);
 
-  try {
-
-let transaction = await updateEvent(key, eventId, metadata, image);
-//You need to sign and send the transaction here.
-deleteFromIpfs(localStorage.apiToken, metadataUri);
-  } catch (error) {
-    console.log(error);
-  }
+try {
+  let transaction = await updateEvent(key, eventId, metadata, image);
+  //You need to sign and send the transaction here.
+  deleteFromIpfs(localStorage.apiToken, metadataUri);
+} catch (error) {
+  console.log(error);
+}
 ```
 
 Remove event
@@ -101,17 +100,15 @@ import { removeEvent } from "ets-js-library";
 let key = "API key for NFT.storage";
 let eventId = "Id of event in smart contract";
 
-
 let metadataUri = await getEventIpfsUri(eventId);
 
-  try {
-
-let transaction = await removeEvent(eventId);
-//You need to sign and send the transaction here.
-deleteFromIpfs(key, metadataUri);
-  } catch (error) {
-    console.log(error);
-  }
+try {
+  let transaction = await removeEvent(eventId);
+  //You need to sign and send the transaction here.
+  deleteFromIpfs(key, metadataUri);
+} catch (error) {
+  console.log(error);
+}
 ```
 
 Fetch events by Ids
