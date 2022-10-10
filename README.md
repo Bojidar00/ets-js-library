@@ -131,8 +131,9 @@ try {
 }
 ```
 
-Fetch events by Ids
-
+### Fetch events by Ids
+1. Import fetchEvents from the library.
+2. Execute fetchEvents.
 ```js
 import { fetchEvents } from "ets-js-library";
 
@@ -142,7 +143,9 @@ let eventIds = [1, 2, 3];
 let events = fetchEvents(eventIds);
 ```
 
-Fetch owned events
+### Fetch owned events
+1. Import fetchOwnedEvents function from the library.
+2. Execute fetchOwnedEvents by supplying an address.
 
 ```js
 import { fetchOwnedEvents } from "ets-js-library";
@@ -152,7 +155,11 @@ let address = "Address of events owner.";
 let events = fetchOwnedEvents(address);
 ```
 
-Fetch cached events from server
+### Fetch cached events from server
+1. You need to have JWT_SECRET first.
+2. Import fetchAllEventsFromServer function from the library.
+3. Create params.
+4. Execute fetchAllEventsFromServer.
 
 ```js
 import {fetchAllEventsFromServer} from 'ets-js-library';
@@ -175,8 +182,12 @@ let params = {
 let events = fetchAllEventsFromServer(serverUrl, JWT_SECRET, params);
 ```
 
-Add team member to event
-
+### Add team member to event
+1. Import addTeamMember function from the library.
+2. Import utils function from ethers.
+3. Generate the hash of the role.
+4. Execute addTeamMember function. This will return an unsigned transaction.
+5. Sign and send the transaction anyway you like.
 ```js
 import { addTeamMember } from "ets-js-library";
 import { utils } from "ethers";
@@ -189,7 +200,11 @@ let transaction = await addTeamMember(eventId, role, address);
 ```
 
 Remove team member from event
-
+1. Import removeTeamMember function from the library.
+2. Import utils function from ethers.
+3. Generate the hash of the role.
+4. Execute removeTeamMember function. This will return an unsigned transaction.
+5. Sign and send the transaction anyway you like.
 ```js
 import { removeTeamMember } from "ets-js-library";
 import { utils } from "ethers";
