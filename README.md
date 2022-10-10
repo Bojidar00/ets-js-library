@@ -18,7 +18,13 @@ Add this to package.json:
 npm install
 ```
 
-Create event:
+### Create event:
+
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import createEvent function from the library.
+3. Create metadata for the new event.
+4. Execute creteEvent function. This will return an unsigned transaction.
+5. Sign and send the transaction anyway you like.
 
 ```js
 import { createEvent } from "ets-js-library";
@@ -51,10 +57,18 @@ let transaction = await createEvent(key, metadata, image, maxTicketsPerClient);
 //You need to sign and send the transaction after this.
 ```
 
-Update event:
+### Update event:
+
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import updateEvent, getEventIpfsUri and deleteFromIpfs from the library.
+3. Create new metadata for the event.
+4. Execute getEventIpfsUri function. This will return the Uri of the current metadata.
+5. Execute updateEvent function. This will return an unsigned transaction.
+6. Sign and send the transaction anyway you like.
+7. If the transaction succeeds, you can safely delete the old metadata with deleteFromIpfs.
 
 ```js
-import { updateEvent, getEventIpfsUri } from "ets-js-library";
+import { updateEvent, getEventIpfsUri, deleteFromIpfs } from "ets-js-library";
 const metadata = {
   name: "Event1",
   eventId,
@@ -92,10 +106,16 @@ try {
 }
 ```
 
-Remove event
+### Remove event
+
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import removeEvent and deleteFromIpfs from the library.
+3. Execute removeEvent function. This will return an unsigned transaction.
+4. Sign and send the transaction anyway you like.
+5. If the transaction succeeds, you can safely delete the old metadata with deleteFromIpfs.
 
 ```js
-import { removeEvent } from "ets-js-library";
+import { removeEvent, deleteFromIpfs } from "ets-js-library";
 
 let key = "API key for NFT.storage";
 let eventId = "Id of event in smart contract";
