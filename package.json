@@ -1,7 +1,7 @@
 {
   "name": "event-ticketing-system-js-library",
-  "version": "0.1.13",
-  "description": "Library for nft event ticketing system",
+  "version": "0.1.14",
+  "description": "Library for event ticketing system",
   "main": "./src/index.js",
   "type": "module",
   "scripts": {

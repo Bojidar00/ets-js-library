@@ -6,7 +6,7 @@ import {
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   ABI,
   IPFS_GATEWAY_PROVIDER_URL,
-} from "../configs/contract.config.js";
+} from "../configs/index.config.js";
 const provider = ethers.getDefaultProvider(AVALANCHE_TESTNET_API);
 const eventTicketingSystemContract = new ethers.Contract(
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
@@ -65,4 +65,5 @@ export {
   deleteDataFromService,
   fetchEventsMetadata,
   getIpfsUrl,
+  makeGatewayUrl,
 };

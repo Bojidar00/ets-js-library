@@ -3,12 +3,14 @@ import {
   fetchEventsMetadata,
   deleteDataFromService,
   getIpfsUrl,
+  makeGatewayUrl,
 } from "./utils/ipfs.utils.js";
 import {
   AVALANCHE_TESTNET_API,
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   ABI,
-} from "./configs/contract.config.js";
+  ETS_SERVER_URL,
+} from "./configs/index.config.js";
 import { ethers } from "ethers";
 import axios from "axios";
 
@@ -127,7 +129,10 @@ export async function removeTeamMember(eventId, role, address) {
   }
 }
 
-export async function fetchCountriesFromServer(serverUrl, jwtSecret) {
+export async function fetchCountriesFromServer(
+  jwtSecret,
+  serverUrl = ETS_SERVER_URL
+) {
   try {
     const response = await axios.get(`${serverUrl}/api/v1/countries`, {
       headers: { Authorization: `Bearer ${jwtSecret}` },
@@ -138,7 +143,11 @@ export async function fetchCountriesFromServer(serverUrl, jwtSecret) {
   }
 }
 
-export async function fetchPlacesFromServer(serverUrl, jwtSecret, params) {
+export async function fetchPlacesFromServer(
+  jwtSecret,
+  params,
+  serverUrl = ETS_SERVER_URL
+) {
   try {
     const response = await axios.post(`${serverUrl}/api/v1/places`, params, {
       headers: { Authorization: `Bearer ${jwtSecret}` },
@@ -149,7 +158,11 @@ export async function fetchPlacesFromServer(serverUrl, jwtSecret, params) {
   }
 }
 
-export async function fetchAllEventsFromServer(serverUrl, jwtSecret, params) {
+export async function fetchAllEventsFromServer(
+  jwtSecret,
+  params,
+  serverUrl = ETS_SERVER_URL
+) {
   try {
     const response = await axios.post(`${serverUrl}/api/v1/events`, params, {
       headers: { Authorization: `Bearer ${jwtSecret}` },
@@ -164,6 +177,15 @@ export async function getEventMembers(eventId) {
   try {
     const members = await eventTicketingSystemContract.getEventMembers(eventId);
     return members;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export function createGatewayUrl(url) {
+  try {
+    const gatewayUrl = makeGatewayUrl(url);
+    return gatewayUrl;
   } catch (error) {
     throw error;
   }
