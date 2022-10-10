@@ -132,8 +132,10 @@ try {
 ```
 
 ### Fetch events by Ids
+
 1. Import fetchEvents from the library.
 2. Execute fetchEvents.
+
 ```js
 import { fetchEvents } from "ets-js-library";
 
@@ -144,6 +146,7 @@ let events = fetchEvents(eventIds);
 ```
 
 ### Fetch owned events
+
 1. Import fetchOwnedEvents function from the library.
 2. Execute fetchOwnedEvents by supplying an address.
 
@@ -156,6 +159,7 @@ let events = fetchOwnedEvents(address);
 ```
 
 ### Fetch cached events from server
+
 1. You need to have JWT_SECRET first.
 2. Import fetchAllEventsFromServer function from the library.
 3. Create params.
@@ -183,11 +187,13 @@ let events = fetchAllEventsFromServer(serverUrl, JWT_SECRET, params);
 ```
 
 ### Add team member to event
+
 1. Import addTeamMember function from the library.
 2. Import utils function from ethers.
 3. Generate the hash of the role.
 4. Execute addTeamMember function. This will return an unsigned transaction.
 5. Sign and send the transaction anyway you like.
+
 ```js
 import { addTeamMember } from "ets-js-library";
 import { utils } from "ethers";
@@ -200,11 +206,13 @@ let transaction = await addTeamMember(eventId, role, address);
 ```
 
 Remove team member from event
+
 1. Import removeTeamMember function from the library.
 2. Import utils function from ethers.
 3. Generate the hash of the role.
 4. Execute removeTeamMember function. This will return an unsigned transaction.
 5. Sign and send the transaction anyway you like.
+
 ```js
 import { removeTeamMember } from "ets-js-library";
 import { utils } from "ethers";
@@ -247,10 +255,10 @@ feat: Add beta sequence
 
 Please refer to each project's style and contribution guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
 
- 1. **Fork** the repo on GitHub
- 2. **Clone** the project to your own machine
- 3. **Commit** changes to your own branch
- 4. **Push** your work back up to your fork
- 5. Submit a **Pull request** so that we can review your changes
+1.  **Fork** the repo on GitHub
+2.  **Clone** the project to your own machine
+3.  **Commit** changes to your own branch
+4.  **Push** your work back up to your fork
+5.  Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
