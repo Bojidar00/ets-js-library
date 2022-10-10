@@ -129,6 +129,15 @@ export async function removeTeamMember(eventId, role, address) {
   }
 }
 
+export async function fetchJwtFromServer(params, serverUrl = ETS_SERVER_URL) {
+  try {
+    const response = await axios.post(`${serverUrl}/api/token`, params);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function fetchCountriesFromServer(
   jwtSecret,
   serverUrl = ETS_SERVER_URL
