@@ -1,16 +1,17 @@
 {
   "name": "event-ticketing-system-js-library",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Library for event ticketing system",
   "main": "./src/index.js",
   "type": "module",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test": "jest",
     "prepare": "husky install",
     "lint": "eslint --fix \"**/*.js\"",
     "lint:ci": "eslint \"**/*.js\"",
     "prettier": "prettier . --write",
-    "prettier:ci": "prettier ."
+    "prettier:ci": "prettier .",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",

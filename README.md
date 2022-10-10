@@ -181,6 +181,20 @@ let transaction = await removeTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
 ```
 
+## Tests
+
+Run tests:
+
+```sh
+npm run test
+```
+
+View coverage:
+
+```sh
+npm run coverage
+```
+
 ## Conventions and standards
 
 Commit message format
