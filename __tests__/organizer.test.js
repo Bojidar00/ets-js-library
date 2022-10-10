@@ -32,7 +32,7 @@ describe("Organizer tests", () => {
 
   test("Should revert delete event when there is not an event", async () => {
     try {
-      await removeEvent(NFT_STORAGE_API_KEY, 1, address);
+      await removeEvent(1);
     } catch (error) {
       expect(error.reason).toBe("EventTicketingSystem: Caller is not an admin");
     }
