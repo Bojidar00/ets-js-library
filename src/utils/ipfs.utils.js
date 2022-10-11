@@ -2,12 +2,12 @@ import { NFTStorage } from "nft.storage";
 import axios from "axios";
 import { ethers } from "ethers";
 import {
-  AVALANCHE_TESTNET_API,
+  NET_RPC_URL,
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   ABI,
   IPFS_GATEWAY_PROVIDER_URL,
 } from "../configs/index.config.js";
-const provider = ethers.getDefaultProvider(AVALANCHE_TESTNET_API);
+const provider = ethers.getDefaultProvider(NET_RPC_URL);
 const eventTicketingSystemContract = new ethers.Contract(
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   ABI,

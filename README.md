@@ -8,14 +8,8 @@ This is a JavaScript library for interacting with event ticketing system. It cre
 
 Install:
 
-Add this to package.json:
-
 ```bash
-"ets-js-library": "github:Applied-Blockchain-Lab/ets-js-library"
-```
-
-```bash
-npm install
+npm i ets-js-library@npm:event-ticketing-system-js-library
 ```
 
 ### Create event:

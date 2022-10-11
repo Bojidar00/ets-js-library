@@ -9,7 +9,6 @@ import {
   makeGatewayUrl,
 } from "./utils/ipfs.utils.js";
 import {
-  AVALANCHE_TESTNET_API,
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   ABI,
   ETS_SERVER_URL,
@@ -21,7 +20,7 @@ import {
   NET_LABEL,
 } from "../config/constants.cjs";
 
-const provider = ethers.getDefaultProvider(AVALANCHE_TESTNET_API);
+const provider = ethers.getDefaultProvider(NET_RPC_URL);
 const eventTicketingSystemContract = new ethers.Contract(
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   ABI,

@@ -1,13 +1,13 @@
-import schema from "ets-contracts/artifacts/contracts/EventDiamond/facets/EventFacet.sol/EventFacet.json";
+import {schema} from "../../config/EventFacet.js";
 import {
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
-  AVALANCHE_TESTNET_API,
-} from "ets-contracts/config/index.config";
+  NET_RPC_URL,
+} from "../../config/constants.cjs";
 const ABI = schema.abi;
 const IPFS_GATEWAY_PROVIDER_URL = "https://nftstorage.link/ipfs/";
 const ETS_SERVER_URL = "http://127.0.0.1:1337";
 export {
-  AVALANCHE_TESTNET_API,
+  NET_RPC_URL,
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   ABI,
   IPFS_GATEWAY_PROVIDER_URL,
