@@ -19,7 +19,7 @@ import {
   NET_RPC_URL_ID,
   TOKEN_NAME,
   NET_LABEL,
-} from "ets-contracts/config/index.config";
+} from "../config/constants.cjs";
 
 const provider = ethers.getDefaultProvider(AVALANCHE_TESTNET_API);
 const eventTicketingSystemContract = new ethers.Contract(

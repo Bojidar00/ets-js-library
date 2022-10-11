@@ -15,19 +15,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Applied-Blockchain-Lab/event-ticketing-system-js-library.git"
+    "url": "git+https://github.com/Applied-Blockchain-Lab/ets-js-library.git"
   },
   "author": "Bozhidar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Applied-Blockchain-Lab/event-ticketing-system-js-library/issues"
+    "url": "https://github.com/Applied-Blockchain-Lab/ets-js-library/issues"
   },
-  "homepage": "https://github.com/Applied-Blockchain-Lab/event-ticketing-system-js-library#readme",
+  "homepage": "https://github.com/Applied-Blockchain-Lab/ets-js-library#readme",
   "dependencies": {
     "axios": "^0.27.2",
     "axios-mock-adapter": "^1.21.2",
     "ethers": "^5.7.1",
-    "ets-contracts": "github:Applied-Blockchain-Lab/ets-contracts#semver:0.2.4",
     "nft.storage": "^7.0.0"
   },
   "devDependencies": {
