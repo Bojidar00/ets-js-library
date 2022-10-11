@@ -9,6 +9,7 @@ import {
   makeGatewayUrl,
 } from "./utils/ipfs.utils.js";
 import {
+
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   ABI,
   ETS_SERVER_URL,
