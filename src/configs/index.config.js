@@ -1,4 +1,4 @@
-import {schema} from "../../config/EventFacet.js";
+import { schema } from "../../config/EventFacet.js";
 import {
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   NET_RPC_URL,

@@ -46,7 +46,9 @@ const metadata = {
   contacts: "Contacts string",
   status: "upcoming",
 };
+
 let key = "API key for NFT.storage";
+
 let transaction = await createEvent(key, metadata, image, maxTicketsPerClient);
 //You need to sign and send the transaction after this.
 ```
@@ -63,6 +65,7 @@ let transaction = await createEvent(key, metadata, image, maxTicketsPerClient);
 
 ```js
 import { updateEvent, getEventIpfsUri, deleteFromIpfs } from "ets-js-library";
+
 const metadata = {
   name: "Event1",
   eventId,
@@ -86,6 +89,7 @@ const metadata = {
   contacts: "Contacts string",
   status: "upcoming",
 };
+
 let key = "API key for NFT.storage";
 let eventId = "Id of event in smart contract";
 
@@ -94,7 +98,7 @@ let metadataUri = await getEventIpfsUri(eventId);
 try {
   let transaction = await updateEvent(key, eventId, metadata, image);
   //You need to sign and send the transaction here.
-  deleteFromIpfs(localStorage.apiToken, metadataUri);
+  deleteFromIpfs(key, metadataUri);
 } catch (error) {
   console.log(error);
 }
@@ -195,6 +199,7 @@ import { utils } from "ethers";
 let eventId = "Id of event in smart contract";
 let address = "Address of new member.";
 let role = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
+
 let transaction = await addTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
 ```
@@ -214,6 +219,7 @@ import { utils } from "ethers";
 let eventId = "Id of event in smart contract";
 let address = "Address of team member.";
 let role = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
+
 let transaction = await removeTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
 ```
