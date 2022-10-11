@@ -1,7 +1,4 @@
 import {
-  createEvent,
-  fetchAllEventsFromServer,
-  fetchEvents,
   removeEvent,
   addTeamMember,
   removeTeamMember,
@@ -11,7 +8,6 @@ import {
 import fetch from "@web-std/fetch";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { jest } from "@jest/globals";
 import { ethers } from "ethers";
 
 const NFT_STORAGE_API_KEY =
@@ -20,7 +16,6 @@ const NFT_STORAGE_API_KEY =
 describe("Organizer tests", () => {
   let mock;
   const address = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266";
-  const AVALANCHE_TESTNET_API = "https://api.avax-test.network/ext/bc/C/rpc";
 
   beforeAll(async () => {
     mock = new MockAdapter(axios);

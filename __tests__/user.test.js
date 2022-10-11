@@ -6,7 +6,6 @@ import {
 import fetch from "@web-std/fetch";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { jest } from "@jest/globals";
 import { ethers } from "ethers";
 
 const NFT_STORAGE_API_KEY =

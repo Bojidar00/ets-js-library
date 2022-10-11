@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: "standard",
+  extends: ["standard", "plugin:jest/recommended"],
   overrides: [],
   parserOptions: {
     ecmaVersion: "latest",
@@ -14,10 +14,11 @@ module.exports = {
     semi: [2, "always"],
     quotes: ["warn", "double"],
     "comma-dangle": ["error", "only-multiline"],
-    "no-undef": 0,
     "no-fallthrough": 0,
-    "no-unused-vars": 0,
     "space-before-function-paren": 0,
     "no-useless-catch": 0,
+    "no-console": "error",
+    eqeqeq: ["error", "always"],
+    "jest/no-conditional-expect": 0,
   },
 };
