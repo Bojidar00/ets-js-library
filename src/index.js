@@ -1,3 +1,6 @@
+import { ethers } from "ethers";
+import axios from "axios";
+
 import {
   uploadDataToIpfs,
   fetchEventsMetadata,
@@ -11,8 +14,12 @@ import {
   ABI,
   ETS_SERVER_URL,
 } from "./configs/index.config.js";
-import { ethers } from "ethers";
-import axios from "axios";
+import {
+  NET_RPC_URL,
+  NET_RPC_URL_ID,
+  TOKEN_NAME,
+  NET_LABEL,
+} from "ets-contracts/config/index.config";
 
 const provider = ethers.getDefaultProvider(AVALANCHE_TESTNET_API);
 const eventTicketingSystemContract = new ethers.Contract(
@@ -199,3 +206,5 @@ export function createGatewayUrl(url) {
     throw error;
   }
 }
+
+export { NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL };

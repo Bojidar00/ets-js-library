@@ -1,4 +1,4 @@
-import schema from "ets-contracts/artifacts/contracts/EventTicketingSystem.sol/EventTicketingSystem.json";
+import schema from "ets-contracts/artifacts/contracts/EventDiamond/facets/EventFacet.sol/EventFacet.json";
 import {
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   AVALANCHE_TESTNET_API,
