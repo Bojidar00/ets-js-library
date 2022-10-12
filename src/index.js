@@ -205,6 +205,130 @@ export async function fetchAllEventIds() {
   return allEventIds;
 }
 
+export function listenForNewEvent(
+  eventModel,
+  countryModel,
+  tagModel,
+  placeModel,
+  eventTagModel,
+  organizerModel,
+  eventOrganizerModel,
+  logger,
+  insertData
+) {
+  logger.info("Listening for new events...");
+  eventTicketingSystemContract.on(
+    "EventCreated",
+    async (eventId, metadataUri) => {
+      logger.info(`New event with ${eventId} is created`);
+
+      // Insert event to db
+      const url = createGatewayUrl(metadataUri);
+      const eventMetadata = await axios.get(url);
+
+      const membersData = await getEventMembers(eventId);
+
+      await insertData(
+        eventModel,
+        countryModel,
+        tagModel,
+        placeModel,
+        eventTagModel,
+        organizerModel,
+        eventOrganizerModel,
+        eventMetadata.data,
+        eventId,
+        metadataUri,
+        membersData
+      );
+    }
+  );
+}
+
+export function listenForEventUpdate(
+  eventModel,
+  countryModel,
+  tagModel,
+  placeModel,
+  eventTagModel,
+  logger,
+  updateData
+) {
+  logger.info("Listening for update events...");
+
+  eventTicketingSystemContract.on(
+    "MetadataUpdate",
+    async (contractNftEventId) => {
+      logger.info(`Event with contract id ${contractNftEventId} is updated`);
+
+      // Fetch Event NFT metadata
+      const eventsMetadata = await fetchEvents([contractNftEventId]);
+
+      // Update entry in db
+      await updateData(
+        eventModel,
+        countryModel,
+        tagModel,
+        placeModel,
+        eventTagModel,
+        ethers.BigNumber.from(contractNftEventId).toNumber(),
+        eventsMetadata[0],
+        eventsMetadata[0].cid
+      );
+    }
+  );
+}
+
+export function listenForRoleGrant(
+  eventModel,
+  organizerModel,
+  eventOrganizerModel,
+  logger,
+  addOrganizer
+) {
+  logger.info("Listening for role grant events...");
+
+  eventTicketingSystemContract.on(
+    "RoleGranted",
+    async (contractNftEventId, role, account, sender) => {
+      logger.info(
+        `${account} is granted with ${role} for event with id ${contractNftEventId} from ${sender}`
+      );
+
+      await addOrganizer(eventModel, organizerModel, eventOrganizerModel, {
+        contractNftEventId,
+        role,
+        account,
+      });
+    }
+  );
+}
+
+export function listenForRoleRevoke(
+  eventModel,
+  organizerModel,
+  eventOrganizerModel,
+  logger,
+  deleteOrganizer
+) {
+  logger.info("Listening for role revoke events...");
+
+  eventTicketingSystemContract.on(
+    "RoleRevoked",
+    async (contractNftEventId, role, account, sender) => {
+      logger.info(
+        `${account}'s role ${role} is revoked for event with id ${contractNftEventId} from ${sender}`
+      );
+
+      await deleteOrganizer(eventModel, organizerModel, eventOrganizerModel, {
+        contractNftEventId,
+        role,
+        account,
+      });
+    }
+  );
+}
+
 export function createGatewayUrl(url) {
   try {
     const gatewayUrl = makeGatewayUrl(url);

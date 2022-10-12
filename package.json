@@ -1,6 +1,6 @@
 {
   "name": "ets-js-library",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Library for event ticketing system",
   "main": "./src/index.js",
   "type": "module",
@@ -30,6 +30,8 @@
     "nft.storage": "^7.0.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/plugin-syntax-import-assertions": "^7.18.6",
     "@babel/preset-env": "^7.19.1",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",

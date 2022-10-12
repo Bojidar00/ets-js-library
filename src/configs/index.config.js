@@ -1,4 +1,4 @@
-import schema from "../../config/EventFacet.json";
+import schema from "../../config/EventFacet.json" assert { type: "json" };
 import {
   EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
   NET_RPC_URL,
