@@ -5,9 +5,14 @@ module.exports = {
   },
   extends: ["standard", "plugin:jest/recommended"],
   overrides: [],
+  parser: "@babel/eslint-parser",
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
+    requireConfigFile: false,
+    babelOptions: {
+      plugins: ["@babel/plugin-syntax-import-assertions"],
+    },
   },
   ignorePatterns: ["commitlint.config.js", "coverage"],
   rules: {
