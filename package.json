@@ -17,8 +17,8 @@
     "type": "git",
     "url": "git+https://github.com/Applied-Blockchain-Lab/ets-js-library.git"
   },
-  "author": "Bozhidar",
-  "license": "ISC",
+  "author": "Quanterall",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Applied-Blockchain-Lab/ets-js-library/issues"
   },
