@@ -9,7 +9,7 @@ This is a JavaScript library for interacting with event ticketing system. It cre
 Install:
 
 ```bash
-npm i ets-js-library@npm:event-ticketing-system-js-library
+npm i ets-js-library
 ```
 
 ### Create event:
