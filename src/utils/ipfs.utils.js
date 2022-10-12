@@ -50,6 +50,7 @@ async function fetchEventsMetadata(eventIds) {
 
       const eventMetadata = await axios.get(url);
       eventMetadata.data.eventId = eventId;
+      eventMetadata.data.cid = eventUri;
 
       eventsMetadata.push(eventMetadata.data);
     } catch (error) {
