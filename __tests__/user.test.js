@@ -104,7 +104,8 @@ describe("user", () => {
     );
   });
 
-  test("Gets event details", async () => {
+  // TODO: Needs refactoring. Do not rely on contract
+  test.skip("Gets event details", async () => {
     const metadataURI =
       "https://nftstorage.link/ipfs/bafyreiflrftprln2zoit3lviwt63inbucb2pq6zua5hwzcqx2nnhzdfcsu/metadata.json";
 
