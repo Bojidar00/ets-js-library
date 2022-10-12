@@ -197,6 +197,14 @@ export async function getEventMembers(eventId) {
   }
 }
 
+export async function fetchAllEventIds() {
+  const allEventIdsBN = await eventTicketingSystemContract.fetchAllEventIds();
+
+  const allEventIds = allEventIdsBN.map((eventId) => eventId.toNumber());
+
+  return allEventIds;
+}
+
 export function createGatewayUrl(url) {
   try {
     const gatewayUrl = makeGatewayUrl(url);
