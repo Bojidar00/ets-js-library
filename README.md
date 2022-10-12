@@ -232,7 +232,7 @@ Run tests:
 npm run test
 ```
 
-View coverage:
+See test coverage:
 
 ```sh
 npm run coverage
