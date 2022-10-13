@@ -204,7 +204,7 @@ let transaction = await addTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
 ```
 
-Remove team member from event
+### Remove team member from event
 
 1. Import removeTeamMember function from the library.
 2. Import utils function from ethers.
