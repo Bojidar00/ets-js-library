@@ -88,17 +88,12 @@ describe("user", () => {
         limit: "",
       },
     };
-    const JWT_SECRET = "SECRET TOKEN";
 
     mock
       .onPost(`${serverURL}/api/v1/events`, params)
       .reply(200, ["ipfs://metadataOfEvent1", "ipfs://metadataOfEvent2"]);
 
-    const response = await fetchAllEventsFromServer(
-      JWT_SECRET,
-      params,
-      serverURL
-    );
+    const response = await fetchAllEventsFromServer(params, serverURL);
     expect(response.data.toString()).toBe(
       "ipfs://metadataOfEvent1,ipfs://metadataOfEvent2"
     );

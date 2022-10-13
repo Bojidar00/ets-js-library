@@ -12,7 +12,7 @@ Install:
 npm i ets-js-library
 ```
 
-### Create event:
+### Create event
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import createEvent function from the library.
@@ -47,13 +47,18 @@ const metadata = {
   status: "upcoming",
 };
 
-let key = "API key for NFT.storage";
+const key = "API key for NFT.storage";
 
-let transaction = await createEvent(key, metadata, image, maxTicketsPerClient);
+const transaction = await createEvent(
+  key,
+  metadata,
+  image,
+  maxTicketsPerClient
+);
 //You need to sign and send the transaction after this.
 ```
 
-### Update event:
+### Update event
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import updateEvent, getEventIpfsUri and deleteFromIpfs from the library.
@@ -90,13 +95,14 @@ const metadata = {
   status: "upcoming",
 };
 
-let key = "API key for NFT.storage";
-let eventId = "Id of event in smart contract";
+const key = "API key for NFT.storage";
+const eventId = "Id of event in smart contract";
 
-let metadataUri = await getEventIpfsUri(eventId);
+const metadataUri = await getEventIpfsUri(eventId);
 
 try {
-  let transaction = await updateEvent(key, eventId, metadata, image);
+  const transaction = await updateEvent(key, eventId, metadata, image);
+
   //You need to sign and send the transaction here.
   deleteFromIpfs(key, metadataUri);
 } catch (error) {
@@ -115,13 +121,14 @@ try {
 ```js
 import { removeEvent, deleteFromIpfs } from "ets-js-library";
 
-let key = "API key for NFT.storage";
-let eventId = "Id of event in smart contract";
+const key = "API key for NFT.storage";
+const eventId = "Id of event in smart contract";
 
-let metadataUri = await getEventIpfsUri(eventId);
+const metadataUri = await getEventIpfsUri(eventId);
 
 try {
-  let transaction = await removeEvent(eventId);
+  const transaction = await removeEvent(eventId);
+
   //You need to sign and send the transaction here.
   deleteFromIpfs(key, metadataUri);
 } catch (error) {
@@ -138,9 +145,9 @@ try {
 import { fetchEvents } from "ets-js-library";
 
 //Ids of events in smart contract.
-let eventIds = [1, 2, 3];
+const eventIds = [1, 2, 3];
 
-let events = fetchEvents(eventIds);
+const events = fetchEvents(eventIds);
 ```
 
 ### Fetch owned events
@@ -151,37 +158,50 @@ let events = fetchEvents(eventIds);
 ```js
 import { fetchOwnedEvents } from "ets-js-library";
 
-let address = "Address of events owner.";
+const address = "Address of events owner.";
 
-let events = fetchOwnedEvents(address);
+const events = fetchOwnedEvents(address);
 ```
 
 ### Fetch cached events from server
 
-1. You need to have JWT_SECRET first.
-2. Import fetchAllEventsFromServer function from the library.
-3. Create params.
-4. Execute fetchAllEventsFromServer.
+1. Import fetchAllEventsFromServer function from the library.
+2. Create params.
+3. Execute fetchAllEventsFromServer.
 
 ```js
-import {fetchAllEventsFromServer} from 'ets-js-library';
+import { fetchAllEventsFromServer } from "ets-js-library";
 
 let params = {
-  title: "",
-  description: "",
-  eventStartDateStartingInterval: "",
-  eventStartDateEndingInterval: "",
+  keywords: {
+    title: "",
+    titleDesc: "",
+    preference: "",
+  },
+  minStartDate: "",
+  maxStartDate: "",
   eventEndDateStartingInterval: "",
   eventEndDateEndingInterval: "",
   country: "",
   place: "",
-  tags: "",
-  sort: "",
-  pagination: "",
-  organizer: "";
+  tags: {
+    tags: [],
+    preference: "",
+  },
+  sort: {
+    startDate: "",
+    eventName: "",
+    country: "",
+    place: "",
+  },
+  pagination: {
+    offset: "",
+    limit: "",
+  },
+  organizer: "",
 };
 
-let events = fetchAllEventsFromServer(serverUrl, JWT_SECRET, params);
+const events = fetchAllEventsFromServer(serverUrl, JWT_SECRET, params);
 ```
 
 ### Add team member to event
@@ -196,11 +216,11 @@ let events = fetchAllEventsFromServer(serverUrl, JWT_SECRET, params);
 import { addTeamMember } from "ets-js-library";
 import { utils } from "ethers";
 
-let eventId = "Id of event in smart contract";
-let address = "Address of new member.";
-let role = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
+const eventId = "Id of event in smart contract";
+const address = "Address of new member.";
+const role = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
 
-let transaction = await addTeamMember(eventId, role, address);
+const transaction = await addTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
 ```
 
@@ -216,11 +236,11 @@ let transaction = await addTeamMember(eventId, role, address);
 import { removeTeamMember } from "ets-js-library";
 import { utils } from "ethers";
 
-let eventId = "Id of event in smart contract";
-let address = "Address of team member.";
-let role = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
+const eventId = "Id of event in smart contract";
+const address = "Address of team member.";
+const role = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
 
-let transaction = await removeTeamMember(eventId, role, address);
+const transaction = await removeTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
 ```
 
@@ -255,10 +275,10 @@ feat: Add beta sequence
 
 Please refer to each project's style and contribution guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
 
-1.  **Fork** the repo on GitHub
-2.  **Clone** the project to your own machine
-3.  **Commit** changes to your own branch
-4.  **Push** your work back up to your fork
-5.  Submit a **Pull request** so that we can review your changes
+1. **Fork** the repo on GitHub
+2. **Clone** the project to your own machine
+3. **Commit** changes to your own branch
+4. **Push** your work back up to your fork
+5. Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
