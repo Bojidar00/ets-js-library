@@ -3,13 +3,13 @@ import axios from "axios";
 import { ethers } from "ethers";
 import {
   NET_RPC_URL,
-  EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
+  EVENTS_CONTRACT_ADDRESS,
   ABI,
   IPFS_GATEWAY_PROVIDER_URL,
 } from "../configs/index.config.js";
 const provider = ethers.getDefaultProvider(NET_RPC_URL);
-const eventTicketingSystemContract = new ethers.Contract(
-  EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
+const eventsContract = new ethers.Contract(
+  EVENTS_CONTRACT_ADDRESS,
   ABI,
   provider
 );
@@ -36,7 +36,7 @@ async function deleteDataFromService(nftStorageApiKey, eventUri) {
 }
 
 async function getIpfsUrl(eventId) {
-  const eventUri = await eventTicketingSystemContract.tokenURI(eventId);
+  const eventUri = await eventsContract.tokenURI(eventId);
   return eventUri;
 }
 
@@ -45,7 +45,7 @@ async function fetchEventsMetadata(eventIds) {
 
   for (const eventId of eventIds) {
     try {
-      const eventUri = await eventTicketingSystemContract.tokenURI(eventId);
+      const eventUri = await eventsContract.tokenURI(eventId);
       const url = makeGatewayUrl(eventUri);
 
       const eventMetadata = await axios.get(url);
