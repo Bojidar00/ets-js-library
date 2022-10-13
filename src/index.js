@@ -1,24 +1,21 @@
 import { ethers } from "ethers";
 import axios from "axios";
-
 import {
   uploadDataToIpfs,
   fetchEventsMetadata,
   deleteDataFromService,
   getIpfsUrl,
   makeGatewayUrl,
-} from "./utils/ipfs.utils.js";
+} from "#ipfs.utils";
 import {
-  EVENTS_CONTRACT_ADDRESS,
   ABI,
   ETS_SERVER_URL,
-} from "./configs/index.config.js";
-import {
+  EVENTS_CONTRACT_ADDRESS,
   NET_RPC_URL,
   NET_RPC_URL_ID,
   TOKEN_NAME,
   NET_LABEL,
-} from "../config/constants.cjs";
+} from "#config";
 
 const provider = ethers.getDefaultProvider(NET_RPC_URL);
 const eventsContract = new ethers.Contract(

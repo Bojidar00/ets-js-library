@@ -6,7 +6,8 @@ import {
   EVENTS_CONTRACT_ADDRESS,
   ABI,
   IPFS_GATEWAY_PROVIDER_URL,
-} from "../configs/index.config.js";
+} from "#config";
+
 const provider = ethers.getDefaultProvider(NET_RPC_URL);
 const eventsContract = new ethers.Contract(
   EVENTS_CONTRACT_ADDRESS,
