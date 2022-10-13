@@ -124,23 +124,9 @@ export async function removeTeamMember(eventId, role, address) {
   }
 }
 
-export async function fetchJwtFromServer(params, serverUrl = ETS_SERVER_URL) {
+export async function fetchCountriesFromServer(serverUrl = ETS_SERVER_URL) {
   try {
-    const response = await axios.post(`${serverUrl}/api/token`, params);
-    return response;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function fetchCountriesFromServer(
-  jwtSecret,
-  serverUrl = ETS_SERVER_URL
-) {
-  try {
-    const response = await axios.get(`${serverUrl}/api/v1/countries`, {
-      headers: { Authorization: `Bearer ${jwtSecret}` },
-    });
+    const response = await axios.get(`${serverUrl}/api/v1/countries`);
     return response;
   } catch (error) {
     throw error;
@@ -148,14 +134,11 @@ export async function fetchCountriesFromServer(
 }
 
 export async function fetchPlacesFromServer(
-  jwtSecret,
   params,
   serverUrl = ETS_SERVER_URL
 ) {
   try {
-    const response = await axios.post(`${serverUrl}/api/v1/places`, params, {
-      headers: { Authorization: `Bearer ${jwtSecret}` },
-    });
+    const response = await axios.post(`${serverUrl}/api/v1/places`, params);
     return response;
   } catch (error) {
     throw error;
@@ -163,14 +146,11 @@ export async function fetchPlacesFromServer(
 }
 
 export async function fetchAllEventsFromServer(
-  jwtSecret,
   params,
   serverUrl = ETS_SERVER_URL
 ) {
   try {
-    const response = await axios.post(`${serverUrl}/api/v1/events`, params, {
-      headers: { Authorization: `Bearer ${jwtSecret}` },
-    });
+    const response = await axios.post(`${serverUrl}/api/v1/events`, params);
     return response;
   } catch (error) {
     throw error;
