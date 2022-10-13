@@ -45,5 +45,10 @@
     "husky": "^8.0.1",
     "jest": "^29.0.3",
     "prettier": "2.7.1"
+  },
+  "imports": {
+    "#ipfs.utils": "./src/utils/ipfs.utils.js",
+    "#config": "./src/configs/index.config.js",
+    "#contract.config/*": "./config/*"
   }
 }
