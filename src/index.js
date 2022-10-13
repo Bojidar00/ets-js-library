@@ -9,7 +9,7 @@ import {
   makeGatewayUrl,
 } from "./utils/ipfs.utils.js";
 import {
-  EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
+  EVENTS_CONTRACT_ADDRESS,
   ABI,
   ETS_SERVER_URL,
 } from "./configs/index.config.js";
@@ -21,8 +21,8 @@ import {
 } from "../config/constants.cjs";
 
 const provider = ethers.getDefaultProvider(NET_RPC_URL);
-const eventTicketingSystemContract = new ethers.Contract(
-  EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
+const eventsContract = new ethers.Contract(
+  EVENTS_CONTRACT_ADDRESS,
   ABI,
   provider
 );
@@ -35,11 +35,10 @@ export async function createEvent(
 ) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
-    const tx =
-      await eventTicketingSystemContract.populateTransaction.createEvent(
-        maxTicketPerClient,
-        url
-      );
+    const tx = await eventsContract.populateTransaction.createEvent(
+      maxTicketPerClient,
+      url
+    );
     return tx;
   } catch (error) {
     throw error;
@@ -58,11 +57,7 @@ export async function fetchEvents(eventIds) {
 
 export async function fetchOwnedEvents(address) {
   const signer = new ethers.VoidSigner(address, provider);
-  const contract = new ethers.Contract(
-    EVENT_TICKETING_SYSTEM_CONTRACT_ADDRESS,
-    ABI,
-    signer
-  );
+  const contract = new ethers.Contract(EVENTS_CONTRACT_ADDRESS, ABI, signer);
   const eventIds = await contract.fetchOwnedEvents();
   const events = await fetchEvents(eventIds);
   return events;
@@ -70,10 +65,7 @@ export async function fetchOwnedEvents(address) {
 
 export async function removeEvent(eventId) {
   try {
-    const tx =
-      await eventTicketingSystemContract.populateTransaction.removeEvent(
-        eventId
-      );
+    const tx = await eventsContract.populateTransaction.removeEvent(eventId);
     return tx;
   } catch (error) {
     throw error;
@@ -83,11 +75,10 @@ export async function removeEvent(eventId) {
 export async function updateEvent(nftStorageApiKey, eventId, metadata, image) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
-    const tx =
-      await eventTicketingSystemContract.populateTransaction.updateEventTokenUri(
-        eventId,
-        url
-      );
+    const tx = await eventsContract.populateTransaction.updateEventTokenUri(
+      eventId,
+      url
+    );
     return tx;
   } catch (error) {
     throw error;
@@ -109,12 +100,11 @@ export async function deleteFromIpfs(nftStorageApiKey, ipfsUri) {
 
 export async function addTeamMember(eventId, role, address) {
   try {
-    const tx =
-      await eventTicketingSystemContract.populateTransaction.addTeamMember(
-        eventId,
-        role,
-        address
-      );
+    const tx = await eventsContract.populateTransaction.addTeamMember(
+      eventId,
+      role,
+      address
+    );
     return tx;
   } catch (error) {
     throw error;
@@ -123,12 +113,11 @@ export async function addTeamMember(eventId, role, address) {
 
 export async function removeTeamMember(eventId, role, address) {
   try {
-    const tx =
-      await eventTicketingSystemContract.populateTransaction.removeTeamMember(
-        eventId,
-        role,
-        address
-      );
+    const tx = await eventsContract.populateTransaction.removeTeamMember(
+      eventId,
+      role,
+      address
+    );
     return tx;
   } catch (error) {
     throw error;
@@ -190,7 +179,7 @@ export async function fetchAllEventsFromServer(
 
 export async function getEventMembers(eventId) {
   try {
-    const members = await eventTicketingSystemContract.getEventMembers(eventId);
+    const members = await eventsContract.getEventMembers(eventId);
     return members;
   } catch (error) {
     throw error;
@@ -198,7 +187,7 @@ export async function getEventMembers(eventId) {
 }
 
 export async function fetchAllEventIds() {
-  const allEventIdsBN = await eventTicketingSystemContract.fetchAllEventIds();
+  const allEventIdsBN = await eventsContract.fetchAllEventIds();
 
   const allEventIds = allEventIdsBN.map((eventId) => eventId.toNumber());
 
@@ -217,32 +206,29 @@ export function listenForNewEvent(
   insertData
 ) {
   logger.info("Listening for new events...");
-  eventTicketingSystemContract.on(
-    "EventCreated",
-    async (eventId, metadataUri) => {
-      logger.info(`New event with ${eventId} is created`);
+  eventsContract.on("EventCreated", async (eventId, metadataUri) => {
+    logger.info(`New event with ${eventId} is created`);
 
-      // Insert event to db
-      const url = createGatewayUrl(metadataUri);
-      const eventMetadata = await axios.get(url);
+    // Insert event to db
+    const url = createGatewayUrl(metadataUri);
+    const eventMetadata = await axios.get(url);
 
-      const membersData = await getEventMembers(eventId);
+    const membersData = await getEventMembers(eventId);
 
-      await insertData(
-        eventModel,
-        countryModel,
-        tagModel,
-        placeModel,
-        eventTagModel,
-        organizerModel,
-        eventOrganizerModel,
-        eventMetadata.data,
-        eventId,
-        metadataUri,
-        membersData
-      );
-    }
-  );
+    await insertData(
+      eventModel,
+      countryModel,
+      tagModel,
+      placeModel,
+      eventTagModel,
+      organizerModel,
+      eventOrganizerModel,
+      eventMetadata.data,
+      eventId,
+      metadataUri,
+      membersData
+    );
+  });
 }
 
 export function listenForEventUpdate(
@@ -256,27 +242,24 @@ export function listenForEventUpdate(
 ) {
   logger.info("Listening for update events...");
 
-  eventTicketingSystemContract.on(
-    "MetadataUpdate",
-    async (contractNftEventId) => {
-      logger.info(`Event with contract id ${contractNftEventId} is updated`);
+  eventsContract.on("MetadataUpdate", async (contractNftEventId) => {
+    logger.info(`Event with contract id ${contractNftEventId} is updated`);
 
-      // Fetch Event NFT metadata
-      const eventsMetadata = await fetchEvents([contractNftEventId]);
+    // Fetch Event NFT metadata
+    const eventsMetadata = await fetchEvents([contractNftEventId]);
 
-      // Update entry in db
-      await updateData(
-        eventModel,
-        countryModel,
-        tagModel,
-        placeModel,
-        eventTagModel,
-        ethers.BigNumber.from(contractNftEventId).toNumber(),
-        eventsMetadata[0],
-        eventsMetadata[0].cid
-      );
-    }
-  );
+    // Update entry in db
+    await updateData(
+      eventModel,
+      countryModel,
+      tagModel,
+      placeModel,
+      eventTagModel,
+      ethers.BigNumber.from(contractNftEventId).toNumber(),
+      eventsMetadata[0],
+      eventsMetadata[0].cid
+    );
+  });
 }
 
 export function listenForRoleGrant(
@@ -288,7 +271,7 @@ export function listenForRoleGrant(
 ) {
   logger.info("Listening for role grant events...");
 
-  eventTicketingSystemContract.on(
+  eventsContract.on(
     "RoleGranted",
     async (contractNftEventId, role, account, sender) => {
       logger.info(
@@ -313,7 +296,7 @@ export function listenForRoleRevoke(
 ) {
   logger.info("Listening for role revoke events...");
 
-  eventTicketingSystemContract.on(
+  eventsContract.on(
     "RoleRevoked",
     async (contractNftEventId, role, account, sender) => {
       logger.info(
