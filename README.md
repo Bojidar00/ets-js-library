@@ -201,7 +201,38 @@ let params = {
   organizer: "",
 };
 
-const events = fetchAllEventsFromServer(serverUrl, JWT_SECRET, params);
+//This parameter is optional
+let serverUrl="http://localhost:1337";
+
+const events = fetchAllEventsFromServer(params, serverUrl);
+```
+
+### Fetch Countries from server
+
+1. Import fetchCountriesFromServer function from the library.
+2. Execute fetchCountriesFromServer.
+
+```js
+import { fetchCountriesFromServer } from "ets-js-library";
+
+//This parameter is optional
+let serverUrl="http://localhost:1337";
+
+const countries = fetchCountriesFromServer(serverUrl);
+```
+
+### Fetch Places from server
+
+1. Import fetchPlacesFromServer function from the library.
+2. Execute fetchPlacesFromServer.
+
+```js
+import { fetchPlacesFromServer } from "ets-js-library";
+
+//This parameter is optional
+let serverUrl="http://localhost:1337";
+
+const places = fetchPlacesFromServer(serverUrl);
 ```
 
 ### Add team member to event
@@ -242,6 +273,30 @@ const role = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
 
 const transaction = await removeTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
+```
+
+### Fetch all team members of event
+
+1. Import getEventMembers function from the library.
+4. Execute getEventMembers function. 
+
+```js
+import { getEventMembers } from "ets-js-library";
+
+const eventId = "Id of event in smart contract";
+
+const members = await getEventMembers(eventId);
+```
+
+### Fetch all event ids
+
+1. Import getEventMembers function from the library.
+4. Execute getEventMembers function. 
+
+```js
+import { fetchAllEventIds } from "ets-js-library";
+
+const eventIds = await fetchAllEventIds();
 ```
 
 ## Tests
