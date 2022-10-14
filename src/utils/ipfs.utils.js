@@ -12,7 +12,7 @@ const provider = ethers.getDefaultProvider(NET_RPC_URL);
 const eventsContract = new ethers.Contract(
   EVENTS_CONTRACT_ADDRESS,
   ABI,
-  provider
+  provider,
 );
 
 function makeGatewayUrl(ipfsURI) {

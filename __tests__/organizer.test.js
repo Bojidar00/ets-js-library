@@ -29,7 +29,7 @@ describe("Organizer tests", () => {
     try {
       await removeEvent(1);
     } catch (error) {
-      expect(error.reason).toBe("EventTicketingSystem: Caller is not an admin");
+      expect(error.reason).toBe("EventTicketingSystem: Caller is not an admin"); // eslint-disable-line jest/no-conditional-expect
     }
   });
 
@@ -39,7 +39,7 @@ describe("Organizer tests", () => {
 
       const functionSig = ethers.utils
         .keccak256(
-          ethers.utils.toUtf8Bytes("addTeamMember(uint256,bytes32,address)")
+          ethers.utils.toUtf8Bytes("addTeamMember(uint256,bytes32,address)"),
         )
         .slice(0, 10);
 
@@ -54,7 +54,7 @@ describe("Organizer tests", () => {
 
       const functionSig = ethers.utils
         .keccak256(
-          ethers.utils.toUtf8Bytes("removeTeamMember(uint256,bytes32,address)")
+          ethers.utils.toUtf8Bytes("removeTeamMember(uint256,bytes32,address)"),
         )
         .slice(0, 10);
 
@@ -99,7 +99,7 @@ describe("Organizer tests", () => {
       };
 
       const image = await fetch(
-        "https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png"
+        "https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png",
       );
       const imageBlob = await image.blob();
 
@@ -108,12 +108,12 @@ describe("Organizer tests", () => {
         1,
         metadata,
         imageBlob,
-        address
+        address,
       );
 
       const functionSig = ethers.utils
         .keccak256(
-          ethers.utils.toUtf8Bytes("updateEventTokenUri(uint256,string)")
+          ethers.utils.toUtf8Bytes("updateEventTokenUri(uint256,string)"),
         )
         .slice(0, 10);
 

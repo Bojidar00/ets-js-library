@@ -52,7 +52,7 @@ describe("user", () => {
     };
 
     const image = await fetch(
-      "https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png"
+      "https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png",
     );
     const imageBlob = await image.blob();
 
@@ -95,7 +95,7 @@ describe("user", () => {
 
     const response = await fetchAllEventsFromServer(params, serverURL);
     expect(response.data.toString()).toBe(
-      "ipfs://metadataOfEvent1,ipfs://metadataOfEvent2"
+      "ipfs://metadataOfEvent1,ipfs://metadataOfEvent2",
     );
   });
 
