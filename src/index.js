@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-catch */
+
 import { ethers } from "ethers";
 import axios from "axios";
 import {
@@ -21,20 +23,20 @@ const provider = ethers.getDefaultProvider(NET_RPC_URL);
 const eventsContract = new ethers.Contract(
   EVENTS_CONTRACT_ADDRESS,
   ABI,
-  provider
+  provider,
 );
 
 export async function createEvent(
   nftStorageApiKey,
   metadata,
   image,
-  maxTicketPerClient
+  maxTicketPerClient,
 ) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
     const tx = await eventsContract.populateTransaction.createEvent(
       maxTicketPerClient,
-      url
+      url,
     );
     return tx;
   } catch (error) {
@@ -74,7 +76,7 @@ export async function updateEvent(nftStorageApiKey, eventId, metadata, image) {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
     const tx = await eventsContract.populateTransaction.updateEventTokenUri(
       eventId,
-      url
+      url,
     );
     return tx;
   } catch (error) {
@@ -100,7 +102,7 @@ export async function addTeamMember(eventId, role, address) {
     const tx = await eventsContract.populateTransaction.addTeamMember(
       eventId,
       role,
-      address
+      address,
     );
     return tx;
   } catch (error) {
@@ -113,7 +115,7 @@ export async function removeTeamMember(eventId, role, address) {
     const tx = await eventsContract.populateTransaction.removeTeamMember(
       eventId,
       role,
-      address
+      address,
     );
     return tx;
   } catch (error) {
@@ -132,7 +134,7 @@ export async function fetchCountriesFromServer(serverUrl = ETS_SERVER_URL) {
 
 export async function fetchPlacesFromServer(
   params,
-  serverUrl = ETS_SERVER_URL
+  serverUrl = ETS_SERVER_URL,
 ) {
   try {
     const response = await axios.post(`${serverUrl}/api/v1/places`, params);
@@ -144,7 +146,7 @@ export async function fetchPlacesFromServer(
 
 export async function fetchAllEventsFromServer(
   params,
-  serverUrl = ETS_SERVER_URL
+  serverUrl = ETS_SERVER_URL,
 ) {
   try {
     const response = await axios.post(`${serverUrl}/api/v1/events`, params);
@@ -180,7 +182,7 @@ export function listenForNewEvent(
   organizerModel,
   eventOrganizerModel,
   logger,
-  insertData
+  insertData,
 ) {
   logger.info("Listening for new events...");
   eventsContract.on("EventCreated", async (eventId, metadataUri) => {
@@ -203,7 +205,7 @@ export function listenForNewEvent(
       eventMetadata.data,
       eventId,
       metadataUri,
-      membersData
+      membersData,
     );
   });
 }
@@ -215,7 +217,7 @@ export function listenForEventUpdate(
   placeModel,
   eventTagModel,
   logger,
-  updateData
+  updateData,
 ) {
   logger.info("Listening for update events...");
 
@@ -234,7 +236,7 @@ export function listenForEventUpdate(
       eventTagModel,
       ethers.BigNumber.from(contractNftEventId).toNumber(),
       eventsMetadata[0],
-      eventsMetadata[0].cid
+      eventsMetadata[0].cid,
     );
   });
 }
@@ -244,7 +246,7 @@ export function listenForRoleGrant(
   organizerModel,
   eventOrganizerModel,
   logger,
-  addOrganizer
+  addOrganizer,
 ) {
   logger.info("Listening for role grant events...");
 
@@ -252,7 +254,7 @@ export function listenForRoleGrant(
     "RoleGranted",
     async (contractNftEventId, role, account, sender) => {
       logger.info(
-        `${account} is granted with ${role} for event with id ${contractNftEventId} from ${sender}`
+        `${account} is granted with ${role} for event with id ${contractNftEventId} from ${sender}`,
       );
 
       await addOrganizer(eventModel, organizerModel, eventOrganizerModel, {
@@ -260,7 +262,7 @@ export function listenForRoleGrant(
         role,
         account,
       });
-    }
+    },
   );
 }
 
@@ -269,7 +271,7 @@ export function listenForRoleRevoke(
   organizerModel,
   eventOrganizerModel,
   logger,
-  deleteOrganizer
+  deleteOrganizer,
 ) {
   logger.info("Listening for role revoke events...");
 
@@ -277,7 +279,7 @@ export function listenForRoleRevoke(
     "RoleRevoked",
     async (contractNftEventId, role, account, sender) => {
       logger.info(
-        `${account}'s role ${role} is revoked for event with id ${contractNftEventId} from ${sender}`
+        `${account}'s role ${role} is revoked for event with id ${contractNftEventId} from ${sender}`,
       );
 
       await deleteOrganizer(eventModel, organizerModel, eventOrganizerModel, {
@@ -285,7 +287,7 @@ export function listenForRoleRevoke(
         role,
         account,
       });
-    }
+    },
   );
 }
 

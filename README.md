@@ -53,7 +53,7 @@ const transaction = await createEvent(
   key,
   metadata,
   image,
-  maxTicketsPerClient
+  maxTicketsPerClient,
 );
 //You need to sign and send the transaction after this.
 ```
