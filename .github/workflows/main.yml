@@ -25,7 +25,9 @@ jobs:
         run: git config --global url."https://${{ secrets.GH_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
 
       - name: Install packages
-        run: npm install
+        run: |
+          echo "${{ secrets.PKEY }}" > .secret
+          npm install
 
       - name: Run tests
         run: npm run test
