@@ -31,10 +31,11 @@ export async function createEvent(
   metadata,
   image,
   maxTicketPerClient,
+  contract = eventsContract,
 ) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
-    const tx = await eventsContract.populateTransaction.createEvent(
+    const tx = await contract.populateTransaction.createEvent(
       maxTicketPerClient,
       url,
     );
@@ -44,9 +45,9 @@ export async function createEvent(
   }
 }
 
-export async function fetchEvents(eventIds) {
+export async function fetchEvents(eventIds, contract) {
   try {
-    const metadata = await fetchEventsMetadata(eventIds);
+    const metadata = await fetchEventsMetadata(eventIds, contract);
 
     return metadata;
   } catch (error) {
@@ -54,17 +55,16 @@ export async function fetchEvents(eventIds) {
   }
 }
 
-export async function fetchOwnedEvents(address) {
+export async function fetchOwnedEvents(address, contract = eventsContract) {
   const signer = new ethers.VoidSigner(address, provider);
-  const contract = new ethers.Contract(EVENTS_CONTRACT_ADDRESS, ABI, signer);
-  const eventIds = await contract.fetchOwnedEvents();
-  const events = await fetchEvents(eventIds);
+  const eventIds = await contract.connect(signer).fetchOwnedEvents();
+  const events = await fetchEvents(eventIds, contract);
   return events;
 }
 
-export async function removeEvent(eventId) {
+export async function removeEvent(eventId, contract = eventsContract) {
   try {
-    const tx = await eventsContract.populateTransaction.removeEvent(eventId);
+    const tx = await contract.populateTransaction.removeEvent(eventId);
 
     return tx;
   } catch (error) {
@@ -72,11 +72,17 @@ export async function removeEvent(eventId) {
   }
 }
 
-export async function updateEvent(nftStorageApiKey, eventId, metadata, image) {
+export async function updateEvent(
+  nftStorageApiKey,
+  eventId,
+  metadata,
+  image,
+  contract = eventsContract,
+) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
 
-    const tx = await eventsContract.populateTransaction.updateEventTokenUri(
+    const tx = await contract.populateTransaction.updateEventTokenUri(
       eventId,
       url,
     );
@@ -87,8 +93,8 @@ export async function updateEvent(nftStorageApiKey, eventId, metadata, image) {
   }
 }
 
-export async function getEventIpfsUri(eventId) {
-  const uri = await getIpfsUrl(eventId);
+export async function getEventIpfsUri(eventId, contract) {
+  const uri = await getIpfsUrl(eventId, contract);
 
   return uri;
 }
@@ -101,9 +107,14 @@ export async function deleteFromIpfs(nftStorageApiKey, ipfsUri) {
   }
 }
 
-export async function addTeamMember(eventId, role, address) {
+export async function addTeamMember(
+  eventId,
+  role,
+  address,
+  contract = eventsContract,
+) {
   try {
-    const tx = await eventsContract.populateTransaction.addTeamMember(
+    const tx = await contract.populateTransaction.addTeamMember(
       eventId,
       role,
       address,
@@ -115,9 +126,14 @@ export async function addTeamMember(eventId, role, address) {
   }
 }
 
-export async function removeTeamMember(eventId, role, address) {
+export async function removeTeamMember(
+  eventId,
+  role,
+  address,
+  contract = eventsContract,
+) {
   try {
-    const tx = await eventsContract.populateTransaction.removeTeamMember(
+    const tx = await contract.populateTransaction.removeTeamMember(
       eventId,
       role,
       address,
@@ -167,9 +183,9 @@ export async function fetchAllEventsFromServer(
   }
 }
 
-export async function getEventMembers(eventId) {
+export async function getEventMembers(eventId, contract = eventsContract) {
   try {
-    const members = await eventsContract.getEventMembers(eventId);
+    const members = await contract.getEventMembers(eventId);
 
     return members;
   } catch (error) {
@@ -177,8 +193,8 @@ export async function getEventMembers(eventId) {
   }
 }
 
-export async function fetchAllEventIds() {
-  const allEventIdsBN = await eventsContract.fetchAllEventIds();
+export async function fetchAllEventIds(contract = eventsContract) {
+  const allEventIdsBN = await contract.fetchAllEventIds();
 
   const allEventIds = allEventIdsBN.map((eventId) => eventId.toNumber());
 

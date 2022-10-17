@@ -36,26 +36,25 @@ async function deleteDataFromService(nftStorageApiKey, eventUri) {
   await client.delete(cid);
 }
 
-async function getIpfsUrl(eventId) {
-  const eventUri = await eventsContract.tokenURI(eventId);
+async function getIpfsUrl(eventId, contract = eventsContract) {
+  const eventUri = await contract.tokenURI(eventId);
   return eventUri;
 }
 
-async function fetchEventsMetadata(eventIds) {
+async function fetchEventsMetadata(eventIds, contract = eventsContract) {
   const eventsMetadata = [];
 
   for (const eventId of eventIds) {
     try {
-      const eventUri = await eventsContract.tokenURI(eventId);
+      const eventUri = await contract.tokenURI(eventId);
       const url = makeGatewayUrl(eventUri);
-
       const eventMetadata = await axios.get(url);
+
       eventMetadata.data.eventId = eventId;
       eventMetadata.data.cid = eventUri;
-
       eventsMetadata.push(eventMetadata.data);
     } catch (error) {
-      return { error: error.reason };
+      return { error };
     }
   }
 
