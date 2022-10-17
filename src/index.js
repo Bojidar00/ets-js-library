@@ -144,7 +144,9 @@ export async function fetchPlacesFromServer(
   serverUrl = ETS_SERVER_URL,
 ) {
   try {
-    const response = await axios.post(`${serverUrl}/api/v1/places?country=${country}`);
+    const response = await axios.get(
+      `${serverUrl}/api/v1/places?country=${country}`,
+    );
 
     return response;
   } catch (error) {
