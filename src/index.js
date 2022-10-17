@@ -185,9 +185,8 @@ export async function fetchAllEventIds() {
   return allEventIds;
 }
 
-export function listenForNewEvent(models, insertData) {
+export function listenForNewEvent(callback) {
   eventsContract.on("EventCreated", async (eventId, metadataUri) => {
-    // Insert event to db
     const url = createGatewayUrl(metadataUri);
     const eventMetadata = await axios.get(url);
 
@@ -199,11 +198,11 @@ export function listenForNewEvent(models, insertData) {
       eventMetadata: eventMetadata.data,
     };
 
-    await insertData(models, data, membersData);
+    await callback(data, membersData);
   });
 }
 
-export function listenForEventUpdate(models, updateData) {
+export function listenForEventUpdate(callback) {
   eventsContract.on("MetadataUpdate", async (contractNftEventId) => {
     // Fetch Event NFT metadata
     const eventsMetadata = await fetchEvents([contractNftEventId]);
@@ -213,12 +212,11 @@ export function listenForEventUpdate(models, updateData) {
       eventMetadata: eventsMetadata[0],
     };
 
-    // Update entry in db
-    await updateData(models, data);
+    await callback(data);
   });
 }
 
-export function listenForRoleGrant(models, addOrganizer) {
+export function listenForRoleGrant(callback) {
   eventsContract.on(
     "RoleGranted",
     async (contractNftEventId, role, account, sender) => {
@@ -229,12 +227,12 @@ export function listenForRoleGrant(models, addOrganizer) {
         sender,
       };
 
-      await addOrganizer(models, data);
+      await callback(data);
     },
   );
 }
 
-export function listenForRoleRevoke(models, deleteOrganizer) {
+export function listenForRoleRevoke(callback) {
   eventsContract.on(
     "RoleRevoked",
     async (contractNftEventId, role, account, sender) => {
@@ -245,7 +243,7 @@ export function listenForRoleRevoke(models, deleteOrganizer) {
         sender,
       };
 
-      await deleteOrganizer(models, data);
+      await callback(data);
     },
   );
 }
