@@ -140,11 +140,11 @@ export async function fetchCountriesFromServer(serverUrl = ETS_SERVER_URL) {
 }
 
 export async function fetchPlacesFromServer(
-  params,
+  country,
   serverUrl = ETS_SERVER_URL,
 ) {
   try {
-    const response = await axios.post(`${serverUrl}/api/v1/places`, params);
+    const response = await axios.post(`${serverUrl}/api/v1/places?country=${country}`);
 
     return response;
   } catch (error) {
