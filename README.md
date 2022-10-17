@@ -172,7 +172,7 @@ const events = fetchOwnedEvents(address);
 ```js
 import { fetchAllEventsFromServer } from "ets-js-library";
 
-let params = {
+const params = {
   keywords: {
     title: "",
     titleDesc: "",
@@ -202,7 +202,7 @@ let params = {
 };
 
 //This parameter is optional
-let serverUrl = "http://localhost:1337";
+const serverUrl = "http://localhost:1337";
 
 const events = fetchAllEventsFromServer(params, serverUrl);
 ```
@@ -216,7 +216,7 @@ const events = fetchAllEventsFromServer(params, serverUrl);
 import { fetchCountriesFromServer } from "ets-js-library";
 
 //This parameter is optional
-let serverUrl = "http://localhost:1337";
+const serverUrl = "http://localhost:1337";
 
 const countries = fetchCountriesFromServer(serverUrl);
 ```
@@ -230,9 +230,10 @@ const countries = fetchCountriesFromServer(serverUrl);
 import { fetchPlacesFromServer } from "ets-js-library";
 
 //This parameter is optional
-let serverUrl = "http://localhost:1337";
+const serverUrl = "http://localhost:1337";
+const country = "Bulgaria";
 
-const places = fetchPlacesFromServer(serverUrl);
+const places = fetchPlacesFromServer(country, serverUrl);
 ```
 
 ### Add team member to event
