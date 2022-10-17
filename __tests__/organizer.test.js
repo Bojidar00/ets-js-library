@@ -29,7 +29,7 @@ describe("Organizer tests", () => {
     try {
       await removeEvent(1);
     } catch (error) {
-      expect(error.reason).toBe("EventTicketingSystem: Caller is not an admin"); // eslint-disable-line jest/no-conditional-expect
+      expect(error.reason).toBe("Event: Caller is not an admin"); // eslint-disable-line jest/no-conditional-expect
     }
   });
 
