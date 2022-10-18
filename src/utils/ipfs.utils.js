@@ -1,19 +1,7 @@
 import { NFTStorage } from "nft.storage";
 import axios from "axios";
-import { ethers } from "ethers";
-import {
-  NET_RPC_URL,
-  EVENTS_CONTRACT_ADDRESS,
-  ABI,
-  IPFS_GATEWAY_PROVIDER_URL,
-} from "#config";
-
-const provider = ethers.getDefaultProvider(NET_RPC_URL);
-const eventsContract = new ethers.Contract(
-  EVENTS_CONTRACT_ADDRESS,
-  ABI,
-  provider,
-);
+import { IPFS_GATEWAY_PROVIDER_URL } from "#config";
+import { eventsContract } from "#contract";
 
 function makeGatewayUrl(ipfsURI) {
   return ipfsURI.replace(/^ipfs:\/\//, IPFS_GATEWAY_PROVIDER_URL);
@@ -46,12 +34,7 @@ async function fetchEventsMetadata(eventIds, contract = eventsContract) {
 
   for (const eventId of eventIds) {
     try {
-      const eventUri = await contract.tokenURI(eventId);
-      const url = makeGatewayUrl(eventUri);
-      const eventMetadata = await axios.get(url);
-
-      eventMetadata.data.eventId = eventId;
-      eventMetadata.data.cid = eventUri;
+      const eventMetadata = await fetchSingleEventMetadata(eventId, contract);
       eventsMetadata.push(eventMetadata.data);
     } catch (error) {
       return { error };
@@ -61,10 +44,21 @@ async function fetchEventsMetadata(eventIds, contract = eventsContract) {
   return eventsMetadata;
 }
 
+async function fetchSingleEventMetadata(eventId, contract = eventsContract) {
+  const eventUri = await contract.tokenURI(eventId);
+  const url = makeGatewayUrl(eventUri);
+  const eventMetadata = await axios.get(url);
+
+  eventMetadata.data.eventId = eventId;
+  eventMetadata.data.cid = eventUri;
+  return eventMetadata;
+}
+
 export {
   uploadDataToIpfs,
   deleteDataFromService,
   fetchEventsMetadata,
+  fetchSingleEventMetadata,
   getIpfsUrl,
   makeGatewayUrl,
 };
