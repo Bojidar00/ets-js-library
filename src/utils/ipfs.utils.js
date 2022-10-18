@@ -7,9 +7,8 @@ function makeGatewayUrl(ipfsURI) {
   return ipfsURI.replace(/^ipfs:\/\//, IPFS_GATEWAY_PROVIDER_URL);
 }
 
-async function uploadDataToIpfs(nftStorageApiKey, metadata, image) {
+async function uploadDataToIpfs(nftStorageApiKey, metadata) {
   const client = new NFTStorage({ token: nftStorageApiKey });
-  metadata.image = image;
 
   const cid = await client.store(metadata);
 
