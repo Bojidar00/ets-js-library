@@ -3,22 +3,13 @@
 import { ethers } from "ethers";
 import axios from "axios";
 import { uploadDataToIpfs, fetchEventsMetadata, deleteDataFromService, getIpfsUrl, makeGatewayUrl } from "#ipfs.utils";
-import {
-  ABI,
-  ETS_SERVER_URL,
-  EVENTS_CONTRACT_ADDRESS,
-  NET_RPC_URL,
-  NET_RPC_URL_ID,
-  TOKEN_NAME,
-  NET_LABEL,
-} from "#config";
-
-const provider = ethers.getDefaultProvider(NET_RPC_URL);
-const eventsContract = new ethers.Contract(EVENTS_CONTRACT_ADDRESS, ABI, provider);
+import { ETS_SERVER_URL, NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL } from "#config";
+import { provider, eventsContract } from "#contract";
 
 export async function createEvent(nftStorageApiKey, metadata, image, maxTicketPerClient, contract = eventsContract) {
   try {
-    const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
+    metadata.image = image;
+    const url = await uploadDataToIpfs(nftStorageApiKey, metadata);
     const tx = await contract.populateTransaction.createEvent(maxTicketPerClient, url);
     return tx;
   } catch (error) {
@@ -179,20 +170,15 @@ export function listenForEventUpdate(callback) {
 }
 
 export function listenForRoleGrant(callback) {
-  eventsContract.on("RoleGranted", async (contractNftEventId, role, account, sender) => {
-    const data = {
-      eventId: contractNftEventId,
-      role,
-      account,
-      sender,
-    };
-
-    await callback(data);
-  });
+  listenForRole(callback, "RoleGranted");
 }
 
 export function listenForRoleRevoke(callback) {
-  eventsContract.on("RoleRevoked", async (contractNftEventId, role, account, sender) => {
+  listenForRole(callback, "RoleRevoked");
+}
+
+function listenForRole(callback, role) {
+  eventsContract.on(role, async (contractNftEventId, role, account, sender) => {
     const data = {
       eventId: contractNftEventId,
       role,
@@ -209,6 +195,116 @@ export function createGatewayUrl(url) {
     const gatewayUrl = makeGatewayUrl(url);
 
     return gatewayUrl;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function setEventCashier(eventId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.setEventCashier(eventId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function createTicketCategory(nftStorageApiKey, eventId, metadata, contract = eventsContract) {
+  try {
+    const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
+    const tx = await contract.populateTransaction.createTicketCategory(eventId, uri);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateCategoryUri(nftStorageApiKey, eventId, categoryId, metadata, contract = eventsContract) {
+  try {
+    const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
+    const tx = await contract.populateTransaction.updateCategoryUri(eventId, categoryId, uri);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function removeCategory(eventId, categoryId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.removeCategory(eventId, categoryId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function startCategorySelling(eventId, categoryId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.startCategorySelling(eventId, categoryId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function stopCategorySelling(eventId, categoryId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.stopCategorySelling(eventId, categoryId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function startAllCategorySelling(eventId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.startAllCategorySelling(eventId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function stopAllCategorySelling(eventId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.stopAllCategorySelling(eventId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchCategoriesByEventId(eventId, contract = eventsContract) {
+  try {
+    const categories = await contract.fetchCategoriesByEventId(eventId);
+    return categories;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function clipTicket(eventId, categoryId, ticketId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.clipTicket(eventId, categoryId, ticketId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function bookTickets(eventId, categoryId, ticketsCount, addresses, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.bookTickets(eventId, categoryId, ticketsCount, addresses);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function buyTickets(eventId, categoryId, ticketMetadataURI, amount, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.buyTickets(eventId, categoryId, ticketMetadataURI, amount);
+    return tx;
   } catch (error) {
     throw error;
   }

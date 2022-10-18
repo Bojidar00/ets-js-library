@@ -1,0 +1,28 @@
+name: Open a pull request
+
+on:
+  push:
+    branches:
+      - copy-json-files-**
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout source code"
+        uses: "actions/checkout@v2"
+        with:
+          ref: ${{ github.ref }}
+
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          commit-message: "ci: Bump version to {{version}}"
+
+      - name: pull-request
+        uses: repo-sync/pull-request@v2.6.2
+        with:
+          destination_branch: "main"
+          github_token: ${{ secrets.GH_TOKEN }}

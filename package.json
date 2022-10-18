@@ -1,6 +1,6 @@
 {
   "name": "ets-js-library",
-  "version": "0.2.19",
+  "version": "0.3.2",
   "description": "Library for event ticketing system",
   "main": "./src/index.js",
   "type": "module",
@@ -49,6 +49,7 @@
   "imports": {
     "#ipfs.utils": "./src/utils/ipfs.utils.js",
     "#config": "./src/configs/index.config.js",
-    "#contract.config/*": "./config/*"
+    "#contract.config/*": "./config/*",
+    "#contract": "./src/utils/contract.js"
   }
 }

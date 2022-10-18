@@ -1,7 +1,6 @@
 import { ABI, NET_RPC_URL } from "#config";
 import { ethers } from "ethers";
 import fs from "fs";
-import fetch from "@web-std/fetch";
 
 const NFT_STORAGE_API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDY4OEYyYjcxMzhlN" +
@@ -45,14 +44,6 @@ const mockedMetadata = {
   },
 };
 
-let image;
-let imageBlob;
-
-(async () => {
-  image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
-  imageBlob = await image.blob();
-})();
-
 export {
   NFT_STORAGE_API_KEY,
   EVENTS_TEST_CONTRACT_ADDRESS,
@@ -62,5 +53,4 @@ export {
   eventsTestContract,
   EXAMPLE_ADDRESS,
   mockedMetadata,
-  imageBlob,
 };
