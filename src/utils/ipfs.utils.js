@@ -1,19 +1,10 @@
 import { NFTStorage } from "nft.storage";
 import axios from "axios";
 import { ethers } from "ethers";
-import {
-  NET_RPC_URL,
-  EVENTS_CONTRACT_ADDRESS,
-  ABI,
-  IPFS_GATEWAY_PROVIDER_URL,
-} from "#config";
+import { NET_RPC_URL, EVENTS_CONTRACT_ADDRESS, ABI, IPFS_GATEWAY_PROVIDER_URL } from "#config";
 
 const provider = ethers.getDefaultProvider(NET_RPC_URL);
-const eventsContract = new ethers.Contract(
-  EVENTS_CONTRACT_ADDRESS,
-  ABI,
-  provider,
-);
+const eventsContract = new ethers.Contract(EVENTS_CONTRACT_ADDRESS, ABI, provider);
 
 function makeGatewayUrl(ipfsURI) {
   return ipfsURI.replace(/^ipfs:\/\//, IPFS_GATEWAY_PROVIDER_URL);
@@ -61,10 +52,4 @@ async function fetchEventsMetadata(eventIds, contract = eventsContract) {
   return eventsMetadata;
 }
 
-export {
-  uploadDataToIpfs,
-  deleteDataFromService,
-  fetchEventsMetadata,
-  getIpfsUrl,
-  makeGatewayUrl,
-};
+export { uploadDataToIpfs, deleteDataFromService, fetchEventsMetadata, getIpfsUrl, makeGatewayUrl };

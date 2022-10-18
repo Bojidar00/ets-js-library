@@ -2,13 +2,7 @@
 
 import { ethers } from "ethers";
 import axios from "axios";
-import {
-  uploadDataToIpfs,
-  fetchEventsMetadata,
-  deleteDataFromService,
-  getIpfsUrl,
-  makeGatewayUrl,
-} from "#ipfs.utils";
+import { uploadDataToIpfs, fetchEventsMetadata, deleteDataFromService, getIpfsUrl, makeGatewayUrl } from "#ipfs.utils";
 import {
   ABI,
   ETS_SERVER_URL,
@@ -20,25 +14,12 @@ import {
 } from "#config";
 
 const provider = ethers.getDefaultProvider(NET_RPC_URL);
-const eventsContract = new ethers.Contract(
-  EVENTS_CONTRACT_ADDRESS,
-  ABI,
-  provider,
-);
+const eventsContract = new ethers.Contract(EVENTS_CONTRACT_ADDRESS, ABI, provider);
 
-export async function createEvent(
-  nftStorageApiKey,
-  metadata,
-  image,
-  maxTicketPerClient,
-  contract = eventsContract,
-) {
+export async function createEvent(nftStorageApiKey, metadata, image, maxTicketPerClient, contract = eventsContract) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
-    const tx = await contract.populateTransaction.createEvent(
-      maxTicketPerClient,
-      url,
-    );
+    const tx = await contract.populateTransaction.createEvent(maxTicketPerClient, url);
     return tx;
   } catch (error) {
     throw error;
@@ -72,20 +53,11 @@ export async function removeEvent(eventId, contract = eventsContract) {
   }
 }
 
-export async function updateEvent(
-  nftStorageApiKey,
-  eventId,
-  metadata,
-  image,
-  contract = eventsContract,
-) {
+export async function updateEvent(nftStorageApiKey, eventId, metadata, image, contract = eventsContract) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
 
-    const tx = await contract.populateTransaction.updateEventTokenUri(
-      eventId,
-      url,
-    );
+    const tx = await contract.populateTransaction.updateEventTokenUri(eventId, url);
 
     return tx;
   } catch (error) {
@@ -107,18 +79,9 @@ export async function deleteFromIpfs(nftStorageApiKey, ipfsUri) {
   }
 }
 
-export async function addTeamMember(
-  eventId,
-  role,
-  address,
-  contract = eventsContract,
-) {
+export async function addTeamMember(eventId, role, address, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.addTeamMember(
-      eventId,
-      role,
-      address,
-    );
+    const tx = await contract.populateTransaction.addTeamMember(eventId, role, address);
 
     return tx;
   } catch (error) {
@@ -126,18 +89,9 @@ export async function addTeamMember(
   }
 }
 
-export async function removeTeamMember(
-  eventId,
-  role,
-  address,
-  contract = eventsContract,
-) {
+export async function removeTeamMember(eventId, role, address, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.removeTeamMember(
-      eventId,
-      role,
-      address,
-    );
+    const tx = await contract.populateTransaction.removeTeamMember(eventId, role, address);
 
     return tx;
   } catch (error) {
@@ -155,14 +109,9 @@ export async function fetchCountriesFromServer(serverUrl = ETS_SERVER_URL) {
   }
 }
 
-export async function fetchPlacesFromServer(
-  country,
-  serverUrl = ETS_SERVER_URL,
-) {
+export async function fetchPlacesFromServer(country, serverUrl = ETS_SERVER_URL) {
   try {
-    const response = await axios.get(
-      `${serverUrl}/api/v1/places?country=${country}`,
-    );
+    const response = await axios.get(`${serverUrl}/api/v1/places?country=${country}`);
 
     return response;
   } catch (error) {
@@ -170,10 +119,7 @@ export async function fetchPlacesFromServer(
   }
 }
 
-export async function fetchAllEventsFromServer(
-  params,
-  serverUrl = ETS_SERVER_URL,
-) {
+export async function fetchAllEventsFromServer(params, serverUrl = ETS_SERVER_URL) {
   try {
     const response = await axios.post(`${serverUrl}/api/v1/events`, params);
 
@@ -233,35 +179,29 @@ export function listenForEventUpdate(callback) {
 }
 
 export function listenForRoleGrant(callback) {
-  eventsContract.on(
-    "RoleGranted",
-    async (contractNftEventId, role, account, sender) => {
-      const data = {
-        eventId: contractNftEventId,
-        role,
-        account,
-        sender,
-      };
+  eventsContract.on("RoleGranted", async (contractNftEventId, role, account, sender) => {
+    const data = {
+      eventId: contractNftEventId,
+      role,
+      account,
+      sender,
+    };
 
-      await callback(data);
-    },
-  );
+    await callback(data);
+  });
 }
 
 export function listenForRoleRevoke(callback) {
-  eventsContract.on(
-    "RoleRevoked",
-    async (contractNftEventId, role, account, sender) => {
-      const data = {
-        eventId: contractNftEventId,
-        role,
-        account,
-        sender,
-      };
+  eventsContract.on("RoleRevoked", async (contractNftEventId, role, account, sender) => {
+    const data = {
+      eventId: contractNftEventId,
+      role,
+      account,
+      sender,
+    };
 
-      await callback(data);
-    },
-  );
+    await callback(data);
+  });
 }
 
 export function createGatewayUrl(url) {

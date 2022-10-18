@@ -8,4 +8,5 @@ module.exports = {
     "#config": "<rootDir>/src/configs/index.config.js",
     "#contract.config/(.*)$": "<rootDir>/config/$1",
   },
+  testPathIgnorePatterns: ["<rootDir>/__tests__/config.js"],
 };
