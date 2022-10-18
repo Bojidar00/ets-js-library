@@ -3,7 +3,7 @@ name: Open a pull request
 on:
   push:
     branches:
-      - origin/copy-**
+      - origin/copy-*
 
 jobs:
   pull-request:
