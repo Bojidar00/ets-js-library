@@ -1,3 +1,5 @@
+name: Open a pull request
+
 on:
   push:
     branches:
