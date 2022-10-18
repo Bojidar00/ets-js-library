@@ -49,12 +49,7 @@ const metadata = {
 
 const key = "API key for NFT.storage";
 
-const transaction = await createEvent(
-  key,
-  metadata,
-  image,
-  maxTicketsPerClient,
-);
+const transaction = await createEvent(key, metadata, image, maxTicketsPerClient);
 //You need to sign and send the transaction after this.
 ```
 

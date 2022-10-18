@@ -36,13 +36,9 @@ describe("user", () => {
       },
     };
 
-    mock
-      .onPost()
-      .reply(200, ["ipfs://metadataOfEvent1", "ipfs://metadataOfEvent2"]);
+    mock.onPost().reply(200, ["ipfs://metadataOfEvent1", "ipfs://metadataOfEvent2"]);
 
     const response = await fetchAllEventsFromServer(params);
-    expect(response.data.toString()).toBe(
-      "ipfs://metadataOfEvent1,ipfs://metadataOfEvent2",
-    );
+    expect(response.data.toString()).toBe("ipfs://metadataOfEvent1,ipfs://metadataOfEvent2");
   });
 });

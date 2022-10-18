@@ -2,36 +2,15 @@
 
 import { ethers } from "ethers";
 import axios from "axios";
-import {
-  uploadDataToIpfs,
-  fetchEventsMetadata,
-  deleteDataFromService,
-  getIpfsUrl,
-  makeGatewayUrl,
-} from "#ipfs.utils";
-import {
-  ETS_SERVER_URL,
-  NET_RPC_URL,
-  NET_RPC_URL_ID,
-  TOKEN_NAME,
-  NET_LABEL,
-} from "#config";
+import { uploadDataToIpfs, fetchEventsMetadata, deleteDataFromService, getIpfsUrl, makeGatewayUrl } from "#ipfs.utils";
+import { ETS_SERVER_URL, NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL } from "#config";
 import { provider, eventsContract } from "#contract";
 
-export async function createEvent(
-  nftStorageApiKey,
-  metadata,
-  image,
-  maxTicketPerClient,
-  contract = eventsContract,
-) {
+export async function createEvent(nftStorageApiKey, metadata, image, maxTicketPerClient, contract = eventsContract) {
   try {
     metadata.image = image;
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata);
-    const tx = await contract.populateTransaction.createEvent(
-      maxTicketPerClient,
-      url,
-    );
+    const tx = await contract.populateTransaction.createEvent(maxTicketPerClient, url);
     return tx;
   } catch (error) {
     throw error;
@@ -65,20 +44,11 @@ export async function removeEvent(eventId, contract = eventsContract) {
   }
 }
 
-export async function updateEvent(
-  nftStorageApiKey,
-  eventId,
-  metadata,
-  image,
-  contract = eventsContract,
-) {
+export async function updateEvent(nftStorageApiKey, eventId, metadata, image, contract = eventsContract) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
 
-    const tx = await contract.populateTransaction.updateEventTokenUri(
-      eventId,
-      url,
-    );
+    const tx = await contract.populateTransaction.updateEventTokenUri(eventId, url);
 
     return tx;
   } catch (error) {
@@ -100,18 +70,9 @@ export async function deleteFromIpfs(nftStorageApiKey, ipfsUri) {
   }
 }
 
-export async function addTeamMember(
-  eventId,
-  role,
-  address,
-  contract = eventsContract,
-) {
+export async function addTeamMember(eventId, role, address, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.addTeamMember(
-      eventId,
-      role,
-      address,
-    );
+    const tx = await contract.populateTransaction.addTeamMember(eventId, role, address);
 
     return tx;
   } catch (error) {
@@ -119,18 +80,9 @@ export async function addTeamMember(
   }
 }
 
-export async function removeTeamMember(
-  eventId,
-  role,
-  address,
-  contract = eventsContract,
-) {
+export async function removeTeamMember(eventId, role, address, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.removeTeamMember(
-      eventId,
-      role,
-      address,
-    );
+    const tx = await contract.populateTransaction.removeTeamMember(eventId, role, address);
 
     return tx;
   } catch (error) {
@@ -148,14 +100,9 @@ export async function fetchCountriesFromServer(serverUrl = ETS_SERVER_URL) {
   }
 }
 
-export async function fetchPlacesFromServer(
-  country,
-  serverUrl = ETS_SERVER_URL,
-) {
+export async function fetchPlacesFromServer(country, serverUrl = ETS_SERVER_URL) {
   try {
-    const response = await axios.get(
-      `${serverUrl}/api/v1/places?country=${country}`,
-    );
+    const response = await axios.get(`${serverUrl}/api/v1/places?country=${country}`);
 
     return response;
   } catch (error) {
@@ -163,10 +110,7 @@ export async function fetchPlacesFromServer(
   }
 }
 
-export async function fetchAllEventsFromServer(
-  params,
-  serverUrl = ETS_SERVER_URL,
-) {
+export async function fetchAllEventsFromServer(params, serverUrl = ETS_SERVER_URL) {
   try {
     const response = await axios.post(`${serverUrl}/api/v1/events`, params);
 
@@ -265,124 +209,72 @@ export async function setEventCashier(eventId, contract = eventsContract) {
   }
 }
 
-export async function createTicketCategory(
-  nftStorageApiKey,
-  eventId,
-  metadata,
-  contract = eventsContract,
-) {
+export async function createTicketCategory(nftStorageApiKey, eventId, metadata, contract = eventsContract) {
   try {
     const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
-    const tx = await contract.populateTransaction.createTicketCategory(
-      eventId,
-      uri,
-    );
+    const tx = await contract.populateTransaction.createTicketCategory(eventId, uri);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function updateCategoryUri(
-  nftStorageApiKey,
-  eventId,
-  categoryId,
-  metadata,
-  contract = eventsContract,
-) {
+export async function updateCategoryUri(nftStorageApiKey, eventId, categoryId, metadata, contract = eventsContract) {
   try {
     const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
-    const tx = await contract.populateTransaction.updateCategoryUri(
-      eventId,
-      categoryId,
-      uri,
-    );
+    const tx = await contract.populateTransaction.updateCategoryUri(eventId, categoryId, uri);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function removeCategory(
-  eventId,
-  categoryId,
-  contract = eventsContract,
-) {
+export async function removeCategory(eventId, categoryId, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.removeCategory(
-      eventId,
-      categoryId,
-    );
+    const tx = await contract.populateTransaction.removeCategory(eventId, categoryId);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function startCategorySelling(
-  eventId,
-  categoryId,
-  contract = eventsContract,
-) {
+export async function startCategorySelling(eventId, categoryId, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.startCategorySelling(
-      eventId,
-      categoryId,
-    );
+    const tx = await contract.populateTransaction.startCategorySelling(eventId, categoryId);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function stopCategorySelling(
-  eventId,
-  categoryId,
-  contract = eventsContract,
-) {
+export async function stopCategorySelling(eventId, categoryId, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.stopCategorySelling(
-      eventId,
-      categoryId,
-    );
+    const tx = await contract.populateTransaction.stopCategorySelling(eventId, categoryId);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function startAllCategorySelling(
-  eventId,
-  contract = eventsContract,
-) {
+export async function startAllCategorySelling(eventId, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.startAllCategorySelling(
-      eventId,
-    );
+    const tx = await contract.populateTransaction.startAllCategorySelling(eventId);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function stopAllCategorySelling(
-  eventId,
-  contract = eventsContract,
-) {
+export async function stopAllCategorySelling(eventId, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.stopAllCategorySelling(
-      eventId,
-    );
+    const tx = await contract.populateTransaction.stopAllCategorySelling(eventId);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function fetchCategoriesByEventId(
-  eventId,
-  contract = eventsContract,
-) {
+export async function fetchCategoriesByEventId(eventId, contract = eventsContract) {
   try {
     const categories = await contract.fetchCategoriesByEventId(eventId);
     return categories;
@@ -391,58 +283,27 @@ export async function fetchCategoriesByEventId(
   }
 }
 
-export async function clipTicket(
-  eventId,
-  categoryId,
-  ticketId,
-  contract = eventsContract,
-) {
+export async function clipTicket(eventId, categoryId, ticketId, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.clipTicket(
-      eventId,
-      categoryId,
-      ticketId,
-    );
+    const tx = await contract.populateTransaction.clipTicket(eventId, categoryId, ticketId);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function bookTickets(
-  eventId,
-  categoryId,
-  ticketsCount,
-  addresses,
-  contract = eventsContract,
-) {
+export async function bookTickets(eventId, categoryId, ticketsCount, addresses, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.bookTickets(
-      eventId,
-      categoryId,
-      ticketsCount,
-      addresses,
-    );
+    const tx = await contract.populateTransaction.bookTickets(eventId, categoryId, ticketsCount, addresses);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function buyTickets(
-  eventId,
-  categoryId,
-  ticketMetadataURI,
-  amount,
-  contract = eventsContract,
-) {
+export async function buyTickets(eventId, categoryId, ticketMetadataURI, amount, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.buyTickets(
-      eventId,
-      categoryId,
-      ticketMetadataURI,
-      amount,
-    );
+    const tx = await contract.populateTransaction.buyTickets(eventId, categoryId, ticketMetadataURI, amount);
     return tx;
   } catch (error) {
     throw error;

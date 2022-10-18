@@ -45,5 +45,6 @@ module.exports = {
     "no-multiple-empty-lines": ["error", { max: 2, maxBOF: 1, maxEOF: 1 }],
     eqeqeq: ["error", "always"],
     "prefer-const": "error",
+    "max-len": ["error", { code: 120 }],
   },
 };
