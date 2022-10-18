@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - copy-json-files/*
+      - copy-json-files-0.2.15
 
 jobs:
   pull-request:
