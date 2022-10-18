@@ -1,7 +1,9 @@
+name: Open a pull request
+
 on:
   push:
     branches:
-      - copy-json-files-0.2.15
+      - origin/copy-**
 
 jobs:
   pull-request:
