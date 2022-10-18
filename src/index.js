@@ -10,21 +10,13 @@ import {
   makeGatewayUrl,
 } from "#ipfs.utils";
 import {
-  ABI,
   ETS_SERVER_URL,
-  EVENTS_CONTRACT_ADDRESS,
   NET_RPC_URL,
   NET_RPC_URL_ID,
   TOKEN_NAME,
   NET_LABEL,
 } from "#config";
-
-const provider = ethers.getDefaultProvider(NET_RPC_URL);
-const eventsContract = new ethers.Contract(
-  EVENTS_CONTRACT_ADDRESS,
-  ABI,
-  provider,
-);
+import { provider, eventsContract } from "#contract";
 
 export async function createEvent(
   nftStorageApiKey,
@@ -233,35 +225,24 @@ export function listenForEventUpdate(callback) {
 }
 
 export function listenForRoleGrant(callback) {
-  eventsContract.on(
-    "RoleGranted",
-    async (contractNftEventId, role, account, sender) => {
-      const data = {
-        eventId: contractNftEventId,
-        role,
-        account,
-        sender,
-      };
-
-      await callback(data);
-    },
-  );
+  listenForRole(callback, "RoleGranted");
 }
 
 export function listenForRoleRevoke(callback) {
-  eventsContract.on(
-    "RoleRevoked",
-    async (contractNftEventId, role, account, sender) => {
-      const data = {
-        eventId: contractNftEventId,
-        role,
-        account,
-        sender,
-      };
+  listenForRole(callback, "RoleRevoked");
+}
 
-      await callback(data);
-    },
-  );
+function listenForRole(callback, role) {
+  eventsContract.on(role, async (contractNftEventId, role, account, sender) => {
+    const data = {
+      eventId: contractNftEventId,
+      role,
+      account,
+      sender,
+    };
+
+    await callback(data);
+  });
 }
 
 export function createGatewayUrl(url) {
