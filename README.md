@@ -25,31 +25,34 @@ import { createEvent } from "ets-js-library";
 
 const metadata = {
   name: "Event1",
-  eventId,
-  websiteUrl: "https://event1.com",
-  posterImageUrl: imageCidGatewayUrl,
-  date: {
-    start: Math.floor(Date.now() / 1000),
-    end: Math.floor(Date.now() / 1000) + 60 * 60,
-  },
-  location: {
-    country: "Bulgaria",
-    city: "Varna",
-    address: "Front Beach Alley, 9007 Golden Sands",
-    coordinates: {
-      latitude: "43.28365485346511",
-      longitude: "28.042738484752096",
+  description: "Event1 Description",
+  image: "Blob or File Object",
+  properties: {
+    websiteUrl: "https://event1.com",
+    date: {
+      start: "2022-10-01",
+      end: "2022-10-03",
     },
+    location: {
+      country: "Bulgaria",
+      city: "Varna",
+      address: "Front Beach Alley, 9007 Golden Sands",
+      coordinates: {
+        latitude: "43.28365485346511",
+        longitude: "28.042738484752096",
+      },
+    },
+    ticketTypes: ["super early birds", "early birds", "regular", "onsite"],
+    maxTicketsPerAccount: 10,
+    contacts: "Contacts string",
+    status: "upcoming",
+    tags: ["#programming", "#blockchain"],
   },
-  ticketTypes: ["super early birds", "early birds", "regular", "onsite"],
-  maxTicketsPerAccount: 10,
-  contacts: "Contacts string",
-  status: "upcoming",
 };
 
 const key = "API key for NFT.storage";
 
-const transaction = await createEvent(key, metadata, image, maxTicketsPerClient);
+const transaction = await createEvent(key, metadata, maxTicketsPerClient);
 //You need to sign and send the transaction after this.
 ```
 
@@ -68,26 +71,29 @@ import { updateEvent, getEventIpfsUri, deleteFromIpfs } from "ets-js-library";
 
 const metadata = {
   name: "Event1",
-  eventId,
-  websiteUrl: "https://event1.com",
-  posterImageUrl: imageCidGatewayUrl,
-  date: {
-    start: Math.floor(Date.now() / 1000),
-    end: Math.floor(Date.now() / 1000) + 60 * 60,
-  },
-  location: {
-    country: "Bulgaria",
-    city: "Varna",
-    address: "Front Beach Alley, 9007 Golden Sands",
-    coordinates: {
-      latitude: "43.28365485346511",
-      longitude: "28.042738484752096",
+  description: "Event1 Description",
+  image: "Blob or File Object",
+  properties: {
+    websiteUrl: "https://event1.com",
+    date: {
+      start: "2022-10-01",
+      end: "2022-10-03",
     },
+    location: {
+      country: "Bulgaria",
+      city: "Varna",
+      address: "Front Beach Alley, 9007 Golden Sands",
+      coordinates: {
+        latitude: "43.28365485346511",
+        longitude: "28.042738484752096",
+      },
+    },
+    ticketTypes: ["super early birds", "early birds", "regular", "onsite"],
+    maxTicketsPerAccount: 10,
+    contacts: "Contacts string",
+    status: "upcoming",
+    tags: ["#programming", "#blockchain"],
   },
-  ticketTypes: ["super early birds", "early birds", "regular", "onsite"],
-  maxTicketsPerAccount: 10,
-  contacts: "Contacts string",
-  status: "upcoming",
 };
 
 const key = "API key for NFT.storage";
@@ -96,7 +102,7 @@ const eventId = "Id of event in smart contract";
 const metadataUri = await getEventIpfsUri(eventId);
 
 try {
-  const transaction = await updateEvent(key, eventId, metadata, image);
+  const transaction = await updateEvent(key, eventId, metadata);
 
   //You need to sign and send the transaction here.
   deleteFromIpfs(key, metadataUri);

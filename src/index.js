@@ -6,11 +6,12 @@ import { uploadDataToIpfs, fetchEventsMetadata, deleteDataFromService, getIpfsUr
 import { ETS_SERVER_URL, NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL } from "#config";
 import { provider, eventsContract } from "#contract";
 
-export async function createEvent(nftStorageApiKey, metadata, image, maxTicketPerClient, contract = eventsContract) {
+export async function createEvent(nftStorageApiKey, metadata, maxTicketPerClient, contract = eventsContract) {
   try {
-    metadata.image = image;
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata);
+
     const tx = await contract.populateTransaction.createEvent(maxTicketPerClient, url);
+
     return tx;
   } catch (error) {
     throw error;
@@ -29,8 +30,11 @@ export async function fetchEvents(eventIds, contract) {
 
 export async function fetchOwnedEvents(address, contract = eventsContract) {
   const signer = new ethers.VoidSigner(address, provider);
+
   const eventIds = await contract.connect(signer).fetchOwnedEvents();
+
   const events = await fetchEvents(eventIds, contract);
+
   return events;
 }
 
@@ -44,9 +48,9 @@ export async function removeEvent(eventId, contract = eventsContract) {
   }
 }
 
-export async function updateEvent(nftStorageApiKey, eventId, metadata, image, contract = eventsContract) {
+export async function updateEvent(nftStorageApiKey, eventId, metadata, contract = eventsContract) {
   try {
-    const url = await uploadDataToIpfs(nftStorageApiKey, metadata, image);
+    const url = await uploadDataToIpfs(nftStorageApiKey, metadata);
 
     const tx = await contract.populateTransaction.updateEventTokenUri(eventId, url);
 
