@@ -242,6 +242,15 @@ export async function removeCategory(eventId, categoryId, contract = eventsContr
   }
 }
 
+export async function addCategoryTicketsCount(eventId, categoryId, ticketsCount, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.addCategoryTicketsCount(eventId, categoryId, ticketsCount);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function startCategorySelling(eventId, categoryId, contract = eventsContract) {
   try {
     const tx = await contract.populateTransaction.startCategorySelling(eventId, categoryId);
