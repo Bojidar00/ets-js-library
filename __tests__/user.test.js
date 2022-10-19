@@ -1,6 +1,7 @@
 import { fetchAllEventsFromServer } from "../src/index";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { mockedEventParams } from "./config";
 
 describe("user", () => {
   let mock;
@@ -14,31 +15,9 @@ describe("user", () => {
   });
 
   test("Gets all events from server", async () => {
-    const params = {
-      title: "",
-      description: "",
-      eventStartDateStartingInterval: "",
-      eventStartDateEndingInterval: "",
-      eventEndDateStartingInterval: "",
-      eventEndDateEndingInterval: "",
-      country: "",
-      place: "",
-      tags: [],
-      sort: {
-        startDate: "",
-        eventName: "",
-        country: "",
-        place: "",
-      },
-      pagination: {
-        offset: "",
-        limit: "",
-      },
-    };
-
     mock.onPost().reply(200, ["ipfs://metadataOfEvent1", "ipfs://metadataOfEvent2"]);
 
-    const response = await fetchAllEventsFromServer(params);
+    const response = await fetchAllEventsFromServer(mockedEventParams);
     expect(response.data.toString()).toBe("ipfs://metadataOfEvent1,ipfs://metadataOfEvent2");
   });
 });
