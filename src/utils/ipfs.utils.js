@@ -44,13 +44,17 @@ async function fetchEventsMetadata(eventIds, contract = eventsContract) {
 }
 
 async function fetchSingleEventMetadata(eventId, contract = eventsContract) {
-  const eventUri = await contract.tokenURI(eventId);
-  const url = makeGatewayUrl(eventUri);
-  const eventMetadata = await axios.get(url);
+  try {
+    const eventUri = await contract.tokenURI(eventId);
+    const url = makeGatewayUrl(eventUri);
+    const eventMetadata = await axios.get(url);
 
-  eventMetadata.data.eventId = eventId;
-  eventMetadata.data.cid = eventUri;
-  return eventMetadata;
+    eventMetadata.data.eventId = eventId;
+    eventMetadata.data.cid = eventUri;
+    return eventMetadata;
+  } catch (error) {
+    return { error };
+  }
 }
 
 export {
