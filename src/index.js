@@ -170,15 +170,15 @@ export function listenForEventUpdate(callback) {
 }
 
 export function listenForRoleGrant(callback) {
-  listenForRole(callback, "RoleGranted");
+  listenForRole("RoleGranted", callback);
 }
 
 export function listenForRoleRevoke(callback) {
-  listenForRole(callback, "RoleRevoked");
+  listenForRole("RoleRevoked", callback);
 }
 
-function listenForRole(callback, role) {
-  eventsContract.on(role, async (contractNftEventId, role, account, sender) => {
+function listenForRole(contractEventName, callback) {
+  eventsContract.on(contractEventName, async (contractNftEventId, role, account, sender) => {
     const data = {
       eventId: contractNftEventId,
       role,

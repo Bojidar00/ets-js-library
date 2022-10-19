@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { NFTStorage } from "nft.storage";
 import axios from "axios";
 import { IPFS_GATEWAY_PROVIDER_URL } from "#config";
@@ -36,7 +37,7 @@ async function fetchEventsMetadata(eventIds, contract = eventsContract) {
       const eventMetadata = await fetchSingleEventMetadata(eventId, contract);
       eventsMetadata.push(eventMetadata.data);
     } catch (error) {
-      return { error };
+      throw error;
     }
   }
 
@@ -44,13 +45,17 @@ async function fetchEventsMetadata(eventIds, contract = eventsContract) {
 }
 
 async function fetchSingleEventMetadata(eventId, contract = eventsContract) {
-  const eventUri = await contract.tokenURI(eventId);
-  const url = makeGatewayUrl(eventUri);
-  const eventMetadata = await axios.get(url);
+  try {
+    const eventUri = await contract.tokenURI(eventId);
+    const url = makeGatewayUrl(eventUri);
+    const eventMetadata = await axios.get(url);
 
-  eventMetadata.data.eventId = eventId;
-  eventMetadata.data.cid = eventUri;
-  return eventMetadata;
+    eventMetadata.data.eventId = eventId;
+    eventMetadata.data.cid = eventUri;
+    return eventMetadata;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export {
