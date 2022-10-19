@@ -4,6 +4,19 @@
 
 This is a JavaScript library for interacting with event ticketing system. It creates unsigned transactions and fetches data from smart contracts and ipfs.
 
+### Users of the system
+ - Visitor: 
+Can search for events and buy tickets.
+ - Organizers of event:
+   - Admin: 
+     Can control everything on his events. 
+   - Moderator:
+     Can do everything except managing roles and deleting the event.
+   - Cashier:
+     Can operate with the funds collected from the event.
+   - Validator:
+     Can mark a ticket as "used".
+
 ## How to use
 
 Install:
@@ -299,6 +312,62 @@ const members = await getEventMembers(eventId);
 import { fetchAllEventIds } from "ets-js-library";
 
 const eventIds = await fetchAllEventIds();
+```
+
+### Listen for new events
+1. Import listenForNewEvent function from the library.
+2. Create a callback function.
+3. Supply callback function to listenForNewEvent as parameter.
+```js
+import { listenForNewEvent } from "ets-js-library";
+
+function callback(data, membersData){
+  //This function will be called when the event is emitted.
+}
+
+listenForNewEvent(callback);
+```
+
+### Listen for event update
+1. Import listenForEventUpdate function from the library.
+2. Create a callback function.
+3. Supply callback function to listenForEventUpdate as parameter.
+```js
+import { listenForEventUpdate } from "ets-js-library";
+
+function callback(data){
+  //This function will be called when the event is emitted.
+}
+
+listenForEventUpdate(callback);
+```
+
+### Listen for Role Granted
+1. Import listenForRoleGrant function from the library.
+2. Create a callback function.
+3. Supply callback function to listenForRoleGrant as parameter.
+```js
+import { listenForRoleGrant } from "ets-js-library";
+
+function callback(data){
+  //This function will be called when the event is emitted.
+}
+
+listenForRoleGrant(callback);
+```
+
+### Listen for Role Revoked
+1. Import listenForRoleRevoke function from the library.
+2. Create a callback function.
+3. Supply callback function to listenForRoleRevoke as parameter.
+```js
+import { listenForRoleRevoke } from "ets-js-library";
+
+function callback(data){
+  //This function will be called when the event is emitted.
+}
+
+listenForRoleRevoke(callback);
 ```
 
 ## Tests
