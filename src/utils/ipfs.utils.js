@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { NFTStorage } from "nft.storage";
 import axios from "axios";
 import { IPFS_GATEWAY_PROVIDER_URL } from "#config";
@@ -36,7 +37,7 @@ async function fetchEventsMetadata(eventIds, contract = eventsContract) {
       const eventMetadata = await fetchSingleEventMetadata(eventId, contract);
       eventsMetadata.push(eventMetadata.data);
     } catch (error) {
-      return { error };
+      throw error;
     }
   }
 
@@ -53,7 +54,7 @@ async function fetchSingleEventMetadata(eventId, contract = eventsContract) {
     eventMetadata.data.cid = eventUri;
     return eventMetadata;
   } catch (error) {
-    return { error };
+    throw error;
   }
 }
 
