@@ -21,7 +21,6 @@ const mockedMetadata = {
   description: "Event5 Description",
   image: "null",
   properties: {
-    eventId: "base-58 random bytes",
     websiteUrl: "https://event1.com",
     date: {
       start: "2022-10-01 10:45:29.971113+03",

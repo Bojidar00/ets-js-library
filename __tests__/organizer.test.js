@@ -19,7 +19,9 @@ describe("Organizer tests", () => {
     const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
     const imageBlob = await image.blob();
 
-    const populatedTx = await createEvent(NFT_STORAGE_API_KEY, mockedMetadata, imageBlob, 10, eventsTestContract);
+    mockedMetadata.image = imageBlob;
+
+    const populatedTx = await createEvent(NFT_STORAGE_API_KEY, mockedMetadata, 10, eventsTestContract);
 
     const eventTx = await wallet.sendTransaction(populatedTx);
     const eventTxResponse = await eventTx.wait();
@@ -72,18 +74,9 @@ describe("Organizer tests", () => {
     const oldIpfsUrl = await getEventIpfsUri(tokenId, eventsTestContract);
     try {
       mockedMetadata.name = "Updated Name";
-      mockedMetadata.description = "Updated descrtiption";
+      mockedMetadata.description = "Updated description";
 
-      const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
-      const imageBlob = await image.blob();
-
-      const populatedTx = await updateEvent(
-        NFT_STORAGE_API_KEY,
-        tokenId,
-        mockedMetadata,
-        imageBlob,
-        eventsTestContract,
-      );
+      const populatedTx = await updateEvent(NFT_STORAGE_API_KEY, tokenId, mockedMetadata, eventsTestContract);
 
       const tx = await wallet.sendTransaction(populatedTx);
       await tx.wait();
