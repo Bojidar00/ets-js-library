@@ -44,6 +44,28 @@ const mockedMetadata = {
   },
 };
 
+const mockedEventParams = {
+  title: "",
+  description: "",
+  eventStartDateStartingInterval: "",
+  eventStartDateEndingInterval: "",
+  eventEndDateStartingInterval: "",
+  eventEndDateEndingInterval: "",
+  country: "",
+  place: "",
+  tags: [],
+  sort: {
+    startDate: "",
+    eventName: "",
+    country: "",
+    place: "",
+  },
+  pagination: {
+    offset: "",
+    limit: "",
+  },
+};
+
 export {
   NFT_STORAGE_API_KEY,
   EVENTS_TEST_CONTRACT_ADDRESS,
@@ -53,4 +75,5 @@ export {
   eventsTestContract,
   EXAMPLE_ADDRESS,
   mockedMetadata,
+  mockedEventParams,
 };
