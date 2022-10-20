@@ -1,0 +1,40 @@
+{
+  "name": "Category1",
+  "description": "Category1 Description",
+  "image": "null",
+  "properties": {
+    "eventId": 1,
+    "ticketTypesCount": {
+      "type": "semi_fungible or non_fungible",
+      "places": 1
+    },
+    "design": {
+      "color": "color",
+      "imageUrl": "http://example.com"
+    },
+    "ticketPrice": "1BGN",
+    "downPayment": {
+      "price": "1BGN",
+      "finalAmountDate": "2022-10-01"
+    },
+    "discounts": [
+      {
+        "ticketCount": 2,
+        "discountPercentage": 20
+      },
+      {
+        "ticketCount": 3,
+        "discountPercentage": 33
+      },
+      {
+        "ticketCount": 4,
+        "discountPercentage": 25
+      }
+    ],
+    "maxCategoryTicketsAmountPerAccount": 1,
+    "salePeriod": {
+      "saleStartDate": "2022-10-01",
+      "saleEndDate": "2022-10-03"
+    }
+  }
+}
