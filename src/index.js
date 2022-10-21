@@ -224,6 +224,8 @@ export async function createTicketCategory(
   nftStorageApiKey,
   eventId,
   metadata,
+  saleStartDate,
+  saleEndDate,
   ticketsCount,
   contract = eventsContract,
 ) {
@@ -231,8 +233,8 @@ export async function createTicketCategory(
     const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
     const tx = await contract.populateTransaction.createTicketCategory(
       eventId,
-      metadata.salePeriod.saleStartDate,
-      metadata.salePeriod.saleEndDate,
+      saleStartDate,
+      saleEndDate,
       ticketsCount,
       uri,
     );
