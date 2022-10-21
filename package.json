@@ -29,6 +29,7 @@
     "axios-mock-adapter": "^1.21.2",
     "buddy.js": "^0.9.3",
     "ethers": "^5.7.1",
+    "http-status-codes": "^2.2.0",
     "nft.storage": "^7.0.0"
   },
   "devDependencies": {
