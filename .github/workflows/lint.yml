@@ -27,3 +27,6 @@ jobs:
 
       - name: Prettier
         run: npm run prettier:ci
+
+      - name: Buddy
+        run: npm run buddy
