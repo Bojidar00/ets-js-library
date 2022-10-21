@@ -1,6 +1,6 @@
 {
   "name": "ets-js-library",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Library for event ticketing system",
   "main": "./src/index.js",
   "type": "module",
