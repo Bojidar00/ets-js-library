@@ -45,7 +45,12 @@ describe("Organizer tests", () => {
 
   test("Should call add team member method from smart contract", async () => {
     try {
-      const populatedTx = await addTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventsTestContract);
+      const populatedTx = await addTeamMember(
+        tokenId,
+        `0x${"0".repeat(addressLength)}`,
+        EXAMPLE_ADDRESS,
+        eventsTestContract,
+      );
       const tx = await wallet.sendTransaction(populatedTx);
       await tx.wait();
 
@@ -60,7 +65,12 @@ describe("Organizer tests", () => {
 
   test("Should call remove team member method from smart contract", async () => {
     try {
-      const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventsTestContract);
+      const populatedTx = await removeTeamMember(
+        tokenId,
+        `0x${"0".repeat(addressLength)}`,
+        EXAMPLE_ADDRESS,
+        eventsTestContract,
+      );
       const tx = await wallet.sendTransaction(populatedTx);
       await tx.wait();
 
