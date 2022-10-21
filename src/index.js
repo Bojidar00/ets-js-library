@@ -2,7 +2,7 @@
 
 import { ethers } from "ethers";
 import axios from "axios";
-import { uploadDataToIpfs, fetchEventsMetadata, deleteDataFromService, getIpfsUrl, makeGatewayUrl } from "#ipfs.utils";
+import { uploadDataToIpfs, fetchEventsMetadata, fetchSingleEventMetadata, deleteDataFromService, getIpfsUrl, makeGatewayUrl } from "#ipfs.utils";
 import { ETS_SERVER_URL, NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL } from "#config";
 import { provider, eventsContract } from "#contract";
 
@@ -162,7 +162,7 @@ export function listenForNewEvent(callback) {
 export function listenForEventUpdate(callback) {
   eventsContract.on("MetadataUpdate", async (contractNftEventId) => {
     // Fetch Event NFT metadata
-    const eventsMetadata = await fetchEvents([contractNftEventId]);
+    const eventsMetadata = await fetchSingleEventMetadata(contractNftEventId);
 
     const data = {
       eventId: ethers.BigNumber.from(contractNftEventId).toNumber(),
