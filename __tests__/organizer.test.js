@@ -14,19 +14,20 @@ import { eventsTestContract, NFT_STORAGE_API_KEY, wallet, EXAMPLE_ADDRESS, mocke
 
 describe("Organizer tests", () => {
   let tokenId;
-
+  const addressLength = 64;
   beforeAll(async () => {
     const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
     const imageBlob = await image.blob();
-
+    const maxTicketPerClient = 10;
     mockedMetadata.image = imageBlob;
 
-    const populatedTx = await createEvent(NFT_STORAGE_API_KEY, mockedMetadata, 10, eventsTestContract);
+    const populatedTx = await createEvent(NFT_STORAGE_API_KEY, mockedMetadata, maxTicketPerClient, eventsTestContract);
 
     const eventTx = await wallet.sendTransaction(populatedTx);
     const eventTxResponse = await eventTx.wait();
-    const tokenIdInHex = eventTxResponse.logs[0].data.slice(2, 66);
-    tokenId = parseInt(tokenIdInHex, 16);
+    const tokenIdInHex = eventTxResponse.logs[0].data.slice(2, 66); // buddy ignore:line
+    const radix = 16;
+    tokenId = parseInt(tokenIdInHex, radix);
   });
 
   test("Should revert delete event when there is not an event", async () => {
@@ -44,13 +45,13 @@ describe("Organizer tests", () => {
 
   test("Should call add team member method from smart contract", async () => {
     try {
-      const populatedTx = await addTeamMember(tokenId, `0x${"0".repeat(64)}`, EXAMPLE_ADDRESS, eventsTestContract);
+      const populatedTx = await addTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventsTestContract);
       const tx = await wallet.sendTransaction(populatedTx);
       await tx.wait();
 
       const eventMembers = await getEventMembers(tokenId, eventsTestContract);
 
-      expect(eventMembers.length).toBe(2);
+      expect(eventMembers.length).toBe(2); // buddy ignore:line
       expect(eventMembers[1][0].toLowerCase()).toBe(EXAMPLE_ADDRESS);
     } catch (_error) {
       console.log(_error);
@@ -59,7 +60,7 @@ describe("Organizer tests", () => {
 
   test("Should call remove team member method from smart contract", async () => {
     try {
-      const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(64)}`, EXAMPLE_ADDRESS, eventsTestContract);
+      const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventsTestContract);
       const tx = await wallet.sendTransaction(populatedTx);
       await tx.wait();
 
