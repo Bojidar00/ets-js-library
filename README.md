@@ -164,6 +164,41 @@ const eventIds = [1, 2, 3];
 
 const events = fetchEvents(eventIds);
 ```
+Return data:
+```js
+const events = [
+{
+  "name": "",
+  "description": "",
+  "image": "",
+  "cid":"",
+  "eventId":"",
+  "properties": {
+    "webSiteUrl": "",
+    "date": {
+      "start": "",
+      "end": ""
+    },
+    "location": {
+      "country": "",
+      "city": "",
+      "address": "",
+      "coordinates": {
+        "latitude": "",
+        "longitude": ""
+      }
+    },
+    "ticketTypes": [],
+    "maxTicketsPerAccount": 0,
+    "contacts": "",
+    "status": "",
+    "tags": []
+  }
+}
+,
+...
+];
+```
 
 ### Fetch owned events
 
@@ -176,6 +211,41 @@ import { fetchOwnedEvents } from "ets-js-library";
 const address = "Address of events owner.";
 
 const events = fetchOwnedEvents(address);
+```
+Return data:
+```js
+const events = [
+{
+  "name": "",
+  "description": "",
+  "image": "",
+  "cid":"",
+  "eventId":"",
+  "properties": {
+    "webSiteUrl": "",
+    "date": {
+      "start": "",
+      "end": ""
+    },
+    "location": {
+      "country": "",
+      "city": "",
+      "address": "",
+      "coordinates": {
+        "latitude": "",
+        "longitude": ""
+      }
+    },
+    "ticketTypes": [],
+    "maxTicketsPerAccount": 0,
+    "contacts": "",
+    "status": "",
+    "tags": []
+  }
+}
+,
+...
+];
 ```
 
 ### Fetch cached events from server
@@ -221,6 +291,13 @@ const serverUrl = "http://localhost:1337";
 
 const events = fetchAllEventsFromServer(params, serverUrl);
 ```
+Return data:
+```js
+const events =  [
+"ipfs://bafyreia6fhgdn7y2ygvmkgjqgqrnikshfgqohw5k3ophortlmgz77egtlm/metadata.json",
+"ipfs://bafyreia7oca4gvgb7ofj5lskkb7defpvtlct6kfe5sccyixdkgikx5lgli/metadata.json"
+];
+```
 
 ### Fetch Countries from server
 
@@ -234,6 +311,10 @@ import { fetchCountriesFromServer } from "ets-js-library";
 const serverUrl = "http://localhost:1337";
 
 const countries = fetchCountriesFromServer(serverUrl);
+```
+Return data:
+```js
+const countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", ...];
 ```
 
 ### Fetch Places from server
@@ -249,6 +330,10 @@ const serverUrl = "http://localhost:1337";
 const country = "Bulgaria";
 
 const places = fetchPlacesFromServer(country, serverUrl);
+```
+Return data:
+```js
+const places = ["Paris", "Rome", "London", "Berlin", "Venice", ...];
 ```
 
 ### Add team member to event
@@ -303,6 +388,24 @@ const eventId = "Id of event in smart contract";
 
 const members = await getEventMembers(eventId);
 ```
+Return data:
+```js
+const members = [ 
+  [
+    //Address
+    "0xb6F32C6d8C23e5201Ec123644f11cf6F013d9363",
+    //Role
+    "0x0000000000000000000000000000000000000000000000000000000000000000"
+  ],
+  [
+    //Address
+    "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E",
+    //Role
+    "0x21702c8af46127c7fa207f89d0b0a8441bb32959a0ac7df790e9ab1a25c98926"
+  ]
+...
+];
+```
 
 ### Fetch all event ids
 
@@ -313,6 +416,10 @@ const members = await getEventMembers(eventId);
 import { fetchAllEventIds } from "ets-js-library";
 
 const eventIds = await fetchAllEventIds();
+```
+Return data:
+```js
+const eventIds = [ 1, 2, 3 ];
 ```
 
 ### Listen for new events
