@@ -220,10 +220,22 @@ export async function setEventCashier(eventId, contract = eventsContract) {
   }
 }
 
-export async function createTicketCategory(nftStorageApiKey, eventId, metadata, contract = eventsContract) {
+export async function createTicketCategory(
+  nftStorageApiKey,
+  eventId,
+  metadata,
+  ticketsCount,
+  contract = eventsContract,
+) {
   try {
     const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
-    const tx = await contract.populateTransaction.createTicketCategory(eventId, uri);
+    const tx = await contract.populateTransaction.createTicketCategory(
+      eventId,
+      metadata.salePeriod.saleStartDate,
+      metadata.salePeriod.saleEndDate,
+      ticketsCount,
+      uri,
+    );
     return tx;
   } catch (error) {
     throw error;

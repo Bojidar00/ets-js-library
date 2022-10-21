@@ -164,7 +164,9 @@ const eventIds = [1, 2, 3];
 
 const events = fetchEvents(eventIds);
 ```
+
 Return data:
+
 ```js
 const events = [
 {
@@ -212,7 +214,9 @@ const address = "Address of events owner.";
 
 const events = fetchOwnedEvents(address);
 ```
+
 Return data:
+
 ```js
 const events = [
 {
@@ -291,11 +295,13 @@ const serverUrl = "http://localhost:1337";
 
 const events = fetchAllEventsFromServer(params, serverUrl);
 ```
+
 Return data:
+
 ```js
-const events =  [
-"ipfs://bafyreia6fhgdn7y2ygvmkgjqgqrnikshfgqohw5k3ophortlmgz77egtlm/metadata.json",
-"ipfs://bafyreia7oca4gvgb7ofj5lskkb7defpvtlct6kfe5sccyixdkgikx5lgli/metadata.json"
+const events = [
+  "ipfs://bafyreia6fhgdn7y2ygvmkgjqgqrnikshfgqohw5k3ophortlmgz77egtlm/metadata.json",
+  "ipfs://bafyreia7oca4gvgb7ofj5lskkb7defpvtlct6kfe5sccyixdkgikx5lgli/metadata.json",
 ];
 ```
 
@@ -312,7 +318,9 @@ const serverUrl = "http://localhost:1337";
 
 const countries = fetchCountriesFromServer(serverUrl);
 ```
+
 Return data:
+
 ```js
 const countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", ...];
 ```
@@ -331,7 +339,9 @@ const country = "Bulgaria";
 
 const places = fetchPlacesFromServer(country, serverUrl);
 ```
+
 Return data:
+
 ```js
 const places = ["Paris", "Rome", "London", "Berlin", "Venice", ...];
 ```
@@ -388,9 +398,11 @@ const eventId = "Id of event in smart contract";
 
 const members = await getEventMembers(eventId);
 ```
+
 Return data:
+
 ```js
-const members = [ 
+const members = [
   [
     //Address
     "0xb6F32C6d8C23e5201Ec123644f11cf6F013d9363",
@@ -417,9 +429,11 @@ import { fetchAllEventIds } from "ets-js-library";
 
 const eventIds = await fetchAllEventIds();
 ```
+
 Return data:
+
 ```js
-const eventIds = [ 1, 2, 3 ];
+const eventIds = [1, 2, 3];
 ```
 
 ### Listen for new events
