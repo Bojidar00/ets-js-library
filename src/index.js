@@ -211,9 +211,9 @@ export function createGatewayUrl(url) {
   }
 }
 
-export async function setEventCashier(eventId, contract = eventsContract) {
+export async function setEventCashier(eventId, address, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.setEventCashier(eventId);
+    const tx = await contract.populateTransaction.setEventCashier(eventId, address);
     return tx;
   } catch (error) {
     throw error;
