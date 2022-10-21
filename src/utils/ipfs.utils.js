@@ -17,7 +17,7 @@ async function uploadDataToIpfs(nftStorageApiKey, metadata) {
 }
 
 async function deleteDataFromService(nftStorageApiKey, eventUri) {
-  const cid = eventUri.split("/")[2];
+  const cid = eventUri.split("/")[2]; // buddy ignore:line
 
   const client = new NFTStorage({ token: nftStorageApiKey });
 
