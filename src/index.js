@@ -2,7 +2,14 @@
 
 import { ethers } from "ethers";
 import axios from "axios";
-import { uploadDataToIpfs, fetchEventsMetadata, fetchSingleEventMetadata, deleteDataFromService, getIpfsUrl, makeGatewayUrl } from "#ipfs.utils";
+import {
+  uploadDataToIpfs,
+  fetchEventsMetadata,
+  fetchSingleEventMetadata,
+  deleteDataFromService,
+  getIpfsUrl,
+  makeGatewayUrl,
+} from "#ipfs.utils";
 import { ETS_SERVER_URL, NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL } from "#config";
 import { provider, eventsContract } from "#contract";
 
