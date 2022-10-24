@@ -64,6 +64,12 @@ const metadata = {
   },
 };
 
+const contractData = {
+  maxTicketPerClient: 5,
+  startDate: start, // unix timestamp
+  endDate: end, // unix timestamp
+};
+
 const key = "API key for NFT.storage";
 
 const transaction = await createEvent(key, metadata, contractData);
@@ -498,6 +504,21 @@ function callback(data) {
 }
 
 listenForRoleRevoke(callback);
+```
+
+### Set event cashier
+
+1. Import setEventCashier function from the library.
+2. Execute setEventCashier function. This will return an unsigned transaction.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { setEventCashier } from "ets-js-library";
+
+const address = "Address of new cashier.";
+
+const transaction = await setEventCashier(address);
+//You need to sign and send the transaction after this.
 ```
 
 ## Tests
