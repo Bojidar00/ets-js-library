@@ -19,9 +19,16 @@ describe("Organizer tests", () => {
     const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
     const imageBlob = await image.blob();
     const maxTicketPerClient = 10;
+    const startDate = 1666601372;
+    const endDate = 1666601572;
     mockedMetadata.image = imageBlob;
 
-    const populatedTx = await createEvent(NFT_STORAGE_API_KEY, mockedMetadata, maxTicketPerClient, eventsTestContract);
+    const populatedTx = await createEvent(
+      NFT_STORAGE_API_KEY,
+      mockedMetadata,
+      { maxTicketPerClient, startDate, endDate },
+      eventsTestContract,
+    );
 
     const eventTx = await wallet.sendTransaction(populatedTx);
     const eventTxResponse = await eventTx.wait();

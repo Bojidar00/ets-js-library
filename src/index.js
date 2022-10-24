@@ -13,11 +13,16 @@ import {
 import { ETS_SERVER_URL, NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL } from "#config";
 import { provider, eventsContract } from "#contract";
 
-export async function createEvent(nftStorageApiKey, metadata, maxTicketPerClient, contract = eventsContract) {
+export async function createEvent(nftStorageApiKey, metadata, contractData, contract = eventsContract) {
   try {
     const url = await uploadDataToIpfs(nftStorageApiKey, metadata);
 
-    const tx = await contract.populateTransaction.createEvent(maxTicketPerClient, url);
+    const tx = await contract.populateTransaction.createEvent(
+      contractData.maxTicketPerClient,
+      contractData.startDate,
+      contractData.endDate,
+      url,
+    );
 
     return tx;
   } catch (error) {
