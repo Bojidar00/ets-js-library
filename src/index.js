@@ -211,9 +211,9 @@ export function createGatewayUrl(url) {
   }
 }
 
-export async function setEventCashier(eventId, contract = eventsContract) {
+export async function setEventCashier(eventId, address, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.setEventCashier(eventId);
+    const tx = await contract.populateTransaction.setEventCashier(eventId, address);
     return tx;
   } catch (error) {
     throw error;
@@ -224,6 +224,8 @@ export async function createTicketCategory(
   nftStorageApiKey,
   eventId,
   metadata,
+  saleStartDate,
+  saleEndDate,
   ticketsCount,
   contract = eventsContract,
 ) {
@@ -231,8 +233,8 @@ export async function createTicketCategory(
     const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
     const tx = await contract.populateTransaction.createTicketCategory(
       eventId,
-      metadata.salePeriod.saleStartDate,
-      metadata.salePeriod.saleEndDate,
+      saleStartDate,
+      saleEndDate,
       ticketsCount,
       uri,
     );
