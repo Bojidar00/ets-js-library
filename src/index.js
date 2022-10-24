@@ -25,7 +25,7 @@ export async function createEvent(nftStorageApiKey, metadata, maxTicketPerClient
   }
 }
 
-export async function fetchEvents(eventIds, contract) {
+export async function fetchEvents(eventIds, contract = eventsContract) {
   try {
     const metadata = await fetchEventsMetadata(eventIds, contract);
 
@@ -33,6 +33,12 @@ export async function fetchEvents(eventIds, contract) {
   } catch (error) {
     throw error;
   }
+}
+
+export async function fetchContractEvents(contract = eventsContract) {
+  const events = await contract.fetchAllEvents();
+
+  return events;
 }
 
 export async function fetchOwnedEvents(address, contract = eventsContract) {

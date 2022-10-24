@@ -4,10 +4,6 @@
   "image": "Blob or File Object",
   "properties": {
     "websiteUrl": "https://event1.com",
-    "date": {
-      "start": "2022-10-01",
-      "end": "2022-10-03"
-    },
     "location": {
       "country": "Country1",
       "city": "Place1",
@@ -17,8 +13,6 @@
         "longitude": "00.000"
       }
     },
-    "ticketTypes": ["ticketType1", "ticketType2"],
-    "maxTicketsPerAccount": 1,
     "contacts": "Contacts",
     "status": "upcoming",
     "tags": ["tag1", "tag2"]
