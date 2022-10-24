@@ -278,6 +278,15 @@ export async function addCategoryTicketsCount(eventId, categoryId, ticketsCount,
   }
 }
 
+export async function removeCategoryTicketsCount(eventId, categoryId, ticketsCount, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.removeCategoryTicketsCount(eventId, categoryId, ticketsCount);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function startCategorySelling(eventId, categoryId, contract = eventsContract) {
   try {
     const tx = await contract.populateTransaction.startCategorySelling(eventId, categoryId);
@@ -341,9 +350,20 @@ export async function bookTickets(eventId, categoryId, ticketsCount, addresses, 
   }
 }
 
-export async function buyTickets(eventId, categoryId, ticketMetadataURI, amount, contract = eventsContract) {
+export async function updateCategorySaleDates(
+  eventId,
+  categoryId,
+  saleStartDate,
+  saleEndDate,
+  contract = eventsContract,
+) {
   try {
-    const tx = await contract.populateTransaction.buyTickets(eventId, categoryId, ticketMetadataURI, amount);
+    const tx = await contract.populateTransaction.updateCategorySaleDates(
+      eventId,
+      categoryId,
+      saleStartDate,
+      saleEndDate,
+    );
     return tx;
   } catch (error) {
     throw error;
