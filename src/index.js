@@ -78,7 +78,7 @@ export async function updateEvent(nftStorageApiKey, eventId, metadata, contract 
   }
 }
 
-export async function getEventIpfsUri(eventId, contract) {
+export async function getEventIpfsUri(eventId, contract = eventsContract) {
   const uri = await getIpfsUrl(eventId, contract);
 
   return uri;
