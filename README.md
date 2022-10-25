@@ -757,6 +757,23 @@ const eventId = "Id of event";
 const categories = await fetchCategoriesByEventId(eventId);
 ```
 
+Return data:
+
+```js
+const categories = [
+  {
+  id: 1
+  cid: "ipfs://bafyreia6fhgdn7y2ygvmkgjqgqrnikshfgqohw5k3ophortlmgz77egtlm/metadata.json"
+  ticketIds: [1,2,3]
+  ticketsCount: 10
+  saleStartDate: //unix timestamp
+  saleEndDate: //unix timestamp
+  areTicketsBuyable: true
+  }
+  ...
+];
+```
+
 ## Tests
 
 Run tests:
