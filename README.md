@@ -43,24 +43,18 @@ const metadata = {
   image: "Blob or File Object",
   properties: {
     websiteUrl: "https://event1.com",
-    date: {
-      start: "2022-10-01",
-      end: "2022-10-03",
-    },
     location: {
-      country: "Bulgaria",
-      city: "Varna",
-      address: "Front Beach Alley, 9007 Golden Sands",
+      country: "Country1",
+      city: "Place1",
+      address: "Address1",
       coordinates: {
-        latitude: "43.28365485346511",
-        longitude: "28.042738484752096",
+        latitude: "00.000",
+        longitude: "00.000",
       },
     },
-    ticketTypes: ["super early birds", "early birds", "regular", "onsite"],
-    maxTicketsPerAccount: 10,
-    contacts: "Contacts string",
+    contacts: "Contacts",
     status: "upcoming",
-    tags: ["#programming", "#blockchain"],
+    tags: ["tag1", "tag2"],
   },
 };
 
@@ -76,7 +70,7 @@ const transaction = await createEvent(key, metadata, contractData);
 //You need to sign and send the transaction after this.
 ```
 
-### Update event
+### Update event metadata
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import updateEvent, getEventIpfsUri and deleteFromIpfs from the library.
@@ -95,24 +89,18 @@ const metadata = {
   image: "Blob or File Object",
   properties: {
     websiteUrl: "https://event1.com",
-    date: {
-      start: "2022-10-01",
-      end: "2022-10-03",
-    },
     location: {
-      country: "Bulgaria",
-      city: "Varna",
-      address: "Front Beach Alley, 9007 Golden Sands",
+      country: "Country1",
+      city: "Place1",
+      address: "Address1",
       coordinates: {
-        latitude: "43.28365485346511",
-        longitude: "28.042738484752096",
+        latitude: "00.000",
+        longitude: "00.000",
       },
     },
-    ticketTypes: ["super early birds", "early birds", "regular", "onsite"],
-    maxTicketsPerAccount: 10,
-    contacts: "Contacts string",
+    contacts: "Contacts",
     status: "upcoming",
-    tags: ["#programming", "#blockchain"],
+    tags: ["tag1", "tag2"],
   },
 };
 
@@ -176,31 +164,23 @@ Return data:
 ```js
 const events = [
 {
-  "name": "",
-  "description": "",
-  "image": "",
-  "cid":"",
-  "eventId":"",
-  "properties": {
-    "webSiteUrl": "",
-    "date": {
-      "start": "",
-      "end": ""
-    },
-    "location": {
-      "country": "",
-      "city": "",
-      "address": "",
-      "coordinates": {
-        "latitude": "",
-        "longitude": ""
+  name: "Event1",
+  description: "Event1 Description",
+  image: "Blob or File Object",
+  properties: {
+    websiteUrl: "https://event1.com",
+    location: {
+      country: "Country1",
+      city: "Place1",
+      address: "Address1",
+      coordinates: {
+        latitude: "00.000",
+        longitude: "00.000"
       }
     },
-    "ticketTypes": [],
-    "maxTicketsPerAccount": 0,
-    "contacts": "",
-    "status": "",
-    "tags": []
+    contacts: "Contacts",
+    status: "upcoming",
+    tags: ["tag1", "tag2"]
   }
 }
 ,
@@ -226,31 +206,23 @@ Return data:
 ```js
 const events = [
 {
-  "name": "",
-  "description": "",
-  "image": "",
-  "cid":"",
-  "eventId":"",
-  "properties": {
-    "webSiteUrl": "",
-    "date": {
-      "start": "",
-      "end": ""
-    },
-    "location": {
-      "country": "",
-      "city": "",
-      "address": "",
-      "coordinates": {
-        "latitude": "",
-        "longitude": ""
+  name: "Event1",
+  description: "Event1 Description",
+  image: "Blob or File Object",
+  properties: {
+    websiteUrl: "https://event1.com",
+    location: {
+      country: "Country1",
+      city: "Place1",
+      address: "Address1",
+      coordinates: {
+        latitude: "00.000",
+        longitude: "00.000"
       }
     },
-    "ticketTypes": [],
-    "maxTicketsPerAccount": 0,
-    "contacts": "",
-    "status": "",
-    "tags": []
+    contacts: "Contacts",
+    status: "upcoming",
+    tags: ["tag1", "tag2"]
   }
 }
 ,
@@ -519,6 +491,270 @@ const address = "Address of new cashier.";
 
 const transaction = await setEventCashier(address);
 //You need to sign and send the transaction after this.
+```
+
+### Create ticket category
+
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import createTicketCategory function from the library.
+3. Create metadata for the new category.
+4. Execute createTicketCategory function. This will return an unsigned transaction.
+5. Sign and send the transaction anyway you like.
+
+```js
+import { createTicketCategory } from "ets-js-library";
+
+const metadata = {
+  name: "Category1",
+  description: "Category1 Description",
+  image: "null",
+  properties: {
+    eventId: 1,
+    ticketTypesCount: {
+      type: "semi_fungible or non_fungible",
+      places: 1
+    },
+    design: {
+      color: "color",
+      imageUrl: "http://example.com"
+    },
+    ticketPrice: "1BGN",
+    downPayment: {
+      price: "1BGN",
+      finalAmountDate: "2022-10-01"
+    },
+    discounts: [
+      {
+        ticketCount: 2,
+        discountPercentage: 20
+      },
+      {
+        ticketCount: 3,
+        discountPercentage: 33
+      },
+      {
+        ticketCount: 4,
+        discountPercentage: 25
+      }
+    ],
+    maxCategoryTicketsAmountPerAccount: 1,
+    salePeriod: {
+      saleStartDate: "2022-10-01",
+      saleEndDate: "2022-10-03"
+    }
+  }
+};
+
+const const contractData = {
+  ticketsCount: 5,
+  saleStartDate: start, // unix timestamp
+  saleEndDate: end, // unix timestamp
+};
+
+const key = "API key for NFT.storage";
+const eventId = "Id of event";
+
+const transaction = await createTicketCategory(key, eventId, metadata,  contractData);
+//You need to sign and send the transaction after this.
+```
+
+### Update category metadata
+
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import updateCategoryUri, deleteFromIpfs from the library.
+3. Create new metadata for the category.
+4. Execute updateCategoryUri function. This will return an unsigned transaction.
+5. Sign and send the transaction anyway you like.
+6. If the transaction succeeds, you can safely delete the old metadata with deleteFromIpfs.
+
+```js
+import { updateCategoryUri, deleteFromIpfs } from "ets-js-library";
+
+const metadata = {
+  name: "Category1",
+  description: "Category1 Description",
+  image: "null",
+  properties: {
+    eventId: 1,
+    ticketTypesCount: {
+      type: "semi_fungible or non_fungible",
+      places: 1,
+    },
+    design: {
+      color: "color",
+      imageUrl: "http://example.com",
+    },
+    ticketPrice: "1BGN",
+    downPayment: {
+      price: "1BGN",
+      finalAmountDate: "2022-10-01",
+    },
+    discounts: [
+      {
+        ticketCount: 2,
+        discountPercentage: 20,
+      },
+      {
+        ticketCount: 3,
+        discountPercentage: 33,
+      },
+      {
+        ticketCount: 4,
+        discountPercentage: 25,
+      },
+    ],
+    maxCategoryTicketsAmountPerAccount: 1,
+    salePeriod: {
+      saleStartDate: "2022-10-01",
+      saleEndDate: "2022-10-03",
+    },
+  },
+};
+
+const key = "API key for NFT.storage";
+const eventId = "Id of event";
+const categoryId = "Id of category";
+
+try {
+  const transaction = await updateCategoryUri(key, eventId, categoryId, metadata);
+  //You need to sign and send the transaction here.
+  deleteFromIpfs(key, oldMetadataUri);
+} catch (error) {
+  console.log(error);
+}
+```
+
+### Remove category
+
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import removeCategory function from the library.
+3. Execute removeCategory function. This will return an unsigned transaction.
+4. Sign and send the transaction anyway you like.
+5. If the transaction succeeds, you can safely delete the old metadata with deleteFromIpfs.
+
+```js
+import { removeCategory, deleteFromIpfs } from "ets-js-library";
+
+const key = "API key for NFT.storage";
+const eventId = "Id of event";
+const categoryId = "Id of category";
+
+try {
+  const transaction = await removeCategory(eventId, categoryId);
+  //You need to sign and send the transaction here.
+  deleteFromIpfs(key, oldMetadataUri);
+} catch (error) {
+  console.log(error);
+}
+```
+
+### Add more tickets to category
+
+1. Import addCategoryTicketsCount function from the library.
+2. Execute addCategoryTicketsCount function. This will return an unsigned transaction.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { addCategoryTicketsCount } from "ets-js-library";
+
+const eventId = "Id of event";
+const categoryId = "Id of category";
+const moreTickets = 5;
+
+const transaction = await addCategoryTicketsCount(eventId, categoryId, moreTickets);
+//You need to sign and send the transaction after this.
+```
+
+### Remove tickets from category
+
+1. Import addCategoryTicketsCount function from the library.
+2. Execute addCategoryTicketsCount function. This will return an unsigned transaction.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { removeCategoryTicketsCount } from "ets-js-library";
+
+const eventId = "Id of event";
+const categoryId = "Id of category";
+const lessTickets = 5;
+
+const transaction = await removeCategoryTicketsCount(eventId, categoryId, lessTickets);
+//You need to sign and send the transaction after this.
+```
+
+### Start the sale of tickets for a category
+
+1. Import startCategorySelling function from the library.
+2. Execute startCategorySelling function. This will return an unsigned transaction.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { startCategorySelling } from "ets-js-library";
+
+const eventId = "Id of event";
+const categoryId = "Id of category";
+
+const transaction = await startCategorySelling(eventId, categoryId);
+//You need to sign and send the transaction after this.
+```
+
+### Stop the sale of tickets for a category
+
+1. Import stopCategorySelling function from the library.
+2. Execute stopCategorySelling function. This will return an unsigned transaction.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { stopCategorySelling } from "ets-js-library";
+
+const eventId = "Id of event";
+const categoryId = "Id of category";
+
+const transaction = await stopCategorySelling(eventId, categoryId);
+//You need to sign and send the transaction after this.
+```
+
+### Start the sale of tickets for all categories of event
+
+1. Import startAllCategorySelling function from the library.
+2. Execute startAllCategorySelling function. This will return an unsigned transaction.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { startAllCategorySelling } from "ets-js-library";
+
+const eventId = "Id of event";
+
+const transaction = await startAllCategorySelling(eventId);
+//You need to sign and send the transaction after this.
+```
+
+### Stop the sale of tickets for all categories of event
+
+1. Import stopAllCategorySelling function from the library.
+2. Execute stopAllCategorySelling function. This will return an unsigned transaction.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { stopAllCategorySelling } from "ets-js-library";
+
+const eventId = "Id of event";
+
+const transaction = await stopAllCategorySelling(eventId);
+//You need to sign and send the transaction after this.
+```
+
+### Fetch categories of event
+
+1. Import fetchCategoriesByEventId function from the library.
+2. Execute fetchCategoriesByEventId function.
+
+```js
+import { fetchCategoriesByEventId } from "ets-js-library";
+
+const eventId = "Id of event";
+
+const categories = await fetchCategoriesByEventId(eventId);
 ```
 
 ## Tests

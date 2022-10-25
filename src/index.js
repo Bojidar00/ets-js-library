@@ -78,7 +78,7 @@ export async function updateEvent(nftStorageApiKey, eventId, metadata, contract 
   }
 }
 
-export async function getEventIpfsUri(eventId, contract) {
+export async function getEventIpfsUri(eventId, contract = eventsContract) {
   const uri = await getIpfsUrl(eventId, contract);
 
   return uri;
@@ -235,19 +235,17 @@ export async function createTicketCategory(
   nftStorageApiKey,
   eventId,
   metadata,
-  saleStartDate,
-  saleEndDate,
-  ticketsCount,
+  contractData,
   contract = eventsContract,
 ) {
   try {
     const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
     const tx = await contract.populateTransaction.createTicketCategory(
       eventId,
-      saleStartDate,
-      saleEndDate,
-      ticketsCount,
       uri,
+      contractData.saleStartDate,
+      contractData.saleEndDate,
+      contractData.ticketsCount,
     );
     return tx;
   } catch (error) {
