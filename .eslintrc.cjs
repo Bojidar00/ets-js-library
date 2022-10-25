@@ -1,4 +1,11 @@
 module.exports = {
+  globals: {
+    describe: true,
+    it: true,
+    before: true,
+    beforeEach: true,
+    ethers: true
+  },
   env: {
     browser: true,
     es2021: true,
