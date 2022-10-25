@@ -4,7 +4,7 @@ module.exports = {
     it: true,
     before: true,
     beforeEach: true,
-    ethers: true
+    ethers: true,
   },
   env: {
     browser: true,
