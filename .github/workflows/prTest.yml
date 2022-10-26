@@ -28,6 +28,7 @@ jobs:
         run: |
           echo "${{ secrets.PKEY }}" > .secret
           npm install
+          npm install@esm
 
       - name: Run tests
         run: npm run test
