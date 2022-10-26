@@ -251,6 +251,10 @@ export async function createTicketCategory(
       contractData.saleStartDate,
       contractData.saleEndDate,
       contractData.ticketsCount,
+      contractData.ticketPrice,
+      contractData.discountsTicketsCount,
+      contractData.discountsPercentage,
+      contractData.downPayment,
     );
     return tx;
   } catch (error) {
@@ -258,10 +262,25 @@ export async function createTicketCategory(
   }
 }
 
-export async function updateCategoryUri(nftStorageApiKey, eventId, categoryId, metadata, contract = eventsContract) {
+export async function updateCategory(
+  nftStorageApiKey,
+  eventId,
+  categoryId,
+  metadata,
+  contractData,
+  contract = eventsContract,
+) {
   try {
     const uri = await uploadDataToIpfs(nftStorageApiKey, metadata);
-    const tx = await contract.populateTransaction.updateCategoryUri(eventId, categoryId, uri);
+    const tx = await contract.populateTransaction.updateCategory(
+      eventId,
+      categoryId,
+      uri,
+      contractData.ticketPrice,
+      contractData.discountsTicketsCount,
+      contractData.discountsPercentage,
+      contractData.downPayment,
+    );
     return tx;
   } catch (error) {
     throw error;
