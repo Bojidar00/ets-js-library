@@ -519,7 +519,7 @@ const metadata = {
   }
 };
 
-const const contractData = {
+const contractData = {
   saleStartDate: 1666666666, // unix timestamp
   saleEndDate: 1666666666, // unix timestamp
   ticketsCount: 50,
@@ -565,7 +565,7 @@ const metadata = {
   }
 };
 
-const const contractData = {
+const contractData = {
   saleStartDate: 1666666666, // unix timestamp
   saleEndDate: 1666666666, // unix timestamp
   ticketsCount: 50,
