@@ -1,13 +1,14 @@
-import { fetchAllEventsFromServer } from "../src/index";
+import { fetchAllEventsFromServer } from "../src/index.js";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { mockedEventParams } from "./config";
+import { mockedEventParams } from "./config.js";
 import { StatusCodes } from "http-status-codes";
+import { expect } from "chai";
 
-describe("user", () => {
+describe("User tests", () => {
   let mock;
 
-  beforeAll(async () => {
+  before(async () => {
     mock = new MockAdapter(axios);
   });
 
@@ -15,10 +16,10 @@ describe("user", () => {
     mock.reset();
   });
 
-  test("Gets all events from server", async () => {
+  it("Gets all events from server", async () => {
     mock.onPost().reply(StatusCodes.OK, ["ipfs://metadataOfEvent1", "ipfs://metadataOfEvent2"]);
 
     const response = await fetchAllEventsFromServer(mockedEventParams);
-    expect(response.data.toString()).toBe("ipfs://metadataOfEvent1,ipfs://metadataOfEvent2");
+    expect(response.data.toString()).to.equal("ipfs://metadataOfEvent1,ipfs://metadataOfEvent2");
   });
 });

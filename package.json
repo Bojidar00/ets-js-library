@@ -12,8 +12,7 @@
     "prettier": "prettier . --write",
     "prettier:ci": "prettier .",
     "coverage": "jest --coverage",
-    "buddy": "buddy -e src/ && buddy -e __tests__/",
-    "hardhat:deploy": "hardhat run tasks/deployEventDiamond.js"
+    "buddy": "buddy -e src/ && buddy -e tests/"
   },
   "repository": {
     "type": "git",
