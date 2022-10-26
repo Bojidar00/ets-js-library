@@ -60,8 +60,8 @@ const metadata = {
 
 const contractData = {
   maxTicketPerClient: 5,
-  startDate: start, // unix timestamp
-  endDate: end, // unix timestamp
+  startDate: 1666666666, // unix timestamp
+  endDate: 1666666666, // unix timestamp
 };
 
 const key = "API key for NFT.storage";
@@ -509,46 +509,27 @@ const metadata = {
   description: "Category1 Description",
   image: "null",
   properties: {
-    eventId: 1,
     ticketTypesCount: {
       type: "semi_fungible or non_fungible",
-      places: 1
+      places: 10
     },
     design: {
-      color: "color",
-      imageUrl: "http://example.com"
-    },
-    ticketPrice: "1BGN",
-    downPayment: {
-      price: "1BGN",
-      finalAmountDate: "2022-10-01"
-    },
-    discounts: [
-      {
-        ticketCount: 2,
-        discountPercentage: 20
-      },
-      {
-        ticketCount: 3,
-        discountPercentage: 33
-      },
-      {
-        ticketCount: 4,
-        discountPercentage: 25
-      }
-    ],
-    maxCategoryTicketsAmountPerAccount: 1,
-    salePeriod: {
-      saleStartDate: "2022-10-01",
-      saleEndDate: "2022-10-03"
+      color: "color"
     }
   }
 };
 
 const const contractData = {
-  ticketsCount: 5,
-  saleStartDate: start, // unix timestamp
-  saleEndDate: end, // unix timestamp
+  saleStartDate: 1666666666, // unix timestamp
+  saleEndDate: 1666666666, // unix timestamp
+  ticketsCount: 50,
+  ticketPrice: 10,
+  discountsTicketsCount: [ 10, 5 ],
+  discountsPercentage: [ 20, 10],
+  downPayment: {
+    price: 2,
+    finalAmountDate: 1666666666 // unix timestamp
+  }
 };
 
 const key = "API key for NFT.storage";
@@ -558,70 +539,52 @@ const transaction = await createTicketCategory(key, eventId, metadata,  contract
 //You need to sign and send the transaction after this.
 ```
 
-### Update category metadata
+### Update category
 
 1. Create an api token from [nft.storage](https://nft.storage/)
-2. Import updateCategoryUri, deleteFromIpfs from the library.
-3. Create new metadata for the category.
+2. Import updateCategory from the library.
+3. Create new metadata and contractData for the category.
 4. Execute updateCategoryUri function. This will return an unsigned transaction.
 5. Sign and send the transaction anyway you like.
-6. If the transaction succeeds, you can safely delete the old metadata with deleteFromIpfs.
 
 ```js
-import { updateCategoryUri, deleteFromIpfs } from "ets-js-library";
+import { updateCategory } from "ets-js-library";
 
 const metadata = {
   name: "Category1",
   description: "Category1 Description",
   image: "null",
   properties: {
-    eventId: 1,
     ticketTypesCount: {
       type: "semi_fungible or non_fungible",
-      places: 1,
+      places: 10
     },
     design: {
-      color: "color",
-      imageUrl: "http://example.com",
-    },
-    ticketPrice: "1BGN",
-    downPayment: {
-      price: "1BGN",
-      finalAmountDate: "2022-10-01",
-    },
-    discounts: [
-      {
-        ticketCount: 2,
-        discountPercentage: 20,
-      },
-      {
-        ticketCount: 3,
-        discountPercentage: 33,
-      },
-      {
-        ticketCount: 4,
-        discountPercentage: 25,
-      },
-    ],
-    maxCategoryTicketsAmountPerAccount: 1,
-    salePeriod: {
-      saleStartDate: "2022-10-01",
-      saleEndDate: "2022-10-03",
-    },
-  },
+      color: "color"
+    }
+  }
+};
+
+const const contractData = {
+  saleStartDate: 1666666666, // unix timestamp
+  saleEndDate: 1666666666, // unix timestamp
+  ticketsCount: 50,
+  ticketPrice: 10,
+  discountsTicketsCount: [ 10, 5 ],
+  discountsPercentage: [ 20, 10],
+  downPayment: {
+    price: 2,
+    finalAmountDate: 1666666666 // unix timestamp
+  }
 };
 
 const key = "API key for NFT.storage";
 const eventId = "Id of event";
 const categoryId = "Id of category";
 
-try {
-  const transaction = await updateCategoryUri(key, eventId, categoryId, metadata);
-  //You need to sign and send the transaction here.
-  deleteFromIpfs(key, oldMetadataUri);
-} catch (error) {
-  console.log(error);
-}
+
+  const transaction = await updateCategoryUri(key, eventId, categoryId, metadata, contractData);
+  //You need to sign and send the transaction after this.
 ```
 
 ### Remove category
@@ -630,7 +593,7 @@ try {
 2. Import removeCategory function from the library.
 3. Execute removeCategory function. This will return an unsigned transaction.
 4. Sign and send the transaction anyway you like.
-5. If the transaction succeeds, you can safely delete the old metadata with deleteFromIpfs.
+5. If the transaction succeeds, you can safely delete the metadata with deleteFromIpfs.
 
 ```js
 import { removeCategory, deleteFromIpfs } from "ets-js-library";
@@ -762,13 +725,21 @@ Return data:
 ```js
 const categories = [
   {
-  id: 1
-  cid: "ipfs://bafyreia6fhgdn7y2ygvmkgjqgqrnikshfgqohw5k3ophortlmgz77egtlm/metadata.json"
-  ticketIds: [1,2,3]
-  ticketsCount: 10
-  saleStartDate: //unix timestamp
-  saleEndDate: //unix timestamp
-  areTicketsBuyable: true
+  id: 1,
+  cid: "ipfs://bafyreia6fhgdn7y2ygvmkgjqgqrnikshfgqohw5k3ophortlmgz77egtlm/metadata.json",
+  ticketIds: [1,2,3],
+  ticketPrice: 10,
+  ticketsCount: 10,
+  saleStartDate: 1666666666, //unix timestamp
+  saleEndDate: 1666666666, //unix timestamp
+  eventId: 1,
+  discountsTicketsCount: [ 5, 2 ],
+  discountsPercentage: [ 10, 5 ],
+  downPayment: {
+    price: 2,
+    finalAmountDate: 1666666666 // unix timestamp
+  }
+  areTicketsBuyable: true,
   }
   ...
 ];
