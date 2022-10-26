@@ -511,12 +511,12 @@ const metadata = {
   properties: {
     ticketTypesCount: {
       type: "semi_fungible or non_fungible",
-      places: 10
+      places: 10,
     },
     design: {
-      color: "color"
-    }
-  }
+      color: "color",
+    },
+  },
 };
 
 const contractData = {
@@ -524,18 +524,18 @@ const contractData = {
   saleEndDate: 1666666666, // unix timestamp
   ticketsCount: 50,
   ticketPrice: 10,
-  discountsTicketsCount: [ 10, 5 ],
-  discountsPercentage: [ 20, 10],
+  discountsTicketsCount: [10, 5],
+  discountsPercentage: [20, 10],
   downPayment: {
     price: 2,
-    finalAmountDate: 1666666666 // unix timestamp
-  }
+    finalAmountDate: 1666666666, // unix timestamp
+  },
 };
 
 const key = "API key for NFT.storage";
 const eventId = "Id of event";
 
-const transaction = await createTicketCategory(key, eventId, metadata,  contractData);
+const transaction = await createTicketCategory(key, eventId, metadata, contractData);
 //You need to sign and send the transaction after this.
 ```
 
@@ -557,12 +557,12 @@ const metadata = {
   properties: {
     ticketTypesCount: {
       type: "semi_fungible or non_fungible",
-      places: 10
+      places: 10,
     },
     design: {
-      color: "color"
-    }
-  }
+      color: "color",
+    },
+  },
 };
 
 const contractData = {
@@ -570,21 +570,20 @@ const contractData = {
   saleEndDate: 1666666666, // unix timestamp
   ticketsCount: 50,
   ticketPrice: 10,
-  discountsTicketsCount: [ 10, 5 ],
-  discountsPercentage: [ 20, 10],
+  discountsTicketsCount: [10, 5],
+  discountsPercentage: [20, 10],
   downPayment: {
     price: 2,
-    finalAmountDate: 1666666666 // unix timestamp
-  }
+    finalAmountDate: 1666666666, // unix timestamp
+  },
 };
 
 const key = "API key for NFT.storage";
 const eventId = "Id of event";
 const categoryId = "Id of category";
 
-
-  const transaction = await updateCategoryUri(key, eventId, categoryId, metadata, contractData);
-  //You need to sign and send the transaction after this.
+const transaction = await updateCategoryUri(key, eventId, categoryId, metadata, contractData);
+//You need to sign and send the transaction after this.
 ```
 
 ### Remove category
