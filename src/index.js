@@ -47,10 +47,15 @@ export async function fetchContractEvents(contract = eventsContract) {
 }
 
 export async function fetchOwnedEvents(address, contract = eventsContract) {
-  const signer = new ethers.VoidSigner(address, provider);
+  let signer;
+  if (contract.provider._network.chainId === 1337) {
+    // buddy ignore:line
+    signer = address;
+  } else {
+    signer = new ethers.VoidSigner(address, provider);
+  }
 
   const eventIds = await contract.connect(signer).fetchOwnedEvents();
-
   const events = await fetchEvents(eventIds, contract);
 
   return events;
