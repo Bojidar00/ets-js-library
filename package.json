@@ -1,6 +1,6 @@
 {
   "name": "ets-js-library",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "description": "Library for event ticketing system",
   "main": "./src/index.js",
   "type": "module",
@@ -12,8 +12,7 @@
     "prettier": "prettier . --write",
     "prettier:ci": "prettier .",
     "coverage": "jest --coverage",
-    "buddy": "buddy -e src/ && buddy -e __tests__/",
-    "hardhat:deploy": "hardhat run tasks/deployEventDiamond.js"
+    "buddy": "buddy -e src/ && buddy -e test/"
   },
   "repository": {
     "type": "git",

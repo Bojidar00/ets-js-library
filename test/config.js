@@ -1,20 +1,9 @@
-import { ABI, NET_RPC_URL } from "#config";
-import { ethers } from "ethers";
-import fs from "fs";
-
 const NFT_STORAGE_API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDY4OEYyYjcxMzhlN" +
   "WUxQjJBOWQyQzc2OWREMTNBMUQwRTYyMjI5NjMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2Mjk" +
   "3MzI5NzMwOSwibmFtZSI6IkV2ZW50LVRpY2tldGluZy1TeXN0ZW0ifQ.x0aXjwdGsIcxibl7eIjxhdF8vnGHB2BB-2gkScySU20";
 
-const EVENTS_TEST_CONTRACT_ADDRESS = "0x1e012cc61f3D72Fd536B5d72611e439bB8083753";
-const EXAMPLE_ADDRESS = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266";
-
-const PRIVATE_KEY = fs.readFileSync(".secret").toString().trim();
-const provider = ethers.getDefaultProvider(NET_RPC_URL);
-const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-
-const eventsTestContract = new ethers.Contract(EVENTS_TEST_CONTRACT_ADDRESS, ABI, provider);
+const EXAMPLE_ADDRESS = "0x16514b719274484b06d56459f97139b333bd8130";
 
 const mockedMetadata = {
   name: "Event5",
@@ -65,14 +54,4 @@ const mockedEventParams = {
   },
 };
 
-export {
-  NFT_STORAGE_API_KEY,
-  EVENTS_TEST_CONTRACT_ADDRESS,
-  PRIVATE_KEY,
-  provider,
-  wallet,
-  eventsTestContract,
-  EXAMPLE_ADDRESS,
-  mockedMetadata,
-  mockedEventParams,
-};
+export { NFT_STORAGE_API_KEY, EXAMPLE_ADDRESS, mockedMetadata, mockedEventParams };
