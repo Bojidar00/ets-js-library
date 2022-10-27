@@ -57,5 +57,12 @@
     "#config": "./src/configs/index.config.js",
     "#contract.config/*": "./config/*",
     "#contract": "./src/utils/contract.js"
+  },
+  "lint-staged": {
+    "{src,test,tasks}/**/*.{js}": [
+      "npm run prettier",
+      "npm run lint",
+      "npm run buddy"
+    ]
   }
 }
