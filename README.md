@@ -511,12 +511,12 @@ const metadata = {
   properties: {
     ticketTypesCount: {
       type: "semi_fungible or non_fungible",
-      places: 10
+      places: 10,
     },
     design: {
-      color: "color"
-    }
-  }
+      color: "color",
+    },
+  },
 };
 
 const contractData = {
@@ -524,18 +524,18 @@ const contractData = {
   saleEndDate: 1666666666, // unix timestamp
   ticketsCount: 50,
   ticketPrice: 10,
-  discountsTicketsCount: [ 10, 5 ],
-  discountsPercentage: [ 20, 10],
+  discountsTicketsCount: [10, 5],
+  discountsPercentage: [20, 10],
   downPayment: {
     price: 2,
-    finalAmountDate: 1666666666 // unix timestamp
-  }
+    finalAmountDate: 1666666666, // unix timestamp
+  },
 };
 
 const key = "API key for NFT.storage";
 const eventId = "Id of event";
 
-const transaction = await createTicketCategory(key, eventId, metadata,  contractData);
+const transaction = await createTicketCategory(key, eventId, metadata, contractData);
 //You need to sign and send the transaction after this.
 ```
 
@@ -544,7 +544,7 @@ const transaction = await createTicketCategory(key, eventId, metadata,  contract
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import updateCategory from the library.
 3. Create new metadata and contractData for the category.
-4. Execute updateCategoryUri function. This will return an unsigned transaction.
+4. Execute updateCategory function. This will return an unsigned transaction.
 5. Sign and send the transaction anyway you like.
 
 ```js
@@ -557,12 +557,12 @@ const metadata = {
   properties: {
     ticketTypesCount: {
       type: "semi_fungible or non_fungible",
-      places: 10
+      places: 10,
     },
     design: {
-      color: "color"
-    }
-  }
+      color: "color",
+    },
+  },
 };
 
 const contractData = {
@@ -570,21 +570,20 @@ const contractData = {
   saleEndDate: 1666666666, // unix timestamp
   ticketsCount: 50,
   ticketPrice: 10,
-  discountsTicketsCount: [ 10, 5 ],
-  discountsPercentage: [ 20, 10],
+  discountsTicketsCount: [10, 5],
+  discountsPercentage: [20, 10],
   downPayment: {
     price: 2,
-    finalAmountDate: 1666666666 // unix timestamp
-  }
+    finalAmountDate: 1666666666, // unix timestamp
+  },
 };
 
 const key = "API key for NFT.storage";
 const eventId = "Id of event";
 const categoryId = "Id of category";
 
-
-  const transaction = await updateCategoryUri(key, eventId, categoryId, metadata, contractData);
-  //You need to sign and send the transaction after this.
+const transaction = await updateCategory(key, eventId, categoryId, metadata, contractData);
+//You need to sign and send the transaction after this.
 ```
 
 ### Remove category
@@ -645,65 +644,40 @@ const transaction = await removeCategoryTicketsCount(eventId, categoryId, lessTi
 //You need to sign and send the transaction after this.
 ```
 
-### Start the sale of tickets for a category
+### Manage the sale of tickets for a category
 
-1. Import startCategorySelling function from the library.
-2. Execute startCategorySelling function. This will return an unsigned transaction.
+1. Import manageCategorySelling function from the library.
+2. Execute manageCategorySelling function. This will return an unsigned transaction.
 3. Sign and send the transaction anyway you like.
 
 ```js
-import { startCategorySelling } from "ets-js-library";
+import { manageCategorySelling } from "ets-js-library";
 
 const eventId = "Id of event";
 const categoryId = "Id of category";
+//true - sale is enabled
+//false - sale is disabled
+const value = true;
 
-const transaction = await startCategorySelling(eventId, categoryId);
+const transaction = await manageCategorySelling(eventId, categoryId, value);
 //You need to sign and send the transaction after this.
 ```
 
-### Stop the sale of tickets for a category
+### Manage the sale of tickets for all categories of event
 
-1. Import stopCategorySelling function from the library.
-2. Execute stopCategorySelling function. This will return an unsigned transaction.
+1. Import manageAllCategorySelling function from the library.
+2. Execute manageAllCategorySelling function. This will return an unsigned transaction.
 3. Sign and send the transaction anyway you like.
 
 ```js
-import { stopCategorySelling } from "ets-js-library";
+import { manageAllCategorySelling } from "ets-js-library";
 
 const eventId = "Id of event";
-const categoryId = "Id of category";
+//true - sale is enabled
+//false - sale is disabled
+const value = true;
 
-const transaction = await stopCategorySelling(eventId, categoryId);
-//You need to sign and send the transaction after this.
-```
-
-### Start the sale of tickets for all categories of event
-
-1. Import startAllCategorySelling function from the library.
-2. Execute startAllCategorySelling function. This will return an unsigned transaction.
-3. Sign and send the transaction anyway you like.
-
-```js
-import { startAllCategorySelling } from "ets-js-library";
-
-const eventId = "Id of event";
-
-const transaction = await startAllCategorySelling(eventId);
-//You need to sign and send the transaction after this.
-```
-
-### Stop the sale of tickets for all categories of event
-
-1. Import stopAllCategorySelling function from the library.
-2. Execute stopAllCategorySelling function. This will return an unsigned transaction.
-3. Sign and send the transaction anyway you like.
-
-```js
-import { stopAllCategorySelling } from "ets-js-library";
-
-const eventId = "Id of event";
-
-const transaction = await stopAllCategorySelling(eventId);
+const transaction = await manageAllCategorySelling(eventId, value);
 //You need to sign and send the transaction after this.
 ```
 
