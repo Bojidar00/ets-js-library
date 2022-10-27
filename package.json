@@ -59,7 +59,7 @@
     "#contract": "./src/utils/contract.js"
   },
   "lint-staged": {
-    "{src,test,tasks}/**/*.{js}": [
+    "{src,test,tasks}/**/*.js": [
       "npm run prettier",
       "npm run lint",
       "npm run buddy"
