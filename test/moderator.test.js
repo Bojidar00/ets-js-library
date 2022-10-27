@@ -158,6 +158,24 @@ describe("Moderator tests", function () {
     expect(Number(categoriesBefore[0].ticketsCount) + moreTickets).to.equal(categoriesAfter[0].ticketsCount);
   });
 
+  it("Should revert add more tickets to category when there is not category", async () => {
+    const moreTickets = 20;
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await addCategoryTicketsCount(tokenId, categoryId + 1, moreTickets, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+  });
+
+  it("Should revert add more tickets to category when there is not event", async () => {
+    const moreTickets = 20;
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await addCategoryTicketsCount(tokenId + 1, categoryId, moreTickets, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+  });
+
   it("Should remove tickets from category", async () => {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const lessTickets = 20;
@@ -168,6 +186,24 @@ describe("Moderator tests", function () {
     const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
 
     expect(Number(categoriesBefore[0].ticketsCount) - lessTickets).to.equal(categoriesAfter[0].ticketsCount);
+  });
+
+  it("Should revert remove tickets from category when there is not category", async () => {
+    const lessTickets = 20;
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await removeCategoryTicketsCount(tokenId, categoryId + 1, lessTickets, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+  });
+
+  it("Should revert remove tickets from category when there is not event", async () => {
+    const lessTickets = 20;
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await removeCategoryTicketsCount(tokenId + 1, categoryId, lessTickets, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should stop the sale of tickets for category", async () => {
@@ -183,6 +219,24 @@ describe("Moderator tests", function () {
     expect(categoriesAfter[0].areTicketsBuyable).to.equal(false);
   });
 
+  it("Should revert stop the sale of tickets for category when there is not category", async () => {
+    const value = false;
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await manageCategorySelling(tokenId, categoryId + 1, value, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+  });
+
+  it("Should revert stop the sale of tickets for category when there is not event", async () => {
+    const value = false;
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await manageCategorySelling(tokenId + 1, categoryId, value, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+  });
+
   it("Should start the sale of tickets for category", async () => {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const value = true;
@@ -196,6 +250,24 @@ describe("Moderator tests", function () {
     expect(categoriesAfter[0].areTicketsBuyable).to.equal(true);
   });
 
+  it("Should revert start the sale of tickets for category when there is not category", async () => {
+    const value = true;
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await manageCategorySelling(tokenId, categoryId + 1, value, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+  });
+
+  it("Should revert start the sale of tickets for category when there is not event", async () => {
+    const value = true;
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await manageCategorySelling(tokenId + 1, categoryId, value, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+  });
+
   it("Should stop the sale of tickets for all categories", async () => {
     const value = false;
     const populatedTx = await manageAllCategorySelling(tokenId, value, eventFacet);
@@ -207,6 +279,13 @@ describe("Moderator tests", function () {
     expect(event.areAllCategoryTicketsBuyable).to.equal(false);
   });
 
+  it("Should revert stop the sale of tickets for all categories when there is not event", async () => {
+    const value = false;
+    const populatedTx = await manageAllCategorySelling(tokenId + 1, value, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+  });
+
   it("Should start the sale of tickets for all categories", async () => {
     const value = true;
     const populatedTx = await manageAllCategorySelling(tokenId, value, eventFacet);
@@ -216,6 +295,23 @@ describe("Moderator tests", function () {
     const event = await fetchEvent(tokenId, eventFacet);
 
     expect(event.areAllCategoryTicketsBuyable).to.equal(true);
+  });
+
+  it("Should revert start the sale of tickets for all categories when there is not event", async () => {
+    const value = true;
+    const populatedTx = await manageAllCategorySelling(tokenId + 1, value, eventFacet);
+
+    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+  });
+
+  it("Should fetch categories of event", async () => {
+    const categories = await fetchCategoriesByEventId(tokenId, eventFacet);
+
+    expect(categories.length).to.equal(1);
+  });
+
+  it("Should revert fetch categories of event when there is not event", async () => {
+    expect(fetchCategoriesByEventId(tokenId + 1, eventFacet)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should remove category", async () => {
