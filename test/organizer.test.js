@@ -10,7 +10,7 @@ import {
   getEventMembers,
   getEventIpfsUri,
   fetchOwnedEvents,
-  fetchEvents
+  fetchEvents,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
 import { NFT_STORAGE_API_KEY, EXAMPLE_ADDRESS, mockedMetadata } from "./config.js";
@@ -79,7 +79,7 @@ describe("Organizer tests", function () {
     await tx.wait();
     const events = await fetchOwnedEvents(wallet.address, eventFacet);
     expect(events.length).to.equal(0);
-  }); 
+  });
 
   it("Should revert delete event when there is not an event", async () => {
     const populatedTx = await removeEvent(tokenId + 1, eventFacet);
@@ -118,7 +118,12 @@ describe("Organizer tests", function () {
   });
 
   it("Should revert remove team member when there is not an event", async () => {
-    const populatedTx = await removeTeamMember(tokenId + 1, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
+    const populatedTx = await removeTeamMember(
+      tokenId + 1,
+      `0x${"0".repeat(addressLength)}`,
+      EXAMPLE_ADDRESS,
+      eventFacet,
+    );
     await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 

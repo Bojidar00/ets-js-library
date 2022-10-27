@@ -314,36 +314,18 @@ export async function removeCategoryTicketsCount(eventId, categoryId, ticketsCou
   }
 }
 
-export async function startCategorySelling(eventId, categoryId, contract = eventsContract) {
+export async function manageCategorySelling(eventId, categoryId, value, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.startCategorySelling(eventId, categoryId);
+    const tx = await contract.populateTransaction.manageCategorySelling(eventId, categoryId, value);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function stopCategorySelling(eventId, categoryId, contract = eventsContract) {
+export async function manageAllCategorySelling(eventId, value, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.stopCategorySelling(eventId, categoryId);
-    return tx;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function startAllCategorySelling(eventId, contract = eventsContract) {
-  try {
-    const tx = await contract.populateTransaction.startAllCategorySelling(eventId);
-    return tx;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function stopAllCategorySelling(eventId, contract = eventsContract) {
-  try {
-    const tx = await contract.populateTransaction.stopAllCategorySelling(eventId);
+    const tx = await contract.populateTransaction.manageAllCategorySelling(eventId, value);
     return tx;
   } catch (error) {
     throw error;
