@@ -722,9 +722,12 @@ const categories = [
 
 ## Tests
 
+> :warning: **hardhat@esm** is used to test the library to be able to match the type which is _module_, but official hardhat requires _commonjs_
+
 Run tests:
 
 ```sh
+npm install hardhat@esm
 npm run test
 ```
 
