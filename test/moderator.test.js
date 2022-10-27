@@ -3,10 +3,15 @@ import eventSchema from "../config/EventFacet.json" assert { type: "json" };
 
 import {
   createEvent,
+  fetchEvent,
   createTicketCategory,
   fetchCategoriesByEventId,
   updateCategory,
   removeCategory,
+  addCategoryTicketsCount,
+  removeCategoryTicketsCount,
+  manageCategorySelling,
+  manageAllCategorySelling,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
 import { NFT_STORAGE_API_KEY, mockedMetadata, mockedCategoryMetadata, mockedContractData } from "./config.js";
@@ -125,6 +130,78 @@ describe("Moderator tests", function () {
     const categoriesAfterUpdate = await fetchCategoriesByEventId(tokenId, eventFacet);
 
     expect(categoriesAfterUpdate[0].cid).to.not.equal(categories[0].cid);
+  });
+
+  it("Should add more tickets to category", async () => {
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const moreTickets = 20;
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await addCategoryTicketsCount(tokenId, categoryId, moreTickets, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+    const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
+
+    expect(Number(categoriesBefore[0].ticketsCount) + moreTickets).to.equal(categoriesAfter[0].ticketsCount);
+  });
+
+  it("Should remove tickets from category", async () => {
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const lessTickets = 20;
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await removeCategoryTicketsCount(tokenId, categoryId, lessTickets, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+    const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
+
+    expect(Number(categoriesBefore[0].ticketsCount) - lessTickets).to.equal(categoriesAfter[0].ticketsCount);
+  });
+
+  it("Should stop the sale of tickets for category", async () => {
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const value = false;
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await manageCategorySelling(tokenId, categoryId, value, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+    const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
+
+    expect(categoriesBefore[0].areTicketsBuyable).to.not.equal(categoriesAfter[0].areTicketsBuyable);
+    expect(categoriesAfter[0].areTicketsBuyable).to.equal(false);
+  });
+
+  it("Should start the sale of tickets for category", async () => {
+    const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
+    const value = true;
+    const categoryId = categoriesBefore[0].id;
+    const populatedTx = await manageCategorySelling(tokenId, categoryId, value, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+    const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
+
+    expect(categoriesBefore[0].areTicketsBuyable).to.not.equal(categoriesAfter[0].areTicketsBuyable);
+    expect(categoriesAfter[0].areTicketsBuyable).to.equal(true);
+  });
+
+  it("Should stop the sale of tickets for all categories", async () => {
+    const value = false;
+    const populatedTx = await manageAllCategorySelling(tokenId, value, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    const event = await fetchEvent(tokenId, eventFacet);
+
+    expect(event.areAllCategoryTicketsBuyable).to.equal(false);
+  });
+
+  it("Should start the sale of tickets for all categories", async () => {
+    const value = true;
+    const populatedTx = await manageAllCategorySelling(tokenId, value, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    const event = await fetchEvent(tokenId, eventFacet);
+
+    expect(event.areAllCategoryTicketsBuyable).to.equal(true);
   });
 
   it("Should remove category", async () => {

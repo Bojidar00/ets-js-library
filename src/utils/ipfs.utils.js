@@ -53,9 +53,11 @@ async function fetchSingleEventMetadata(eventId, contract = eventsContract) {
     const url = makeGatewayUrl(eventUri);
 
     const eventMetadata = await axios.get(url);
+    const contractData = await contract.fetchEventById(eventId);
 
     eventMetadata.data.eventId = eventId;
     eventMetadata.data.cid = eventUri;
+    Object.assign(eventMetadata, contractData);
 
     return eventMetadata;
   } catch (error) {
