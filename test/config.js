@@ -54,4 +54,39 @@ const mockedEventParams = {
   },
 };
 
-export { NFT_STORAGE_API_KEY, EXAMPLE_ADDRESS, mockedMetadata, mockedEventParams };
+const mockedCategoryMetadata = {
+  name: "Category1",
+  description: "Category1 Description",
+  image: "null",
+  properties: {
+    ticketTypesCount: {
+      type: "semi_fungible or non_fungible",
+      places: 10,
+    },
+    design: {
+      color: "color",
+    },
+  },
+};
+
+const mockedContractData = {
+  saleStartDate: 1666601372, // unix timestamp
+  saleEndDate: 1666601572, // unix timestamp
+  ticketsCount: 50,
+  ticketPrice: 10,
+  discountsTicketsCount: [10, 5], // buddy ignore:line
+  discountsPercentage: [20, 10], // buddy ignore:line
+  downPayment: {
+    price: 2,
+    finalAmountDate: 1666666666, // unix timestamp
+  },
+};
+
+export {
+  NFT_STORAGE_API_KEY,
+  EXAMPLE_ADDRESS,
+  mockedMetadata,
+  mockedEventParams,
+  mockedCategoryMetadata,
+  mockedContractData,
+};

@@ -16,6 +16,7 @@ export async function deployEventDiamond() {
   const accounts = await ethers.getSigners();
   const contractOwner = accounts[0];
   const ticketDiamondAddress = await deployTicketDiamond();
+
   // deploy DiamondCutFacet
   const EventDiamondCutFacet = await ethers.getContractFactory(
     eventDiamondCutSchema.abi,
