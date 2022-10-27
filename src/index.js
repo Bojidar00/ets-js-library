@@ -30,6 +30,15 @@ export async function createEvent(nftStorageApiKey, metadata, contractData, cont
   }
 }
 
+export async function fetchEvent(eventId, contract = eventsContract) {
+  try {
+    const data = await fetchSingleEventMetadata(eventId, contract);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function fetchEvents(eventIds, contract = eventsContract) {
   try {
     const metadata = await fetchEventsMetadata(eventIds, contract);

@@ -488,8 +488,9 @@ listenForRoleRevoke(callback);
 import { setEventCashier } from "ets-js-library";
 
 const address = "Address of new cashier.";
+const eventId = "Id of event";
 
-const transaction = await setEventCashier(address);
+const transaction = await setEventCashier(eventId, address);
 //You need to sign and send the transaction after this.
 ```
 
