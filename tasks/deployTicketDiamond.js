@@ -24,7 +24,12 @@ export async function deployTicketDiamond() {
 
   // deploy Diamond
   const TicketDiamond = await ethers.getContractFactory(ticketDiamondSchema.abi, ticketDiamondSchema.bytecode);
-  const ticketDiamond = await TicketDiamond.deploy(contractOwner.address, ticketDiamondCutFacet.address);
+  const ticketDiamond = await TicketDiamond.deploy(
+    contractOwner.address,
+    ticketDiamondCutFacet.address,
+    "EventTickets",
+    "EVT",
+  );
   await ticketDiamond.deployed();
   console.log("TicketDiamond deployed at: ", ticketDiamond.address);
 

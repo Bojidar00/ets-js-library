@@ -15,7 +15,7 @@ import iDiamondCutSchema from "../config/IDiamondCut.json" assert { type: "json"
 export async function deployEventDiamond() {
   const accounts = await ethers.getSigners();
   const contractOwner = accounts[0];
-
+  const ticketDiamondAddress = await deployTicketDiamond();
   // deploy DiamondCutFacet
   const EventDiamondCutFacet = await ethers.getContractFactory(
     eventDiamondCutSchema.abi,
@@ -26,7 +26,13 @@ export async function deployEventDiamond() {
 
   // deploy Diamond
   const EventDiamond = await ethers.getContractFactory(eventDiamondSchema.abi, eventDiamondSchema.bytecode);
-  const eventDiamond = await EventDiamond.deploy(contractOwner.address, eventDiamondCutFacet.address);
+  const eventDiamond = await EventDiamond.deploy(
+    contractOwner.address,
+    eventDiamondCutFacet.address,
+    "Events",
+    "ET",
+    ticketDiamondAddress,
+  );
   await eventDiamond.deployed();
   console.log("EventDiamond deployed at: ", eventDiamond.address);
 
@@ -63,10 +69,8 @@ export async function deployEventDiamond() {
     functionSelectors: getSelectors(eventOwnershipFacet),
   });
 
-  const ticketDiamondAddress = await deployTicketDiamond();
-
   const EventFacet = await ethers.getContractFactory(eventFacetSchema.abi, eventFacetSchema.bytecode);
-  const eventFacet = await EventFacet.deploy("Events", "ET", ticketDiamondAddress);
+  const eventFacet = await EventFacet.deploy();
   await eventFacet.deployed();
 
   const ticketFacet = await ethers.getContractAt(ticketFacetSchema.abi, ticketDiamondAddress);
