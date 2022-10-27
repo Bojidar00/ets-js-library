@@ -4,6 +4,7 @@ import eventSchema from "../config/EventFacet.json" assert { type: "json" };
 import {
   createEvent,
   fetchEvent,
+  setEventCashier,
   createTicketCategory,
   fetchCategoriesByEventId,
   updateCategory,
@@ -12,10 +13,12 @@ import {
   removeCategoryTicketsCount,
   manageCategorySelling,
   manageAllCategorySelling,
+  getEventMembers,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
 import { NFT_STORAGE_API_KEY, mockedMetadata, mockedCategoryMetadata, mockedContractData } from "./config.js";
 import { expect } from "chai";
+import { utils } from "ethers";
 
 describe("Moderator tests", function () {
   let diamondAddress;
@@ -55,7 +58,18 @@ describe("Moderator tests", function () {
     console.log("New event: ", tokenId);
   });
 
-  // set cashier to be tested
+  it("Should set event cashier", async () => {
+    const CASHIER_ROLE = utils.keccak256(utils.toUtf8Bytes("CASHIER_ROLE"));
+    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const populatedTx = await setEventCashier(tokenId, address, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    const members = await getEventMembers(tokenId, eventFacet);
+
+    expect(members[1].account).to.equal(address);
+    expect(members[1].role).to.equal(CASHIER_ROLE);
+  });
 
   it("Should create ticket category", async () => {
     const populatedTx = await createTicketCategory(
