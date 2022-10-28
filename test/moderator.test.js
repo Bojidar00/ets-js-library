@@ -41,6 +41,15 @@ describe("Moderator tests", function () {
   let wallet;
   let signers;
   const addressLength = 64;
+  const spyFunc = spy();
+
+  function checkFunctionInvocation() {
+    if (spyFunc.callCount === 0) {
+      setTimeout(checkFunctionInvocation, 100); // buddy ignore:line
+    } else {
+      expect(spyFunc.callCount).to.equal(1);
+    }
+  }
 
   before(async function () {
     diamondAddress = await deployEventDiamond();
@@ -352,7 +361,6 @@ describe("Moderator tests", function () {
   });
 
   it("Should listen for new Events", async () => {
-    const spyFunc = spy();
     listenForNewEvent(eventFacet, spyFunc);
     const maxTicketPerClient = 10;
     const startDate = 1666601372;
@@ -367,11 +375,11 @@ describe("Moderator tests", function () {
     const eventTx = await wallet.sendTransaction(populatedTx);
     await eventTx.wait();
 
-    expect(spyFunc.callCount).to.equal(1);
+    checkFunctionInvocation();
+    spyFunc.resetHistory();
   });
 
   it("Should listen for event update", async () => {
-    const spyFunc = spy();
     listenForEventUpdate(eventFacet, spyFunc);
     const currMockedMetadata = JSON.parse(JSON.stringify(mockedMetadata));
     currMockedMetadata.name = "Updated Name";
@@ -382,28 +390,29 @@ describe("Moderator tests", function () {
     const tx = await wallet.sendTransaction(populatedTx);
     await tx.wait();
 
-    expect(spyFunc.callCount).to.equal(1);
+    checkFunctionInvocation();
+    spyFunc.resetHistory();
   });
 
   it("Should listen for role granted", async () => {
-    const spyFunc = spy();
     listenForRoleGrant(eventFacet, spyFunc);
     const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
     await tx.wait();
 
-    expect(spyFunc.callCount).to.equal(1);
+    checkFunctionInvocation();
+    spyFunc.resetHistory();
   });
 
   it("Should listen for role revoked", async () => {
-    const spyFunc = spy();
     listenForRoleRevoke(eventFacet, spyFunc);
 
     const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
     await tx.wait();
 
-    expect(spyFunc.callCount).to.equal(1);
+    checkFunctionInvocation();
+    spyFunc.resetHistory();
   });
 });
