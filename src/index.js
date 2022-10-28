@@ -174,8 +174,8 @@ export async function fetchAllEventIds(contract = eventsContract) {
   return allEventIds;
 }
 
-export function listenForNewEvent(callback) {
-  eventsContract.on("EventCreated", async (eventId, metadataUri) => {
+export function listenForNewEvent(contract = eventsContract, callback) {
+  contract.on("EventCreated", async (eventId, metadataUri) => {
     const url = createGatewayUrl(metadataUri);
     const eventMetadata = await axios.get(url);
 
@@ -191,8 +191,8 @@ export function listenForNewEvent(callback) {
   });
 }
 
-export function listenForEventUpdate(callback) {
-  eventsContract.on("MetadataUpdate", async (contractNftEventId) => {
+export function listenForEventUpdate(contract = eventsContract, callback) {
+  contract.on("MetadataUpdate", async (contractNftEventId) => {
     // Fetch Event NFT metadata
     const eventsMetadata = await fetchSingleEventMetadata(contractNftEventId);
 
@@ -205,16 +205,16 @@ export function listenForEventUpdate(callback) {
   });
 }
 
-export function listenForRoleGrant(callback) {
-  listenForRole("RoleGranted", callback);
+export function listenForRoleGrant(contract = eventsContract, callback) {
+  listenForRole("RoleGranted", contract, callback);
 }
 
-export function listenForRoleRevoke(callback) {
-  listenForRole("RoleRevoked", callback);
+export function listenForRoleRevoke(contract = eventsContract, callback) {
+  listenForRole("RoleRevoked", contract, callback);
 }
 
-function listenForRole(contractEventName, callback) {
-  eventsContract.on(contractEventName, async (contractNftEventId, role, account, sender) => {
+function listenForRole(contractEventName, contract, callback) {
+  contract.on(contractEventName, async (contractNftEventId, role, account, sender) => {
     const data = {
       eventId: contractNftEventId,
       role,
