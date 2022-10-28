@@ -353,7 +353,7 @@ describe("Moderator tests", function () {
 
   it("Should listen for new Events", async () => {
     const spyFunc = spy();
-    listenForNewEvent(spyFunc);
+    listenForNewEvent(eventFacet, spyFunc);
     const maxTicketPerClient = 10;
     const startDate = 1666601372;
     const endDate = 1666601572;
@@ -372,7 +372,7 @@ describe("Moderator tests", function () {
 
   it("Should listen for event update", async () => {
     const spyFunc = spy();
-    listenForEventUpdate(spyFunc);
+    listenForEventUpdate(eventFacet, spyFunc);
     const currMockedMetadata = JSON.parse(JSON.stringify(mockedMetadata));
     currMockedMetadata.name = "Updated Name";
     currMockedMetadata.description = "Updated description";
@@ -387,7 +387,7 @@ describe("Moderator tests", function () {
 
   it("Should listen for role granted", async () => {
     const spyFunc = spy();
-    listenForRoleGrant(spyFunc);
+    listenForRoleGrant(eventFacet, spyFunc);
     const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
@@ -398,7 +398,7 @@ describe("Moderator tests", function () {
 
   it("Should listen for role revoked", async () => {
     const spyFunc = spy();
-    listenForRoleRevoke(spyFunc);
+    listenForRoleRevoke(eventFacet, spyFunc);
 
     const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
