@@ -14,11 +14,24 @@ import {
   manageCategorySelling,
   manageAllCategorySelling,
   getEventMembers,
+  listenForNewEvent,
+  listenForEventUpdate,
+  listenForRoleGrant,
+  listenForRoleRevoke,
+  updateEvent,
+  removeTeamMember,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
-import { NFT_STORAGE_API_KEY, mockedMetadata, mockedCategoryMetadata, mockedContractData } from "./config.js";
+import {
+  NFT_STORAGE_API_KEY,
+  mockedMetadata,
+  mockedCategoryMetadata,
+  mockedContractData,
+  EXAMPLE_ADDRESS,
+} from "./config.js";
 import { expect } from "chai";
 import { utils } from "ethers";
+import { spy } from "sinon";
 
 describe("Moderator tests", function () {
   let diamondAddress;
@@ -27,6 +40,16 @@ describe("Moderator tests", function () {
   let imageBlob;
   let wallet;
   let signers;
+  const addressLength = 64;
+  const spyFunc = spy();
+
+  function checkFunctionInvocation() {
+    if (spyFunc.callCount === 0) {
+      setTimeout(checkFunctionInvocation, 100); // buddy ignore:line
+    } else {
+      expect(spyFunc.callCount).to.equal(1);
+    }
+  }
 
   before(async function () {
     diamondAddress = await deployEventDiamond();
@@ -335,5 +358,61 @@ describe("Moderator tests", function () {
     const populatedTx = await removeCategory(tokenId + 1, 1, eventFacet);
 
     await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+  });
+
+  it("Should listen for new Events", async () => {
+    listenForNewEvent(eventFacet, spyFunc);
+    const maxTicketPerClient = 10;
+    const startDate = 1666601372;
+    const endDate = 1666601572;
+    const populatedTx = await createEvent(
+      NFT_STORAGE_API_KEY,
+      mockedMetadata,
+      { maxTicketPerClient, startDate, endDate },
+      eventFacet,
+    );
+
+    const eventTx = await wallet.sendTransaction(populatedTx);
+    await eventTx.wait();
+
+    checkFunctionInvocation();
+    spyFunc.resetHistory();
+  });
+
+  it("Should listen for event update", async () => {
+    listenForEventUpdate(eventFacet, spyFunc);
+    const currMockedMetadata = JSON.parse(JSON.stringify(mockedMetadata));
+    currMockedMetadata.name = "Updated Name";
+    currMockedMetadata.description = "Updated description";
+    currMockedMetadata.image = imageBlob;
+
+    const populatedTx = await updateEvent(NFT_STORAGE_API_KEY, tokenId, currMockedMetadata, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    checkFunctionInvocation();
+    spyFunc.resetHistory();
+  });
+
+  it("Should listen for role granted", async () => {
+    listenForRoleGrant(eventFacet, spyFunc);
+    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const populatedTx = await setEventCashier(tokenId, address, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    checkFunctionInvocation();
+    spyFunc.resetHistory();
+  });
+
+  it("Should listen for role revoked", async () => {
+    listenForRoleRevoke(eventFacet, spyFunc);
+
+    const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    checkFunctionInvocation();
+    spyFunc.resetHistory();
   });
 });
