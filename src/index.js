@@ -350,24 +350,6 @@ export async function fetchCategoriesByEventId(eventId, contract = eventsContrac
   }
 }
 
-export async function clipTicket(eventId, categoryId, ticketId, contract = eventsContract) {
-  try {
-    const tx = await contract.populateTransaction.clipTicket(eventId, categoryId, ticketId);
-    return tx;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function bookTickets(eventId, categoryId, ticketsCount, addresses, contract = eventsContract) {
-  try {
-    const tx = await contract.populateTransaction.bookTickets(eventId, categoryId, ticketsCount, addresses);
-    return tx;
-  } catch (error) {
-    throw error;
-  }
-}
-
 export async function updateCategorySaleDates(
   eventId,
   categoryId,
@@ -382,6 +364,82 @@ export async function updateCategorySaleDates(
       saleStartDate,
       saleEndDate,
     );
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function buyTicketsFromMultipleEvents(
+  eventCategoryData,
+  priceData,
+  place,
+  ticketMetadataUris,
+  contract = eventsContract,
+) {
+  try {
+    const tx = await contract.populateTransaction.buyTickets(eventCategoryData, priceData, place, ticketMetadataUris);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function buyTicketsFromSingleEvent(
+  eventId,
+  categoryId,
+  priceData,
+  place,
+  ticketMetadataUris,
+  contract = eventsContract,
+) {
+  try {
+    const tx = await contract.populateTransaction.buyTickets(eventId, categoryId, priceData, place, ticketMetadataUris);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addRefundDeadlines(eventId, refundData, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.addRefundDeadlines(eventId, refundData);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function refundTicket(eventId, categoryId, ticketId, account, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.refundTicket(eventId, categoryId, ticketId, account);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function withdrawRefund(eventId, categoryId, ticketId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.withdrawRefund(eventId, categoryId, ticketId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function clipTicket(eventId, categoryId, ticketId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.clipTicket(eventId, categoryId, ticketId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function bookTickets(eventId, categoryId, accounts, place, ticketMetadataUris, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.bookTickets(eventId, categoryId, accounts, place, ticketMetadataUris);
     return tx;
   } catch (error) {
     throw error;
