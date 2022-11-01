@@ -13,13 +13,14 @@ import {
   removeCategoryTicketsCount,
   manageCategorySelling,
   manageAllCategorySelling,
-  getEventMembers,
   listenForNewEvent,
   listenForEventUpdate,
   listenForRoleGrant,
   listenForRoleRevoke,
   updateEvent,
   removeTeamMember,
+  addTeamMember,
+  removeEvent,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
 import {
@@ -39,6 +40,7 @@ describe("Moderator tests", function () {
   let tokenId;
   let imageBlob;
   let wallet;
+  let moderatorWallet;
   let signers;
   const addressLength = 64;
   const spyFunc = spy();
@@ -58,6 +60,7 @@ describe("Moderator tests", function () {
     imageBlob = await image.blob();
     signers = await ethers.getSigners();
     wallet = signers[0];
+    moderatorWallet = signers[1];
 
     const maxTicketPerClient = 10;
     const startDate = 1666601372;
@@ -79,20 +82,21 @@ describe("Moderator tests", function () {
     const radix = 16;
     tokenId = parseInt(tokenIdInHex, radix);
     console.log("New event: ", tokenId);
+
+    // Grant moderator role
+    const moderatorRole = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
+    const moderatorAddress = await moderatorWallet.getAddress();
+    const addTeamMemberTx = await addTeamMember(tokenId, moderatorRole, moderatorAddress, eventFacet);
+    const tx = await wallet.sendTransaction(addTeamMemberTx);
+    await tx.wait();
   });
 
-  it("Should set event cashier", async () => {
-    const CASHIER_ROLE = utils.keccak256(utils.toUtf8Bytes("CASHIER_ROLE"));
+  it("Should revert set event cashier when moderator calls it", async () => {
     const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
-    await tx.wait();
+    populatedTx.from = moderatorWallet.address;
 
-    const members = await getEventMembers(tokenId, eventFacet);
-    const expectedMemberIndex = 5;
-
-    expect(members[expectedMemberIndex].account).to.equal(address);
-    expect(members[expectedMemberIndex].role).to.equal(CASHIER_ROLE);
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
   });
 
   it("Should create ticket category", async () => {
@@ -103,7 +107,8 @@ describe("Moderator tests", function () {
       mockedContractData,
       eventFacet,
     );
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
 
     const categories = await fetchCategoriesByEventId(tokenId, eventFacet);
@@ -120,8 +125,11 @@ describe("Moderator tests", function () {
       mockedContractData,
       eventFacet,
     );
+    populatedTx.from = moderatorWallet.address;
 
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category start date is incorrect");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
+      "Event: Category start date is incorrect",
+    );
   });
 
   it("Should revert create ticket category when the end sale date is not appropriate", async () => {
@@ -134,8 +142,11 @@ describe("Moderator tests", function () {
       mockedContractData,
       eventFacet,
     );
+    populatedTx.from = moderatorWallet.address;
 
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category end date is incorrect");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
+      "Event: Category end date is incorrect",
+    );
   });
 
   it("Should revert create ticket category when there is not an event", async () => {
@@ -146,8 +157,9 @@ describe("Moderator tests", function () {
       mockedContractData,
       eventFacet,
     );
+    populatedTx.from = moderatorWallet.address;
 
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should update ticket category", async () => {
@@ -162,7 +174,9 @@ describe("Moderator tests", function () {
       mockedContractData,
       eventFacet,
     );
-    const tx = await wallet.sendTransaction(populatedTx);
+
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
 
     const categoriesAfterUpdate = await fetchCategoriesByEventId(tokenId, eventFacet);
@@ -175,7 +189,8 @@ describe("Moderator tests", function () {
     const moreTickets = 20;
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await addCategoryTicketsCount(tokenId, categoryId, moreTickets, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
     const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
 
@@ -187,8 +202,9 @@ describe("Moderator tests", function () {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await addCategoryTicketsCount(tokenId, categoryId + 1, moreTickets, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
   });
 
   it("Should revert add more tickets to category when there is not event", async () => {
@@ -196,8 +212,9 @@ describe("Moderator tests", function () {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await addCategoryTicketsCount(tokenId + 1, categoryId, moreTickets, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should remove tickets from category", async () => {
@@ -205,7 +222,8 @@ describe("Moderator tests", function () {
     const lessTickets = 20;
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await removeCategoryTicketsCount(tokenId, categoryId, lessTickets, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
     const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
 
@@ -217,8 +235,9 @@ describe("Moderator tests", function () {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await removeCategoryTicketsCount(tokenId, categoryId + 1, lessTickets, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
   });
 
   it("Should revert remove tickets from category when there is not event", async () => {
@@ -226,8 +245,9 @@ describe("Moderator tests", function () {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await removeCategoryTicketsCount(tokenId + 1, categoryId, lessTickets, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should stop the sale of tickets for category", async () => {
@@ -235,7 +255,8 @@ describe("Moderator tests", function () {
     const value = false;
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await manageCategorySelling(tokenId, categoryId, value, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
     const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
 
@@ -248,8 +269,9 @@ describe("Moderator tests", function () {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await manageCategorySelling(tokenId, categoryId + 1, value, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
   });
 
   it("Should revert stop the sale of tickets for category when there is not event", async () => {
@@ -257,8 +279,9 @@ describe("Moderator tests", function () {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await manageCategorySelling(tokenId + 1, categoryId, value, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should start the sale of tickets for category", async () => {
@@ -266,7 +289,8 @@ describe("Moderator tests", function () {
     const value = true;
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await manageCategorySelling(tokenId, categoryId, value, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
     const categoriesAfter = await fetchCategoriesByEventId(tokenId, eventFacet);
 
@@ -279,8 +303,9 @@ describe("Moderator tests", function () {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await manageCategorySelling(tokenId, categoryId + 1, value, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
   });
 
   it("Should revert start the sale of tickets for category when there is not event", async () => {
@@ -288,14 +313,16 @@ describe("Moderator tests", function () {
     const categoriesBefore = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categoriesBefore[0].id;
     const populatedTx = await manageCategorySelling(tokenId + 1, categoryId, value, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should stop the sale of tickets for all categories", async () => {
     const value = false;
     const populatedTx = await manageAllCategorySelling(tokenId, value, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
 
     const event = await fetchEvent(tokenId, eventFacet);
@@ -306,14 +333,16 @@ describe("Moderator tests", function () {
   it("Should revert stop the sale of tickets for all categories when there is not event", async () => {
     const value = false;
     const populatedTx = await manageAllCategorySelling(tokenId + 1, value, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should start the sale of tickets for all categories", async () => {
     const value = true;
     const populatedTx = await manageAllCategorySelling(tokenId, value, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
 
     const event = await fetchEvent(tokenId, eventFacet);
@@ -324,8 +353,9 @@ describe("Moderator tests", function () {
   it("Should revert start the sale of tickets for all categories when there is not event", async () => {
     const value = true;
     const populatedTx = await manageAllCategorySelling(tokenId + 1, value, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should fetch categories of event", async () => {
@@ -342,7 +372,8 @@ describe("Moderator tests", function () {
     const categories = await fetchCategoriesByEventId(tokenId, eventFacet);
     const categoryId = categories[0].id;
     const populatedTx = await removeCategory(tokenId, categoryId, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
 
     const categoriesAfterRemove = await fetchCategoriesByEventId(tokenId, eventFacet);
@@ -351,14 +382,16 @@ describe("Moderator tests", function () {
 
   it("Should revert remove category when there is not category", async () => {
     const populatedTx = await removeCategory(tokenId, 1, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
   });
 
   it("Should revert remove category when there is not an event", async () => {
     const populatedTx = await removeCategory(tokenId + 1, 1, eventFacet);
+    populatedTx.from = moderatorWallet.address;
 
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
   });
 
   it("Should listen for new Events", async () => {
@@ -372,8 +405,9 @@ describe("Moderator tests", function () {
       { maxTicketPerClient, startDate, endDate },
       eventFacet,
     );
+    populatedTx.from = moderatorWallet.address;
 
-    const eventTx = await wallet.sendTransaction(populatedTx);
+    const eventTx = await moderatorWallet.sendTransaction(populatedTx);
     await eventTx.wait();
 
     checkFunctionInvocation();
@@ -388,7 +422,8 @@ describe("Moderator tests", function () {
     currMockedMetadata.image = imageBlob;
 
     const populatedTx = await updateEvent(NFT_STORAGE_API_KEY, tokenId, currMockedMetadata, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
 
     checkFunctionInvocation();
@@ -415,5 +450,26 @@ describe("Moderator tests", function () {
 
     checkFunctionInvocation();
     spyFunc.resetHistory();
+  });
+
+  it("Should revert add team member when it is not the owner", async () => {
+    const populatedTx = await addTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
+    populatedTx.from = moderatorWallet.address;
+
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+  });
+
+  it("Should revert remove team member when it is not the owner", async () => {
+    const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
+    populatedTx.from = moderatorWallet.address;
+
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+  });
+
+  it("Should revert remove event when it is not the owner", async () => {
+    const populatedTx = await removeEvent(tokenId, eventFacet);
+    populatedTx.from = moderatorWallet.address;
+
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
   });
 });
