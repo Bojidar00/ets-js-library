@@ -105,8 +105,8 @@ describe("Organizer tests", function () {
     await tx.wait();
 
     const eventMembers = await getEventMembers(tokenId, eventFacet);
-    expect(eventMembers.length).to.equal(2); // buddy ignore:line
-    expect(eventMembers[1][0].toLowerCase()).to.equal(EXAMPLE_ADDRESS);
+    expect(eventMembers.length).to.equal(6); // buddy ignore:line
+    expect(eventMembers[5][0].toLowerCase()).to.equal(EXAMPLE_ADDRESS); // buddy ignore:line
   });
 
   it("Should call remove team member method from smart contract", async () => {
@@ -115,7 +115,8 @@ describe("Organizer tests", function () {
     await tx.wait();
 
     const eventMembers = await getEventMembers(tokenId, eventFacet);
-    expect(eventMembers.length).to.equal(1);
+    const expectedMembersLength = 5;
+    expect(eventMembers.length).to.equal(expectedMembersLength);
     expect(eventMembers[0][0].toLowerCase()).to.equal(wallet.address.toLowerCase());
   });
 
@@ -137,7 +138,8 @@ describe("Organizer tests", function () {
 
   it("Should call get event members method from smart contract", async () => {
     const eventMembers = await getEventMembers(tokenId, eventFacet);
-    expect(eventMembers.length).to.equal(1);
+    const expectedMembersLength = 5;
+    expect(eventMembers.length).to.equal(expectedMembersLength);
     expect(eventMembers[0][0].toLowerCase()).to.equal(wallet.address.toLowerCase());
   });
 
