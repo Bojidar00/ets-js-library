@@ -11,10 +11,12 @@ import {
   getEventIpfsUri,
   fetchOwnedEvents,
   fetchEvents,
+  setEventCashier,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
 import { NFT_STORAGE_API_KEY, EXAMPLE_ADDRESS, mockedMetadata } from "./config.js";
 import { expect } from "chai";
+import { utils } from "ethers";
 
 describe("Organizer tests", function () {
   let diamondAddress;
@@ -142,5 +144,18 @@ describe("Organizer tests", function () {
   it("Should call fetchOwnedEvents from smart contract", async () => {
     const events = await fetchOwnedEvents(wallet, eventFacet);
     expect(events.length).to.equal(tokenId);
+  });
+
+  it("Should set event cashier", async () => {
+    const CASHIER_ROLE = utils.keccak256(utils.toUtf8Bytes("CASHIER_ROLE"));
+    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const populatedTx = await setEventCashier(tokenId, address, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    const members = await getEventMembers(tokenId, eventFacet);
+
+    expect(members[1].account).to.equal(address);
+    expect(members[1].role).to.equal(CASHIER_ROLE);
   });
 });
