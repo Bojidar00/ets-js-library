@@ -89,9 +89,10 @@ describe("Moderator tests", function () {
     await tx.wait();
 
     const members = await getEventMembers(tokenId, eventFacet);
+    const expectedMemberIndex = 5;
 
-    expect(members[1].account).to.equal(address);
-    expect(members[1].role).to.equal(CASHIER_ROLE);
+    expect(members[expectedMemberIndex].account).to.equal(address);
+    expect(members[expectedMemberIndex].role).to.equal(CASHIER_ROLE);
   });
 
   it("Should create ticket category", async () => {
