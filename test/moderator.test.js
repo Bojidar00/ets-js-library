@@ -20,6 +20,7 @@ import {
   updateEvent,
   removeTeamMember,
   addTeamMember,
+  removeEvent,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
 import {
@@ -460,6 +461,13 @@ describe("Moderator tests", function () {
 
   it("Should revert remove team member when it is not the owner", async () => {
     const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
+    populatedTx.from = moderatorWallet.address;
+
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+  });
+
+  it("Should revert remove event when it is not the owner", async () => {
+    const populatedTx = await removeEvent(tokenId, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
     await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
