@@ -720,6 +720,198 @@ const categories = [
 ];
 ```
 
+### Buy multiple tickets from multiple events and categories
+
+1. Import buyTicketsFromMultipleEvents function from the library.
+2. Execute buyTicketsFromMultipleEvents function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { buyTicketsFromMultipleEvents } from "ets-js-library";
+
+const eventCategoryData = [
+  {
+    eventId: "id of event",
+    categoryId: "id of category",
+  },
+  {
+    eventId: "id of event",
+    categoryId: "id of category",
+  },
+];
+
+const priceData = [
+  {
+    amount: "Amount of tickets to buy",
+    price: "Price of a single ticket",
+  },
+  {
+    amount: "Amount of tickets to buy",
+    price: "Price of a single ticket",
+  },
+];
+
+const place = [
+  {
+    row: "Row number of seat",
+    seat: "Seat position on row",
+  },
+  {
+    row: "Row number of seat",
+    seat: "Seat position on row",
+  },
+];
+
+const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+
+const transaction = await buyTicketsFromMultipleEvents(eventCategoryData, priceData, place, ticketMetadataUris);
+//You need to sign and send the transaction after this.
+```
+
+### Buy multiple tickets from a category from one event
+
+1. Import buyTicketsFromSingleEvent function from the library.
+2. Execute buyTicketsFromSingleEvent function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { buyTicketsFromSingleEvent } from "ets-js-library";
+
+const eventId = "id of event";
+const categoryId = "id of category";
+
+const priceData = [
+  {
+    amount: "Amount of tickets to buy",
+    price: "Price of a single ticket",
+  },
+  {
+    amount: "Amount of tickets to buy",
+    price: "Price of a single ticket",
+  },
+];
+
+const place = [
+  {
+    row: "Row number of seat",
+    seat: "Seat position on row",
+  },
+  {
+    row: "Row number of seat",
+    seat: "Seat position on row",
+  },
+];
+
+const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+
+const transaction = await buyTicketsFromSingleEvent(eventId, categoryId, priceData, place, ticketMetadataUris);
+//You need to sign and send the transaction after this.
+```
+
+### Add multiple refund data for an event
+
+1. Import addRefundDeadlines function from the library.
+2. Execute addRefundDeadlines function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { addRefundDeadlines } from "ets-js-library";
+
+const eventId = "id of event";
+
+const refundData = [
+  { date: "timestamp", percentage: "percentage to return" },
+  { date: "timestamp", percentage: "percentage to return" },
+];
+
+const transaction = await addRefundDeadlines(eventId, refundData);
+//You need to sign and send the transaction after this.
+```
+
+### Refund ticket
+
+1. Import refundTicket function from the library.
+2. Execute refundTicket function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { refundTicket } from "ets-js-library";
+
+const eventId = "id of event";
+const categoryId = "id of category";
+const ticketId = "id of ticket";
+const account = "Address which will receive the tokens";
+
+const transaction = await refundTicket(eventId, categoryId, ticketId, account);
+//You need to sign and send the transaction after this.
+```
+
+This function does not send the tokens immediately to the account, but saves the information in the contract, after which the user must get them through the [withdrawRefund](#withdrawrefund) function.
+
+### withdrawRefund
+
+1. Import withdrawRefund function from the library.
+2. Execute withdrawRefund function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { withdrawRefund } from "ets-js-library";
+
+const eventId = "id of event";
+const categoryId = "id of category";
+const ticketId = "id of ticket";
+
+const transaction = await withdrawRefund(eventId, categoryId, ticketId);
+//You need to sign and send the transaction after this.
+```
+
+### Clip ticket
+
+1. Import clipTicket function from the library.
+2. Execute clipTicket function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { clipTicket } from "ets-js-library";
+
+const eventId = "id of event";
+const categoryId = "id of category";
+const ticketId = "id of ticket";
+
+const transaction = await clipTicket(eventId, categoryId, ticketId);
+//You need to sign and send the transaction after this.
+```
+
+### Book tickets
+
+1. Import bookTickets function from the library.
+2. Execute bookTickets function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { bookTickets } from "ets-js-library";
+
+const eventId = "id of event";
+const categoryId = "id of category";
+const accounts = ["0x...", "0x..."];
+
+const place = [
+  {
+    row: "Row number of seat",
+    seat: "Seat position on row",
+  },
+  {
+    row: "Row number of seat",
+    seat: "Seat position on row",
+  },
+];
+
+const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+
+const transaction = await bookTickets(eventId, categoryId, accounts, place, ticketMetadataUris);
+//You need to sign and send the transaction after this.
+```
+
 ## Tests
 
 > :warning: **hardhat@esm** is used to test the library to be able to match the type which is _module_, but official hardhat requires _commonjs_
