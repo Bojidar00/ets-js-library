@@ -14,7 +14,7 @@ import {
   setEventCashier,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
-import { NFT_STORAGE_API_KEY, EXAMPLE_ADDRESS, mockedMetadata } from "./config.js";
+import { NFT_STORAGE_API_KEY, EXAMPLE_ADDRESS, mockedMetadata, errorMessages, DATES } from "./config.js";
 import { expect } from "chai";
 import { utils } from "ethers";
 
@@ -36,8 +36,8 @@ describe("Organizer tests", function () {
     wallet = signers[0];
 
     const maxTicketPerClient = 10;
-    const startDate = 1666601372;
-    const endDate = 1666601572;
+    const startDate = DATES.EVENT_START_DATE;
+    const endDate = DATES.EVENT_END_DATE;
 
     mockedMetadata.image = imageBlob;
 
@@ -85,7 +85,7 @@ describe("Organizer tests", function () {
 
   it("Should revert delete event when there is not an event", async () => {
     const populatedTx = await removeEvent(tokenId + 1, eventFacet);
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should call fetch events by id method from smart contract", async () => {
@@ -127,13 +127,13 @@ describe("Organizer tests", function () {
       EXAMPLE_ADDRESS,
       eventFacet,
     );
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   // fails
   it.skip("Should revert remove team member when there is not member with given address", async () => {
     const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should call get event members method from smart contract", async () => {

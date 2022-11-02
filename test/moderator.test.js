@@ -30,6 +30,7 @@ import {
   mockedContractData,
   EXAMPLE_ADDRESS,
   errorMessages,
+  DATES,
 } from "./config.js";
 import { expect } from "chai";
 import { utils } from "ethers";
@@ -64,8 +65,8 @@ describe("Moderator tests", function () {
     moderatorWallet = signers[1];
 
     const maxTicketPerClient = 10;
-    const startDate = 1666601372;
-    const endDate = 1666601572;
+    const startDate = DATES.EVENT_START_DATE;
+    const endDate = DATES.EVENT_END_DATE;
 
     mockedMetadata.image = imageBlob;
     mockedCategoryMetadata.image = imageBlob;
@@ -93,7 +94,7 @@ describe("Moderator tests", function () {
   });
 
   it("Should revert set event cashier when moderator calls it", async () => {
-    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const address = EXAMPLE_ADDRESS;
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
@@ -118,9 +119,9 @@ describe("Moderator tests", function () {
     expect(categories.length).to.equal(1);
   });
 
-  it("Should revert create ticket category when the start sale date is not appropriate", async () => {
-    mockedContractData.saleStartDate = 1666601370;
-    mockedContractData.saleEndDate = 1666666666;
+  it("Should revert create ticket category when the start sale date is earlier than start date of event", async () => {
+    mockedContractData.saleStartDate = DATES.EARLY_SALE_START_DATE;
+    mockedContractData.saleEndDate = DATES.EVENT_END_DATE;
     const populatedTx = await createTicketCategory(
       NFT_STORAGE_API_KEY,
       tokenId,
@@ -135,9 +136,9 @@ describe("Moderator tests", function () {
     );
   });
 
-  it("Should revert create ticket category when the end sale date is not appropriate", async () => {
-    mockedContractData.saleStartDate = 1666666666;
-    mockedContractData.saleEndDate = 1666666666;
+  it("Should revert create ticket category when the end sale date is after the end date of the event", async () => {
+    mockedContractData.saleStartDate = DATES.EVENT_START_DATE;
+    mockedContractData.saleEndDate = DATES.LATE_SALE_END_DATE;
     const populatedTx = await createTicketCategory(
       NFT_STORAGE_API_KEY,
       tokenId,
@@ -400,8 +401,8 @@ describe("Moderator tests", function () {
   it("Should listen for new Events", async () => {
     listenForNewEvent(eventFacet, spyFunc);
     const maxTicketPerClient = 10;
-    const startDate = 1666601372;
-    const endDate = 1666601572;
+    const startDate = DATES.EVENT_START_DATE;
+    const endDate = DATES.EVENT_END_DATE;
     const populatedTx = await createEvent(
       NFT_STORAGE_API_KEY,
       mockedMetadata,
@@ -435,7 +436,7 @@ describe("Moderator tests", function () {
 
   it("Should listen for role granted", async () => {
     listenForRoleGrant(eventFacet, spyFunc);
-    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const address = EXAMPLE_ADDRESS;
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
     await tx.wait();
