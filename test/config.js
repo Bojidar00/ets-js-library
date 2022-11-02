@@ -90,6 +90,13 @@ const errorMessages = {
   categoryDoesNotExist: "Event: Category does not exist!",
 };
 
+const DATES = {
+  EARLY_SALE_START_DATE: 1666601370,
+  LATE_SALE_END_DATE: 1666666666,
+  EVENT_START_DATE: 1666601372,
+  EVENT_END_DATE: 1666601572,
+};
+
 export {
   NFT_STORAGE_API_KEY,
   EXAMPLE_ADDRESS,
@@ -98,4 +105,5 @@ export {
   mockedCategoryMetadata,
   mockedContractData,
   errorMessages,
+  DATES,
 };
