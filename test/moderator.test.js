@@ -29,6 +29,7 @@ import {
   mockedCategoryMetadata,
   mockedContractData,
   EXAMPLE_ADDRESS,
+  errorMessages,
 } from "./config.js";
 import { expect } from "chai";
 import { utils } from "ethers";
@@ -96,7 +97,9 @@ describe("Moderator tests", function () {
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
+      errorMessages.callerIsNotEventOrganiser,
+    );
   });
 
   it("Should create ticket category", async () => {
@@ -128,7 +131,7 @@ describe("Moderator tests", function () {
     populatedTx.from = moderatorWallet.address;
 
     await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
-      "Event: Category start date is incorrect",
+      errorMessages.categoryStartDateIsIncorrect,
     );
   });
 
@@ -145,7 +148,7 @@ describe("Moderator tests", function () {
     populatedTx.from = moderatorWallet.address;
 
     await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
-      "Event: Category end date is incorrect",
+      errorMessages.categoryEndDateIsIncorrect,
     );
   });
 
@@ -159,7 +162,7 @@ describe("Moderator tests", function () {
     );
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should update ticket category", async () => {
@@ -204,7 +207,7 @@ describe("Moderator tests", function () {
     const populatedTx = await addCategoryTicketsCount(tokenId, categoryId + 1, moreTickets, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert add more tickets to category when there is not event", async () => {
@@ -214,7 +217,7 @@ describe("Moderator tests", function () {
     const populatedTx = await addCategoryTicketsCount(tokenId + 1, categoryId, moreTickets, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should remove tickets from category", async () => {
@@ -237,7 +240,7 @@ describe("Moderator tests", function () {
     const populatedTx = await removeCategoryTicketsCount(tokenId, categoryId + 1, lessTickets, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert remove tickets from category when there is not event", async () => {
@@ -247,7 +250,7 @@ describe("Moderator tests", function () {
     const populatedTx = await removeCategoryTicketsCount(tokenId + 1, categoryId, lessTickets, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should stop the sale of tickets for category", async () => {
@@ -271,7 +274,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageCategorySelling(tokenId, categoryId + 1, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert stop the sale of tickets for category when there is not event", async () => {
@@ -281,7 +284,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageCategorySelling(tokenId + 1, categoryId, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should start the sale of tickets for category", async () => {
@@ -305,7 +308,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageCategorySelling(tokenId, categoryId + 1, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert start the sale of tickets for category when there is not event", async () => {
@@ -315,7 +318,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageCategorySelling(tokenId + 1, categoryId, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should stop the sale of tickets for all categories", async () => {
@@ -335,7 +338,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageAllCategorySelling(tokenId + 1, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should start the sale of tickets for all categories", async () => {
@@ -355,7 +358,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageAllCategorySelling(tokenId + 1, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should fetch categories of event", async () => {
@@ -365,7 +368,7 @@ describe("Moderator tests", function () {
   });
 
   it("Should revert fetch categories of event when there is not event", async () => {
-    expect(fetchCategoriesByEventId(tokenId + 1, eventFacet)).to.be.revertedWith("Event: Event does not exist!");
+    expect(fetchCategoriesByEventId(tokenId + 1, eventFacet)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should remove category", async () => {
@@ -384,14 +387,14 @@ describe("Moderator tests", function () {
     const populatedTx = await removeCategory(tokenId, 1, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert remove category when there is not an event", async () => {
     const populatedTx = await removeCategory(tokenId + 1, 1, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should listen for new Events", async () => {
@@ -456,20 +459,26 @@ describe("Moderator tests", function () {
     const populatedTx = await addTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
+      errorMessages.callerIsNotEventOrganiser,
+    );
   });
 
   it("Should revert remove team member when it is not the owner", async () => {
     const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
+      errorMessages.callerIsNotEventOrganiser,
+    );
   });
 
   it("Should revert remove event when it is not the owner", async () => {
     const populatedTx = await removeEvent(tokenId, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
+      errorMessages.callerIsNotEventOrganiser,
+    );
   });
 });
