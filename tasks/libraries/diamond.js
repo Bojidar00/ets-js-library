@@ -6,7 +6,6 @@ export function getSelectors(contract) {
 
   const selectors = signatures.reduce((acc, val) => {
     if (val !== "init(bytes)") {
-      // console.log(val, contract.interface.getSighash(val))
       acc.push(contract.interface.getSighash(val));
     }
     return acc;
@@ -73,10 +72,3 @@ export function findAddressPositionInFacets(facetAddress, facets) {
     }
   }
 }
-
-// exports.getSelectors = getSelectors;
-// exports.getSelector = getSelector;
-// exports.FacetCutAction = FacetCutAction;
-// exports.remove = remove;
-// exports.removeSelectors = removeSelectors;
-// exports.findAddressPositionInFacets = findAddressPositionInFacets;
