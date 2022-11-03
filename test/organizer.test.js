@@ -150,7 +150,7 @@ describe("Organizer tests", function () {
 
   it("Should set event cashier", async () => {
     const CASHIER_ROLE = utils.keccak256(utils.toUtf8Bytes("CASHIER_ROLE"));
-    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const address = EXAMPLE_ADDRESS;
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
     await tx.wait();
