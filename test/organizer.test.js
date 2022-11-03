@@ -14,7 +14,14 @@ import {
   setEventCashier,
 } from "../src/index.js";
 import fetch from "@web-std/fetch";
-import { NFT_STORAGE_API_KEY, EXAMPLE_ADDRESS, mockedMetadata, errorMessages, DATES } from "./config.js";
+import {
+  NFT_STORAGE_API_KEY,
+  EXAMPLE_ADDRESS,
+  mockedMetadata,
+  errorMessages,
+  DATES,
+  SECOND_EXAMPLE_ADDRESS,
+} from "./config.js";
 import { expect } from "chai";
 import { utils } from "ethers";
 
@@ -142,7 +149,7 @@ describe("Organizer tests", function () {
 
   it("Should set event cashier", async () => {
     const CASHIER_ROLE = utils.keccak256(utils.toUtf8Bytes("CASHIER_ROLE"));
-    const address = EXAMPLE_ADDRESS;
+    const address = SECOND_EXAMPLE_ADDRESS;
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
     await tx.wait();

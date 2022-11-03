@@ -4,6 +4,7 @@ const NFT_STORAGE_API_KEY =
   "3MzI5NzMwOSwibmFtZSI6IkV2ZW50LVRpY2tldGluZy1TeXN0ZW0ifQ.x0aXjwdGsIcxibl7eIjxhdF8vnGHB2BB-2gkScySU20";
 
 const EXAMPLE_ADDRESS = "0x16514b719274484b06d56459f97139b333bd8130";
+const SECOND_EXAMPLE_ADDRESS = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
 
 const mockedMetadata = {
   name: "Event5",
@@ -100,6 +101,7 @@ const DATES = {
 export {
   NFT_STORAGE_API_KEY,
   EXAMPLE_ADDRESS,
+  SECOND_EXAMPLE_ADDRESS,
   mockedMetadata,
   mockedEventParams,
   mockedCategoryMetadata,
