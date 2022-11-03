@@ -27,7 +27,7 @@ describe("Organizer tests", function () {
   let signers;
   const addressLength = 64;
 
-  beforeEach(async function () {
+  before(async function () {
     diamondAddress = await deployEventDiamond();
     eventFacet = await ethers.getContractAt(eventSchema.abi, diamondAddress);
     const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
@@ -75,19 +75,6 @@ describe("Organizer tests", function () {
     expect(oldIpfsUrl.toString()).to.not.equal(newIpfsUrl.toString());
   });
 
-  it("Should call remove event method from smart contract", async () => {
-    const populatedTx = await removeEvent(tokenId, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
-    await tx.wait();
-    const events = await fetchOwnedEvents(wallet.address, eventFacet);
-    expect(events.length).to.equal(0);
-  });
-
-  it("Should revert delete event when there is not an event", async () => {
-    const populatedTx = await removeEvent(tokenId + 1, eventFacet);
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
-  });
-
   it("Should call fetch events by id method from smart contract", async () => {
     const eventIds = [tokenId];
     const events = await fetchEvents(eventIds, eventFacet);
@@ -97,6 +84,11 @@ describe("Organizer tests", function () {
   it("Should call fetch owned events method from smart contract", async () => {
     const events = await fetchOwnedEvents(wallet.address, eventFacet);
     expect(events.length).to.equal(1);
+  });
+
+  it("Should revert delete event when there is not an event", async () => {
+    const populatedTx = await removeEvent(tokenId + 1, eventFacet);
+    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should call add team member method from smart contract", async () => {
@@ -160,5 +152,13 @@ describe("Organizer tests", function () {
 
     expect(members[expectedMemberIndex].account).to.equal(address);
     expect(members[expectedMemberIndex].role).to.equal(CASHIER_ROLE);
+  });
+
+  it("Should call remove event method from smart contract", async () => {
+    const populatedTx = await removeEvent(tokenId, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+    const events = await fetchOwnedEvents(wallet.address, eventFacet);
+    expect(events.length).to.equal(0);
   });
 });
