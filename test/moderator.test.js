@@ -84,9 +84,7 @@ describe("Moderator tests", function () {
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
-      errorMessages.callerIsNotEventOrganiser,
-    );
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.callerIsNotAdmin);
   });
 
   it("Should create ticket category", async () => {
@@ -446,26 +444,20 @@ describe("Moderator tests", function () {
     const populatedTx = await addTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
-      errorMessages.callerIsNotEventOrganiser,
-    );
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.callerIsNotAdmin);
   });
 
   it("Should revert remove team member when it is not the owner", async () => {
     const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
-      errorMessages.callerIsNotEventOrganiser,
-    );
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.callerIsNotAdmin);
   });
 
   it("Should revert remove event when it is not the owner", async () => {
     const populatedTx = await removeEvent(tokenId, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
-      errorMessages.callerIsNotEventOrganiser,
-    );
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.callerIsNotAdmin);
   });
 });
