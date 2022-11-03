@@ -85,7 +85,7 @@ const mockedContractData = {
 
 const errorMessages = {
   eventDoesNotExist: "Event: Event does not exist!",
-  callerIsNotEventOrganiser: "Event: Caller is not an admin",
+  callerIsNotAdmin: "Event: Caller is not an admin",
   categoryStartDateIsIncorrect: "Event: Category start date is incorrect",
   categoryEndDateIsIncorrect: "Event: Category end date is incorrect",
   categoryDoesNotExist: "Event: Category does not exist!",
