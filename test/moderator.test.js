@@ -1,6 +1,3 @@
-import { deployEventDiamond } from "../tasks/deployEventDiamond.js";
-import eventSchema from "../config/EventFacet.json" assert { type: "json" };
-
 import {
   createEvent,
   fetchEvent,
@@ -22,7 +19,6 @@ import {
   addTeamMember,
   removeEvent,
 } from "../src/index.js";
-import fetch from "@web-std/fetch";
 import {
   NFT_STORAGE_API_KEY,
   mockedMetadata,
@@ -35,6 +31,7 @@ import {
 import { expect } from "chai";
 import { utils } from "ethers";
 import { spy } from "sinon";
+import { mockedCreateEvent, testSetUp } from "./utils.js";
 
 describe("Moderator tests", function () {
   let diamondAddress;
@@ -56,12 +53,13 @@ describe("Moderator tests", function () {
   }
 
   before(async function () {
-    diamondAddress = await deployEventDiamond();
-    eventFacet = await ethers.getContractAt(eventSchema.abi, diamondAddress);
-    const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
-    imageBlob = await image.blob();
-    signers = await ethers.getSigners();
-    wallet = signers[0];
+    ({ diamondAddress, eventFacet, imageBlob, signers, wallet } = await testSetUp(
+      diamondAddress,
+      eventFacet,
+      imageBlob,
+      signers,
+      wallet,
+    ));
     moderatorWallet = signers[1];
 
     const maxTicketPerClient = 10;
@@ -71,19 +69,7 @@ describe("Moderator tests", function () {
     mockedMetadata.image = imageBlob;
     mockedCategoryMetadata.image = imageBlob;
 
-    const populatedTx = await createEvent(
-      NFT_STORAGE_API_KEY,
-      mockedMetadata,
-      { maxTicketPerClient, startDate, endDate },
-      eventFacet,
-    );
-
-    const eventTx = await wallet.sendTransaction(populatedTx);
-    const eventTxResponse = await eventTx.wait();
-    const tokenIdInHex = eventTxResponse.logs[0].data.slice(2, 66); // buddy ignore:line
-    const radix = 16;
-    tokenId = parseInt(tokenIdInHex, radix);
-    console.log("New event: ", tokenId);
+    tokenId = await mockedCreateEvent(maxTicketPerClient, startDate, endDate, eventFacet, wallet, tokenId);
 
     // Grant moderator role
     const moderatorRole = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));

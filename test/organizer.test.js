@@ -1,19 +1,14 @@
-import { deployEventDiamond } from "../tasks/deployEventDiamond.js";
-import eventSchema from "../config/EventFacet.json" assert { type: "json" };
-
 import {
   removeEvent,
   addTeamMember,
   removeTeamMember,
   updateEvent,
-  createEvent,
   getEventMembers,
   getEventIpfsUri,
   fetchOwnedEvents,
   fetchEvents,
   setEventCashier,
 } from "../src/index.js";
-import fetch from "@web-std/fetch";
 import {
   NFT_STORAGE_API_KEY,
   EXAMPLE_ADDRESS,
@@ -24,6 +19,7 @@ import {
 } from "./config.js";
 import { expect } from "chai";
 import { utils } from "ethers";
+import { mockedCreateEvent, testSetUp } from "./utils.js";
 
 describe("Organizer tests", function () {
   let diamondAddress;
@@ -35,32 +31,20 @@ describe("Organizer tests", function () {
   const addressLength = 64;
 
   before(async function () {
-    diamondAddress = await deployEventDiamond();
-    eventFacet = await ethers.getContractAt(eventSchema.abi, diamondAddress);
-    const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
-    imageBlob = await image.blob();
-    signers = await ethers.getSigners();
-    wallet = signers[0];
+    ({ diamondAddress, eventFacet, imageBlob, signers, wallet } = await testSetUp(
+      diamondAddress,
+      eventFacet,
+      imageBlob,
+      signers,
+      wallet,
+    ));
 
     const maxTicketPerClient = 10;
     const startDate = DATES.EVENT_START_DATE;
     const endDate = DATES.EVENT_END_DATE;
-
     mockedMetadata.image = imageBlob;
 
-    const populatedTx = await createEvent(
-      NFT_STORAGE_API_KEY,
-      mockedMetadata,
-      { maxTicketPerClient, startDate, endDate },
-      eventFacet,
-    );
-
-    const eventTx = await wallet.sendTransaction(populatedTx);
-    const eventTxResponse = await eventTx.wait();
-    const tokenIdInHex = eventTxResponse.logs[0].data.slice(2, 66); // buddy ignore:line
-    const radix = 16;
-    tokenId = parseInt(tokenIdInHex, radix);
-    console.log("New event: ", tokenId);
+    tokenId = await mockedCreateEvent(maxTicketPerClient, startDate, endDate, eventFacet, wallet, tokenId);
   });
 
   it("Should call create event method from smart contract", async () => {
