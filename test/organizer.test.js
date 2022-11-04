@@ -1,22 +1,25 @@
-import { deployEventDiamond } from "../tasks/deployEventDiamond.js";
-import eventSchema from "../config/EventFacet.json" assert { type: "json" };
-
 import {
   removeEvent,
   addTeamMember,
   removeTeamMember,
   updateEvent,
-  createEvent,
   getEventMembers,
   getEventIpfsUri,
   fetchOwnedEvents,
   fetchEvents,
   setEventCashier,
 } from "../src/index.js";
-import fetch from "@web-std/fetch";
-import { NFT_STORAGE_API_KEY, EXAMPLE_ADDRESS, mockedMetadata } from "./config.js";
+import {
+  NFT_STORAGE_API_KEY,
+  EXAMPLE_ADDRESS,
+  mockedMetadata,
+  errorMessages,
+  DATES,
+  SECOND_EXAMPLE_ADDRESS,
+} from "./config.js";
 import { expect } from "chai";
 import { utils } from "ethers";
+import { mockedCreateEvent, testSetUp } from "./utils.js";
 
 describe("Organizer tests", function () {
   let diamondAddress;
@@ -27,33 +30,21 @@ describe("Organizer tests", function () {
   let signers;
   const addressLength = 64;
 
-  beforeEach(async function () {
-    diamondAddress = await deployEventDiamond();
-    eventFacet = await ethers.getContractAt(eventSchema.abi, diamondAddress);
-    const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
-    imageBlob = await image.blob();
-    signers = await ethers.getSigners();
-    wallet = signers[0];
+  before(async function () {
+    ({ diamondAddress, eventFacet, imageBlob, signers, wallet } = await testSetUp(
+      diamondAddress,
+      eventFacet,
+      imageBlob,
+      signers,
+      wallet,
+    ));
 
     const maxTicketPerClient = 10;
-    const startDate = 1666601372;
-    const endDate = 1666601572;
-
+    const startDate = DATES.EVENT_START_DATE;
+    const endDate = DATES.EVENT_END_DATE;
     mockedMetadata.image = imageBlob;
 
-    const populatedTx = await createEvent(
-      NFT_STORAGE_API_KEY,
-      mockedMetadata,
-      { maxTicketPerClient, startDate, endDate },
-      eventFacet,
-    );
-
-    const eventTx = await wallet.sendTransaction(populatedTx);
-    const eventTxResponse = await eventTx.wait();
-    const tokenIdInHex = eventTxResponse.logs[0].data.slice(2, 66); // buddy ignore:line
-    const radix = 16;
-    tokenId = parseInt(tokenIdInHex, radix);
-    console.log("New event: ", tokenId);
+    tokenId = await mockedCreateEvent(maxTicketPerClient, startDate, endDate, eventFacet, wallet, tokenId);
   });
 
   it("Should call create event method from smart contract", async () => {
@@ -75,19 +66,6 @@ describe("Organizer tests", function () {
     expect(oldIpfsUrl.toString()).to.not.equal(newIpfsUrl.toString());
   });
 
-  it("Should call remove event method from smart contract", async () => {
-    const populatedTx = await removeEvent(tokenId, eventFacet);
-    const tx = await wallet.sendTransaction(populatedTx);
-    await tx.wait();
-    const events = await fetchOwnedEvents(wallet.address, eventFacet);
-    expect(events.length).to.equal(0);
-  });
-
-  it("Should revert delete event when there is not an event", async () => {
-    const populatedTx = await removeEvent(tokenId + 1, eventFacet);
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
-  });
-
   it("Should call fetch events by id method from smart contract", async () => {
     const eventIds = [tokenId];
     const events = await fetchEvents(eventIds, eventFacet);
@@ -97,6 +75,11 @@ describe("Organizer tests", function () {
   it("Should call fetch owned events method from smart contract", async () => {
     const events = await fetchOwnedEvents(wallet.address, eventFacet);
     expect(events.length).to.equal(1);
+  });
+
+  it("Should revert delete event when there is not an event", async () => {
+    const populatedTx = await removeEvent(tokenId + 1, eventFacet);
+    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should call add team member method from smart contract", async () => {
@@ -127,13 +110,13 @@ describe("Organizer tests", function () {
       EXAMPLE_ADDRESS,
       eventFacet,
     );
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   // fails
   it.skip("Should revert remove team member when there is not member with given address", async () => {
     const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
-    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(wallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should call get event members method from smart contract", async () => {
@@ -150,7 +133,7 @@ describe("Organizer tests", function () {
 
   it("Should set event cashier", async () => {
     const CASHIER_ROLE = utils.keccak256(utils.toUtf8Bytes("CASHIER_ROLE"));
-    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const address = SECOND_EXAMPLE_ADDRESS;
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
     await tx.wait();
@@ -160,5 +143,13 @@ describe("Organizer tests", function () {
 
     expect(members[expectedMemberIndex].account).to.equal(address);
     expect(members[expectedMemberIndex].role).to.equal(CASHIER_ROLE);
+  });
+
+  it("Should call remove event method from smart contract", async () => {
+    const populatedTx = await removeEvent(tokenId, eventFacet);
+    const tx = await wallet.sendTransaction(populatedTx);
+    await tx.wait();
+    const events = await fetchOwnedEvents(wallet.address, eventFacet);
+    expect(events.length).to.equal(0);
   });
 });
