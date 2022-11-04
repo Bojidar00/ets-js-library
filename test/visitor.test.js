@@ -5,7 +5,7 @@ import { mockedEventParams } from "./config.js";
 import { StatusCodes } from "http-status-codes";
 import { expect } from "chai";
 
-describe("User tests", () => {
+describe("Visitor tests", () => {
   let mock;
 
   before(async () => {

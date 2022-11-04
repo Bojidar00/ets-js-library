@@ -1,6 +1,3 @@
-import { deployEventDiamond } from "../tasks/deployEventDiamond.js";
-import eventSchema from "../config/EventFacet.json" assert { type: "json" };
-
 import {
   createEvent,
   fetchEvent,
@@ -22,17 +19,19 @@ import {
   addTeamMember,
   removeEvent,
 } from "../src/index.js";
-import fetch from "@web-std/fetch";
 import {
   NFT_STORAGE_API_KEY,
   mockedMetadata,
   mockedCategoryMetadata,
   mockedContractData,
   EXAMPLE_ADDRESS,
+  errorMessages,
+  DATES,
 } from "./config.js";
 import { expect } from "chai";
 import { utils } from "ethers";
 import { spy } from "sinon";
+import { mockedCreateEvent, testSetUp } from "./utils.js";
 
 describe("Moderator tests", function () {
   let diamondAddress;
@@ -54,34 +53,23 @@ describe("Moderator tests", function () {
   }
 
   before(async function () {
-    diamondAddress = await deployEventDiamond();
-    eventFacet = await ethers.getContractAt(eventSchema.abi, diamondAddress);
-    const image = await fetch("https://www.blackseachain.com/assets/img/hero-section/hero-image-compressed.png");
-    imageBlob = await image.blob();
-    signers = await ethers.getSigners();
-    wallet = signers[0];
+    ({ diamondAddress, eventFacet, imageBlob, signers, wallet } = await testSetUp(
+      diamondAddress,
+      eventFacet,
+      imageBlob,
+      signers,
+      wallet,
+    ));
     moderatorWallet = signers[1];
 
     const maxTicketPerClient = 10;
-    const startDate = 1666601372;
-    const endDate = 1666601572;
+    const startDate = DATES.EVENT_START_DATE;
+    const endDate = DATES.EVENT_END_DATE;
 
     mockedMetadata.image = imageBlob;
     mockedCategoryMetadata.image = imageBlob;
 
-    const populatedTx = await createEvent(
-      NFT_STORAGE_API_KEY,
-      mockedMetadata,
-      { maxTicketPerClient, startDate, endDate },
-      eventFacet,
-    );
-
-    const eventTx = await wallet.sendTransaction(populatedTx);
-    const eventTxResponse = await eventTx.wait();
-    const tokenIdInHex = eventTxResponse.logs[0].data.slice(2, 66); // buddy ignore:line
-    const radix = 16;
-    tokenId = parseInt(tokenIdInHex, radix);
-    console.log("New event: ", tokenId);
+    tokenId = await mockedCreateEvent(maxTicketPerClient, startDate, endDate, eventFacet, wallet, tokenId);
 
     // Grant moderator role
     const moderatorRole = utils.keccak256(utils.toUtf8Bytes("MODERATOR_ROLE"));
@@ -92,11 +80,11 @@ describe("Moderator tests", function () {
   });
 
   it("Should revert set event cashier when moderator calls it", async () => {
-    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const address = EXAMPLE_ADDRESS;
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.callerIsNotAdmin);
   });
 
   it("Should create ticket category", async () => {
@@ -115,9 +103,9 @@ describe("Moderator tests", function () {
     expect(categories.length).to.equal(1);
   });
 
-  it("Should revert create ticket category when the start sale date is not appropriate", async () => {
-    mockedContractData.saleStartDate = 1666601370;
-    mockedContractData.saleEndDate = 1666666666;
+  it("Should revert create ticket category when the start sale date is earlier than start date of event", async () => {
+    mockedContractData.saleStartDate = DATES.EARLY_SALE_START_DATE;
+    mockedContractData.saleEndDate = DATES.EVENT_END_DATE;
     const populatedTx = await createTicketCategory(
       NFT_STORAGE_API_KEY,
       tokenId,
@@ -128,13 +116,13 @@ describe("Moderator tests", function () {
     populatedTx.from = moderatorWallet.address;
 
     await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
-      "Event: Category start date is incorrect",
+      errorMessages.categoryStartDateIsIncorrect,
     );
   });
 
-  it("Should revert create ticket category when the end sale date is not appropriate", async () => {
-    mockedContractData.saleStartDate = 1666666666;
-    mockedContractData.saleEndDate = 1666666666;
+  it("Should revert create ticket category when the end sale date is after the end date of the event", async () => {
+    mockedContractData.saleStartDate = DATES.EVENT_START_DATE;
+    mockedContractData.saleEndDate = DATES.LATE_SALE_END_DATE;
     const populatedTx = await createTicketCategory(
       NFT_STORAGE_API_KEY,
       tokenId,
@@ -145,7 +133,7 @@ describe("Moderator tests", function () {
     populatedTx.from = moderatorWallet.address;
 
     await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(
-      "Event: Category end date is incorrect",
+      errorMessages.categoryEndDateIsIncorrect,
     );
   });
 
@@ -159,7 +147,7 @@ describe("Moderator tests", function () {
     );
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should update ticket category", async () => {
@@ -204,7 +192,7 @@ describe("Moderator tests", function () {
     const populatedTx = await addCategoryTicketsCount(tokenId, categoryId + 1, moreTickets, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert add more tickets to category when there is not event", async () => {
@@ -214,7 +202,7 @@ describe("Moderator tests", function () {
     const populatedTx = await addCategoryTicketsCount(tokenId + 1, categoryId, moreTickets, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should remove tickets from category", async () => {
@@ -237,7 +225,7 @@ describe("Moderator tests", function () {
     const populatedTx = await removeCategoryTicketsCount(tokenId, categoryId + 1, lessTickets, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert remove tickets from category when there is not event", async () => {
@@ -247,7 +235,7 @@ describe("Moderator tests", function () {
     const populatedTx = await removeCategoryTicketsCount(tokenId + 1, categoryId, lessTickets, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should stop the sale of tickets for category", async () => {
@@ -271,7 +259,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageCategorySelling(tokenId, categoryId + 1, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert stop the sale of tickets for category when there is not event", async () => {
@@ -281,7 +269,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageCategorySelling(tokenId + 1, categoryId, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should start the sale of tickets for category", async () => {
@@ -305,7 +293,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageCategorySelling(tokenId, categoryId + 1, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert start the sale of tickets for category when there is not event", async () => {
@@ -315,7 +303,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageCategorySelling(tokenId + 1, categoryId, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should stop the sale of tickets for all categories", async () => {
@@ -335,7 +323,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageAllCategorySelling(tokenId + 1, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should start the sale of tickets for all categories", async () => {
@@ -355,7 +343,7 @@ describe("Moderator tests", function () {
     const populatedTx = await manageAllCategorySelling(tokenId + 1, value, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should fetch categories of event", async () => {
@@ -365,7 +353,7 @@ describe("Moderator tests", function () {
   });
 
   it("Should revert fetch categories of event when there is not event", async () => {
-    expect(fetchCategoriesByEventId(tokenId + 1, eventFacet)).to.be.revertedWith("Event: Event does not exist!");
+    expect(fetchCategoriesByEventId(tokenId + 1, eventFacet)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should remove category", async () => {
@@ -384,21 +372,21 @@ describe("Moderator tests", function () {
     const populatedTx = await removeCategory(tokenId, 1, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Category does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.categoryDoesNotExist);
   });
 
   it("Should revert remove category when there is not an event", async () => {
     const populatedTx = await removeCategory(tokenId + 1, 1, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Event does not exist!");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
   });
 
   it("Should listen for new Events", async () => {
     listenForNewEvent(eventFacet, spyFunc);
     const maxTicketPerClient = 10;
-    const startDate = 1666601372;
-    const endDate = 1666601572;
+    const startDate = DATES.EVENT_START_DATE;
+    const endDate = DATES.EVENT_END_DATE;
     const populatedTx = await createEvent(
       NFT_STORAGE_API_KEY,
       mockedMetadata,
@@ -432,7 +420,7 @@ describe("Moderator tests", function () {
 
   it("Should listen for role granted", async () => {
     listenForRoleGrant(eventFacet, spyFunc);
-    const address = "0xB7a94AfbF92B4D2D522EaA8f7c0e07Ab6A61186E";
+    const address = EXAMPLE_ADDRESS;
     const populatedTx = await setEventCashier(tokenId, address, eventFacet);
     const tx = await wallet.sendTransaction(populatedTx);
     await tx.wait();
@@ -456,20 +444,20 @@ describe("Moderator tests", function () {
     const populatedTx = await addTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.callerIsNotAdmin);
   });
 
   it("Should revert remove team member when it is not the owner", async () => {
     const populatedTx = await removeTeamMember(tokenId, `0x${"0".repeat(addressLength)}`, EXAMPLE_ADDRESS, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.callerIsNotAdmin);
   });
 
   it("Should revert remove event when it is not the owner", async () => {
     const populatedTx = await removeEvent(tokenId, eventFacet);
     populatedTx.from = moderatorWallet.address;
 
-    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith("Event: Caller is not an admin");
+    await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.callerIsNotAdmin);
   });
 });
