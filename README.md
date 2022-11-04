@@ -26,7 +26,9 @@ Install:
 npm i ets-js-library
 ```
 
-### Create event
+## Available functionalities in format *Action name (who has the right)*
+
+### Create event (Everyone)
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import createEvent function from the library.
@@ -70,7 +72,7 @@ const transaction = await createEvent(key, metadata, contractData);
 //You need to sign and send the transaction after this.
 ```
 
-### Update event metadata
+### Update event metadata (Admin or Moderator)
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import updateEvent, getEventIpfsUri and deleteFromIpfs from the library.
@@ -119,7 +121,7 @@ try {
 }
 ```
 
-### Remove event
+### Remove event (Admin)
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import removeEvent and deleteFromIpfs from the library.
@@ -145,7 +147,7 @@ try {
 }
 ```
 
-### Fetch events by Ids
+### Fetch events by Ids (Everyone)
 
 1. Import fetchEvents from the library.
 2. Execute fetchEvents.
@@ -188,7 +190,7 @@ const events = [
 ];
 ```
 
-### Fetch owned events
+### Fetch owned events (Admin or Moderator)
 
 1. Import fetchOwnedEvents function from the library.
 2. Execute fetchOwnedEvents by supplying an address.
@@ -230,7 +232,7 @@ const events = [
 ];
 ```
 
-### Fetch cached events from server
+### Fetch cached events from server (Everyone)
 
 1. Import fetchAllEventsFromServer function from the library.
 2. Create params.
@@ -283,7 +285,7 @@ const events = [
 ];
 ```
 
-### Fetch Countries from server
+### Fetch Countries from server (Everyone)
 
 1. Import fetchCountriesFromServer function from the library.
 2. Execute fetchCountriesFromServer.
@@ -303,7 +305,7 @@ Return data:
 const countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", ...];
 ```
 
-### Fetch Places from server
+### Fetch Places from server (Everyone)
 
 1. Import fetchPlacesFromServer function from the library.
 2. Execute fetchPlacesFromServer.
@@ -324,7 +326,7 @@ Return data:
 const places = ["Paris", "Rome", "London", "Berlin", "Venice", ...];
 ```
 
-### Add team member to event
+### Add team member to event (Admin)
 
 1. Import addTeamMember function from the library.
 2. Import utils function from ethers.
@@ -344,7 +346,7 @@ const transaction = await addTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
 ```
 
-### Remove team member from event
+### Remove team member from event (Admin)
 
 1. Import removeTeamMember function from the library.
 2. Import utils function from ethers.
@@ -364,7 +366,7 @@ const transaction = await removeTeamMember(eventId, role, address);
 //You need to sign and send the transaction after this.
 ```
 
-### Fetch all team members of event
+### Fetch all team members of event (Everyone)
 
 1. Import getEventMembers function from the library.
 2. Execute getEventMembers function.
@@ -397,7 +399,7 @@ const members = [
 ];
 ```
 
-### Fetch all event ids
+### Fetch all event ids (Everyone) 
 
 1. Import getEventMembers function from the library.
 2. Execute getEventMembers function.
@@ -414,7 +416,7 @@ Return data:
 const eventIds = [1, 2, 3];
 ```
 
-### Listen for new events
+### Listen for new events (Everyone)
 
 1. Import listenForNewEvent function from the library.
 2. Create a callback function.
@@ -430,7 +432,7 @@ function callback(data, membersData) {
 listenForNewEvent(callback);
 ```
 
-### Listen for event update
+### Listen for event update (Everyone)
 
 1. Import listenForEventUpdate function from the library.
 2. Create a callback function.
@@ -446,7 +448,7 @@ function callback(data) {
 listenForEventUpdate(callback);
 ```
 
-### Listen for Role Granted
+### Listen for Role Granted (Everyone)
 
 1. Import listenForRoleGrant function from the library.
 2. Create a callback function.
@@ -462,7 +464,7 @@ function callback(data) {
 listenForRoleGrant(callback);
 ```
 
-### Listen for Role Revoked
+### Listen for Role Revoked (Everyone)
 
 1. Import listenForRoleRevoke function from the library.
 2. Create a callback function.
@@ -478,7 +480,7 @@ function callback(data) {
 listenForRoleRevoke(callback);
 ```
 
-### Set event cashier
+### Set event cashier (Admin)
 
 1. Import setEventCashier function from the library.
 2. Execute setEventCashier function. This will return an unsigned transaction.
@@ -494,7 +496,7 @@ const transaction = await setEventCashier(eventId, address);
 //You need to sign and send the transaction after this.
 ```
 
-### Create ticket category
+### Create ticket category (Admin or Moderator)
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import createTicketCategory function from the library.
@@ -540,7 +542,7 @@ const transaction = await createTicketCategory(key, eventId, metadata, contractD
 //You need to sign and send the transaction after this.
 ```
 
-### Update category
+### Update category (Admin or Moderator)
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import updateCategory from the library.
@@ -587,7 +589,7 @@ const transaction = await updateCategory(key, eventId, categoryId, metadata, con
 //You need to sign and send the transaction after this.
 ```
 
-### Remove category
+### Remove category (Admin or Moderator)
 
 1. Create an api token from [nft.storage](https://nft.storage/)
 2. Import removeCategory function from the library.
@@ -611,7 +613,7 @@ try {
 }
 ```
 
-### Add more tickets to category
+### Add more tickets to category (Admin or Moderator)
 
 1. Import addCategoryTicketsCount function from the library.
 2. Execute addCategoryTicketsCount function. This will return an unsigned transaction.
@@ -628,7 +630,7 @@ const transaction = await addCategoryTicketsCount(eventId, categoryId, moreTicke
 //You need to sign and send the transaction after this.
 ```
 
-### Remove tickets from category
+### Remove tickets from category (Admin or Moderator)
 
 1. Import addCategoryTicketsCount function from the library.
 2. Execute addCategoryTicketsCount function. This will return an unsigned transaction.
@@ -645,7 +647,7 @@ const transaction = await removeCategoryTicketsCount(eventId, categoryId, lessTi
 //You need to sign and send the transaction after this.
 ```
 
-### Manage the sale of tickets for a category
+### Manage the sale of tickets for a category (Admin or Moderator)
 
 1. Import manageCategorySelling function from the library.
 2. Execute manageCategorySelling function. This will return an unsigned transaction.
@@ -664,7 +666,7 @@ const transaction = await manageCategorySelling(eventId, categoryId, value);
 //You need to sign and send the transaction after this.
 ```
 
-### Manage the sale of tickets for all categories of event
+### Manage the sale of tickets for all categories of event (Admin or Moderator)
 
 1. Import manageAllCategorySelling function from the library.
 2. Execute manageAllCategorySelling function. This will return an unsigned transaction.
@@ -682,7 +684,7 @@ const transaction = await manageAllCategorySelling(eventId, value);
 //You need to sign and send the transaction after this.
 ```
 
-### Fetch categories of event
+### Fetch categories of event (Everyone)
 
 1. Import fetchCategoriesByEventId function from the library.
 2. Execute fetchCategoriesByEventId function.
@@ -720,7 +722,7 @@ const categories = [
 ];
 ```
 
-### Buy multiple tickets from multiple events and categories
+### Buy multiple tickets from multiple events and categories (Everyone)
 
 1. Import buyTicketsFromMultipleEvents function from the library.
 2. Execute buyTicketsFromMultipleEvents function.
@@ -768,7 +770,7 @@ const transaction = await buyTicketsFromMultipleEvents(eventCategoryData, priceD
 //You need to sign and send the transaction after this.
 ```
 
-### Buy multiple tickets from a category from one event
+### Buy multiple tickets from a category from one event (Everyone)
 
 1. Import buyTicketsFromSingleEvent function from the library.
 2. Execute buyTicketsFromSingleEvent function.
@@ -808,7 +810,7 @@ const transaction = await buyTicketsFromSingleEvent(eventId, categoryId, priceDa
 //You need to sign and send the transaction after this.
 ```
 
-### Add multiple refund data for an event
+### Add multiple refund data for an event (Admin or Moderator)
 
 1. Import addRefundDeadlines function from the library.
 2. Execute addRefundDeadlines function.
@@ -828,7 +830,7 @@ const transaction = await addRefundDeadlines(eventId, refundData);
 //You need to sign and send the transaction after this.
 ```
 
-### Refund ticket
+### Refund ticket (Admin or Moderator)
 
 1. Import refundTicket function from the library.
 2. Execute refundTicket function.
@@ -848,7 +850,7 @@ const transaction = await refundTicket(eventId, categoryId, ticketId, account);
 
 This function does not send the tokens immediately to the account, but saves the information in the contract, after which the user must get them through the [withdrawRefund](#withdrawrefund) function.
 
-### withdrawRefund
+### withdraw the refund (Everyone)
 
 1. Import withdrawRefund function from the library.
 2. Execute withdrawRefund function.
@@ -865,7 +867,7 @@ const transaction = await withdrawRefund(eventId, categoryId, ticketId);
 //You need to sign and send the transaction after this.
 ```
 
-### Clip ticket
+### Clip ticket (Admin, Moderator or Receptionist)
 
 1. Import clipTicket function from the library.
 2. Execute clipTicket function.
@@ -882,7 +884,7 @@ const transaction = await clipTicket(eventId, categoryId, ticketId);
 //You need to sign and send the transaction after this.
 ```
 
-### Book tickets
+### Book tickets (Admin or Moderator)
 
 1. Import bookTickets function from the library.
 2. Execute bookTickets function.
