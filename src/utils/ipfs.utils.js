@@ -16,6 +16,16 @@ async function uploadDataToIpfs(nftStorageApiKey, metadata) {
   return cid.url;
 }
 
+async function uploadArrayToIpfs(nftStorageApiKey, metadataArray) {
+  const UrisArray = [];
+
+  for (let i = 0; i < metadataArray.length; i++) {
+    UrisArray.push(await uploadDataToIpfs(nftStorageApiKey, metadataArray[i]));
+  }
+
+  return UrisArray;
+}
+
 async function deleteDataFromService(nftStorageApiKey, eventUri) {
   const cid = eventUri.split("/")[2]; // buddy ignore:line
 
@@ -67,6 +77,7 @@ async function fetchSingleEventMetadata(eventId, contract = eventsContract) {
 
 export {
   uploadDataToIpfs,
+  uploadArrayToIpfs,
   deleteDataFromService,
   fetchEventsMetadata,
   fetchSingleEventMetadata,

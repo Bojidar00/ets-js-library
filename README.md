@@ -26,7 +26,7 @@ Install:
 npm i ets-js-library
 ```
 
-## Available functionalities in format *Action name (who has the right)*
+## Available functionalities in format _Action name (who has the right)_
 
 ### Create event (Everyone)
 
@@ -399,7 +399,7 @@ const members = [
 ];
 ```
 
-### Fetch all event ids (Everyone) 
+### Fetch all event ids (Everyone)
 
 1. Import getEventMembers function from the library.
 2. Execute getEventMembers function.
@@ -731,6 +731,8 @@ const categories = [
 ```js
 import { buyTicketsFromMultipleEvents } from "ets-js-library";
 
+const key = "API key for NFT.storage";
+
 const eventCategoryData = [
   {
     eventId: "id of event",
@@ -764,9 +766,19 @@ const place = [
   },
 ];
 
-const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+const ticketsMetadata = [{
+  name: "ticket",
+  description: "ticket for event",
+  image: "Blob or File Object",
+  properties: {
+    note: "Note from buyer"
+    returnReason: "",
+  },
+},
+...
+];
 
-const transaction = await buyTicketsFromMultipleEvents(eventCategoryData, priceData, place, ticketMetadataUris);
+const transaction = await buyTicketsFromMultipleEvents(key, eventCategoryData, priceData, place, ticketsMetadata);
 //You need to sign and send the transaction after this.
 ```
 
@@ -781,6 +793,7 @@ import { buyTicketsFromSingleEvent } from "ets-js-library";
 
 const eventId = "id of event";
 const categoryId = "id of category";
+const key = "API key for NFT.storage";
 
 const priceData = [
   {
@@ -804,9 +817,19 @@ const place = [
   },
 ];
 
-const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+const ticketsMetadata = [{
+  name: "ticket",
+  description: "ticket for event",
+  image: "Blob or File Object",
+  properties: {
+    note: "Note from buyer"
+    returnReason: "",
+  },
+},
+...
+];
 
-const transaction = await buyTicketsFromSingleEvent(eventId, categoryId, priceData, place, ticketMetadataUris);
+const transaction = await buyTicketsFromSingleEvent(key, eventId, categoryId, priceData, place, ticketMetadataUris);
 //You need to sign and send the transaction after this.
 ```
 

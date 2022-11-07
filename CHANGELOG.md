@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2022-11-7
+
+### Added
+
+- Upload ticket metadata to ipfs.
+
+### Changed
+
 ## [0.11.1] - 2022-11-1
 
 ### Added
