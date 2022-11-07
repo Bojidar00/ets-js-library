@@ -724,9 +724,10 @@ const categories = [
 
 ### Buy multiple tickets from multiple events and categories (Everyone)
 
-1. Import buyTicketsFromMultipleEvents function from the library.
-2. Execute buyTicketsFromMultipleEvents function.
-3. Sign and send the transaction anyway you like.
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import buyTicketsFromMultipleEvents function from the library.
+3. Execute buyTicketsFromMultipleEvents function.
+4. Sign and send the transaction anyway you like.
 
 ```js
 import { buyTicketsFromMultipleEvents } from "ets-js-library";
@@ -784,9 +785,10 @@ const transaction = await buyTicketsFromMultipleEvents(key, eventCategoryData, p
 
 ### Buy multiple tickets from a category from one event (Everyone)
 
-1. Import buyTicketsFromSingleEvent function from the library.
-2. Execute buyTicketsFromSingleEvent function.
-3. Sign and send the transaction anyway you like.
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import buyTicketsFromSingleEvent function from the library.
+3. Execute buyTicketsFromSingleEvent function.
+4. Sign and send the transaction anyway you like.
 
 ```js
 import { buyTicketsFromSingleEvent } from "ets-js-library";
@@ -945,6 +947,26 @@ const ticketsMetadata = [{
 ];
 
 const transaction = await bookTickets(key, eventId, categoryId, accounts, place, ticketsMetadata);
+//You need to sign and send the transaction after this.
+```
+
+### Send Booked tickets (Admin or Moderator)
+
+1. Import sendInvitation function from the library.
+2. Execute sendInvitation function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { sendInvitation } from "ets-js-library";
+
+const eventId = "id of event";
+const ticketIds = [1, 2, 3];
+const accounts = ["0x...", "0x..."];
+
+
+
+
+const transaction = await sendInvitation(eventId, ticketIds, accounts);
 //You need to sign and send the transaction after this.
 ```
 

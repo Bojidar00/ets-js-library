@@ -460,4 +460,13 @@ export async function bookTickets(
   }
 }
 
+export async function sendInvitation(eventId, ticketIds, accounts, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.sendInvitation(eventId, ticketIds, accounts);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export { NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL };
