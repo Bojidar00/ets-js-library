@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import axios from "axios";
 import {
   uploadDataToIpfs,
+  uploadArrayToIpfs,
   fetchEventsMetadata,
   fetchSingleEventMetadata,
   deleteDataFromService,
@@ -371,14 +372,16 @@ export async function updateCategorySaleDates(
 }
 
 export async function buyTicketsFromMultipleEvents(
+  nftStorageApiKey,
   eventCategoryData,
   priceData,
   place,
-  ticketMetadataUris,
+  ticketsMetadata,
   contract = eventsContract,
 ) {
   try {
-    const tx = await contract.populateTransaction.buyTickets(eventCategoryData, priceData, place, ticketMetadataUris);
+    const ticketUris = await uploadArrayToIpfs(nftStorageApiKey, ticketsMetadata);
+    const tx = await contract.populateTransaction.buyTickets(eventCategoryData, priceData, place, ticketUris);
     return tx;
   } catch (error) {
     throw error;
@@ -386,15 +389,17 @@ export async function buyTicketsFromMultipleEvents(
 }
 
 export async function buyTicketsFromSingleEvent(
+  nftStorageApiKey,
   eventId,
   categoryId,
   priceData,
   place,
-  ticketMetadataUris,
+  ticketsMetadata,
   contract = eventsContract,
 ) {
   try {
-    const tx = await contract.populateTransaction.buyTickets(eventId, categoryId, priceData, place, ticketMetadataUris);
+    const ticketUris = await uploadArrayToIpfs(nftStorageApiKey, ticketsMetadata);
+    const tx = await contract.populateTransaction.buyTickets(eventId, categoryId, priceData, place, ticketUris);
     return tx;
   } catch (error) {
     throw error;
@@ -437,9 +442,27 @@ export async function clipTicket(eventId, categoryId, ticketId, contract = event
   }
 }
 
-export async function bookTickets(eventId, categoryId, accounts, place, ticketMetadataUris, contract = eventsContract) {
+export async function bookTickets(
+  nftStorageApiKey,
+  eventId,
+  categoryId,
+  accounts,
+  place,
+  ticketsMetadata,
+  contract = eventsContract,
+) {
   try {
-    const tx = await contract.populateTransaction.bookTickets(eventId, categoryId, accounts, place, ticketMetadataUris);
+    const ticketUris = await uploadArrayToIpfs(nftStorageApiKey, ticketsMetadata);
+    const tx = await contract.populateTransaction.bookTickets(eventId, categoryId, accounts, place, ticketUris);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function sendInvitation(eventId, ticketIds, accounts, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.sendInvitation(eventId, ticketIds, accounts);
     return tx;
   } catch (error) {
     throw error;

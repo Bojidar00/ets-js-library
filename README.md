@@ -26,7 +26,7 @@ Install:
 npm i ets-js-library
 ```
 
-## Available functionalities in format *Action name (who has the right)*
+## Available functionalities in format _Action name (who has the right)_
 
 ### Create event (Everyone)
 
@@ -399,7 +399,7 @@ const members = [
 ];
 ```
 
-### Fetch all event ids (Everyone) 
+### Fetch all event ids (Everyone)
 
 1. Import getEventMembers function from the library.
 2. Execute getEventMembers function.
@@ -724,12 +724,15 @@ const categories = [
 
 ### Buy multiple tickets from multiple events and categories (Everyone)
 
-1. Import buyTicketsFromMultipleEvents function from the library.
-2. Execute buyTicketsFromMultipleEvents function.
-3. Sign and send the transaction anyway you like.
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import buyTicketsFromMultipleEvents function from the library.
+3. Execute buyTicketsFromMultipleEvents function.
+4. Sign and send the transaction anyway you like.
 
 ```js
 import { buyTicketsFromMultipleEvents } from "ets-js-library";
+
+const key = "API key for NFT.storage";
 
 const eventCategoryData = [
   {
@@ -764,23 +767,35 @@ const place = [
   },
 ];
 
-const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+const ticketsMetadata = [{
+  name: "ticket",
+  description: "ticket for event",
+  image: "Blob or File Object",
+  properties: {
+    note: "Note from buyer"
+    returnReason: "",
+  },
+},
+...
+];
 
-const transaction = await buyTicketsFromMultipleEvents(eventCategoryData, priceData, place, ticketMetadataUris);
+const transaction = await buyTicketsFromMultipleEvents(key, eventCategoryData, priceData, place, ticketsMetadata);
 //You need to sign and send the transaction after this.
 ```
 
 ### Buy multiple tickets from a category from one event (Everyone)
 
-1. Import buyTicketsFromSingleEvent function from the library.
-2. Execute buyTicketsFromSingleEvent function.
-3. Sign and send the transaction anyway you like.
+1. Create an api token from [nft.storage](https://nft.storage/)
+2. Import buyTicketsFromSingleEvent function from the library.
+3. Execute buyTicketsFromSingleEvent function.
+4. Sign and send the transaction anyway you like.
 
 ```js
 import { buyTicketsFromSingleEvent } from "ets-js-library";
 
 const eventId = "id of event";
 const categoryId = "id of category";
+const key = "API key for NFT.storage";
 
 const priceData = [
   {
@@ -804,9 +819,19 @@ const place = [
   },
 ];
 
-const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+const ticketsMetadata = [{
+  name: "ticket",
+  description: "ticket for event",
+  image: "Blob or File Object",
+  properties: {
+    note: "Note from buyer"
+    returnReason: "",
+  },
+},
+...
+];
 
-const transaction = await buyTicketsFromSingleEvent(eventId, categoryId, priceData, place, ticketMetadataUris);
+const transaction = await buyTicketsFromSingleEvent(key, eventId, categoryId, priceData, place, ticketMetadataUris);
 //You need to sign and send the transaction after this.
 ```
 
@@ -896,6 +921,7 @@ import { bookTickets } from "ets-js-library";
 const eventId = "id of event";
 const categoryId = "id of category";
 const accounts = ["0x...", "0x..."];
+const key = "API key for NFT.storage";
 
 const place = [
   {
@@ -908,9 +934,39 @@ const place = [
   },
 ];
 
-const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+const ticketsMetadata = [{
+  name: "ticket",
+  description: "ticket for event",
+  image: "Blob or File Object",
+  properties: {
+    note: "Note from buyer"
+    returnReason: "",
+  },
+},
+...
+];
 
-const transaction = await bookTickets(eventId, categoryId, accounts, place, ticketMetadataUris);
+const transaction = await bookTickets(key, eventId, categoryId, accounts, place, ticketsMetadata);
+//You need to sign and send the transaction after this.
+```
+
+### Send Booked tickets (Admin or Moderator)
+
+1. Import sendInvitation function from the library.
+2. Execute sendInvitation function.
+3. Sign and send the transaction anyway you like.
+
+```js
+import { sendInvitation } from "ets-js-library";
+
+const eventId = "id of event";
+const ticketIds = [1, 2, 3];
+const accounts = ["0x...", "0x..."];
+
+
+
+
+const transaction = await sendInvitation(eventId, ticketIds, accounts);
 //You need to sign and send the transaction after this.
 ```
 
