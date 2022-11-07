@@ -919,6 +919,7 @@ import { bookTickets } from "ets-js-library";
 const eventId = "id of event";
 const categoryId = "id of category";
 const accounts = ["0x...", "0x..."];
+const key = "API key for NFT.storage";
 
 const place = [
   {
@@ -931,9 +932,19 @@ const place = [
   },
 ];
 
-const ticketMetadataUris = ["ipfs://aaa", "ipfs://bbb"];
+const ticketsMetadata = [{
+  name: "ticket",
+  description: "ticket for event",
+  image: "Blob or File Object",
+  properties: {
+    note: "Note from buyer"
+    returnReason: "",
+  },
+},
+...
+];
 
-const transaction = await bookTickets(eventId, categoryId, accounts, place, ticketMetadataUris);
+const transaction = await bookTickets(key, eventId, categoryId, accounts, place, ticketsMetadata);
 //You need to sign and send the transaction after this.
 ```
 
