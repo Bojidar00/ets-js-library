@@ -1,5 +1,7 @@
 /* global ethers */
 
+export const FacetCutAction = { Add: 0, Replace: 0, Remove: 2 };
+
 // get function selectors from ABI
 export function getSelectors(contract) {
   const signatures = Object.keys(contract.interface.functions);

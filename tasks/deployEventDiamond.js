@@ -2,13 +2,14 @@
 /* eslint prefer-const: "off", no-console: "off" */
 
 import { deployTicketDiamond } from "./deployTicketDiamond.js";
-import { getSelectors } from "./libraries/diamond.js";
+import { getSelectors, FacetCutAction } from "./libraries/diamond.js";
 import eventDiamondCutSchema from "../config/EventDiamondCutFacet.json" assert { type: "json" };
 import eventDiamondSchema from "../config/EventDiamond.json" assert { type: "json" };
 import eventDiamondInitSchema from "../config/EventDiamondInit.json" assert { type: "json" };
 import eventDiamondLoupeSchema from "../config/EventDiamondLoupeFacet.json" assert { type: "json" };
 import eventOwnershipSchema from "../config/EventOwnershipFacet.json" assert { type: "json" };
 import eventFacetSchema from "../config/EventFacet.json" assert { type: "json" };
+import eventTicketControllerFacetSchema from "#contract.config/EventTicketControllerFacet.json" assert { type: "json" };
 import ticketFacetSchema from "../config/TicketFacet.json" assert { type: "json" };
 import iDiamondCutSchema from "../config/IDiamondCut.json" assert { type: "json" };
 
@@ -45,30 +46,19 @@ export async function deployEventDiamond() {
   const eventDiamondInit = await EventDiamondInit.deploy();
   await eventDiamondInit.deployed();
 
+  const Facets = [eventDiamondLoupeSchema, eventOwnershipSchema, eventTicketControllerFacetSchema];
   const cut = [];
 
-  const EventDiamondLoupeFacet = await ethers.getContractFactory(
-    eventDiamondLoupeSchema.abi,
-    eventDiamondLoupeSchema.bytecode,
-  );
-  const eventDiamondLoupeFacet = await EventDiamondLoupeFacet.deploy();
-  await eventDiamondLoupeFacet.deployed();
-
-  cut.push({
-    facetAddress: eventDiamondLoupeFacet.address,
-    action: 0,
-    functionSelectors: getSelectors(eventDiamondLoupeFacet),
-  });
-
-  const EventOwnershipFacet = await ethers.getContractFactory(eventOwnershipSchema.abi, eventOwnershipSchema.bytecode);
-  const eventOwnershipFacet = await EventOwnershipFacet.deploy();
-  await eventOwnershipFacet.deployed();
-
-  cut.push({
-    facetAddress: eventOwnershipFacet.address,
-    action: 0,
-    functionSelectors: getSelectors(eventOwnershipFacet),
-  });
+  for (const Facet of Facets) {
+    const FacetContract = await ethers.getContractFactory(Facet.abi, Facet.bytecode);
+    const facet = await FacetContract.deploy();
+    await facet.deployed();
+    cut.push({
+      facetAddress: facet.address,
+      action: FacetCutAction.Add,
+      functionSelectors: getSelectors(facet),
+    });
+  }
 
   const EventFacet = await ethers.getContractFactory(eventFacetSchema.abi, eventFacetSchema.bytecode);
   const eventFacet = await EventFacet.deploy();

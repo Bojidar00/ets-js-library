@@ -381,7 +381,8 @@ export async function buyTicketsFromMultipleEvents(
 ) {
   try {
     const ticketUris = await uploadArrayToIpfs(nftStorageApiKey, ticketsMetadata);
-    const tx = await contract.populateTransaction.buyTickets(eventCategoryData, priceData, place, ticketUris);
+    const buyTicketsFuncSig = "buyTickets((uint256,uint256)[],(uint256,uint256)[],(uint256,uint256)[],string[])";
+    const tx = await contract.populateTransaction[buyTicketsFuncSig](eventCategoryData, priceData, place, ticketUris);
     return tx;
   } catch (error) {
     throw error;
@@ -399,7 +400,8 @@ export async function buyTicketsFromSingleEvent(
 ) {
   try {
     const ticketUris = await uploadArrayToIpfs(nftStorageApiKey, ticketsMetadata);
-    const tx = await contract.populateTransaction.buyTickets(eventId, categoryId, priceData, place, ticketUris);
+    const buyTicketsFuncSig = "buyTickets(uint256,uint256,(uint256,uint256)[],(uint256,uint256)[],string[])";
+    const tx = await contract.populateTransaction[buyTicketsFuncSig](eventId, categoryId, priceData, place, ticketUris);
     return tx;
   } catch (error) {
     throw error;

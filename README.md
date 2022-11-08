@@ -772,7 +772,7 @@ const ticketsMetadata = [{
   description: "ticket for event",
   image: "Blob or File Object",
   properties: {
-    note: "Note from buyer"
+    note: "Note from buyer",
     returnReason: "",
   },
 },
@@ -824,14 +824,14 @@ const ticketsMetadata = [{
   description: "ticket for event",
   image: "Blob or File Object",
   properties: {
-    note: "Note from buyer"
+    note: "Note from buyer",
     returnReason: "",
   },
 },
 ...
 ];
 
-const transaction = await buyTicketsFromSingleEvent(key, eventId, categoryId, priceData, place, ticketMetadataUris);
+const transaction = await buyTicketsFromSingleEvent(key, eventId, categoryId, priceData, place, ticketMetadata);
 //You need to sign and send the transaction after this.
 ```
 
@@ -962,9 +962,6 @@ import { sendInvitation } from "ets-js-library";
 const eventId = "id of event";
 const ticketIds = [1, 2, 3];
 const accounts = ["0x...", "0x..."];
-
-
-
 
 const transaction = await sendInvitation(eventId, ticketIds, accounts);
 //You need to sign and send the transaction after this.
