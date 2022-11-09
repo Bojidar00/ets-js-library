@@ -12,7 +12,7 @@ import {
   makeGatewayUrl,
 } from "#ipfs.utils";
 import { ETS_SERVER_URL, NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL } from "#config";
-import { provider, eventsContract } from "#contract";
+import { provider, eventsContract, ticketsContract } from "#contract";
 
 export async function createEvent(nftStorageApiKey, metadata, contractData, contract = eventsContract) {
   try {
@@ -517,6 +517,12 @@ export async function getAddressTicketIdsByEvent(eventId, address, contract = ev
   } catch (error) {
     throw error;
   }
+}
+
+export async function fetchTicketOwnerOf(ticketId, contract = ticketsContract) {
+  const account = await contract.ownerOf(ticketId);
+
+  return account;
 }
 
 export { NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL };
