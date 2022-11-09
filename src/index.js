@@ -380,9 +380,13 @@ export async function buyTicketsFromMultipleEvents(
   contract = eventsContract,
 ) {
   try {
+    const value = calculateTotalValue(priceData);
     const ticketUris = await uploadArrayToIpfs(nftStorageApiKey, ticketsMetadata);
     const buyTicketsFuncSig = "buyTickets((uint256,uint256)[],(uint256,uint256)[],(uint256,uint256)[],string[])";
-    const tx = await contract.populateTransaction[buyTicketsFuncSig](eventCategoryData, priceData, place, ticketUris);
+
+    const tx = await contract.populateTransaction[buyTicketsFuncSig](eventCategoryData, priceData, place, ticketUris, {
+      value,
+    });
     return tx;
   } catch (error) {
     throw error;
@@ -399,13 +403,32 @@ export async function buyTicketsFromSingleEvent(
   contract = eventsContract,
 ) {
   try {
+    const value = calculateTotalValue(priceData);
     const ticketUris = await uploadArrayToIpfs(nftStorageApiKey, ticketsMetadata);
     const buyTicketsFuncSig = "buyTickets(uint256,uint256,(uint256,uint256)[],(uint256,uint256)[],string[])";
-    const tx = await contract.populateTransaction[buyTicketsFuncSig](eventId, categoryId, priceData, place, ticketUris);
+
+    const tx = await contract.populateTransaction[buyTicketsFuncSig](
+      eventId,
+      categoryId,
+      priceData,
+      place,
+      ticketUris,
+      { value },
+    );
     return tx;
   } catch (error) {
     throw error;
   }
+}
+
+function calculateTotalValue(priceData) {
+  let value = 0;
+
+  for (let i = 0; i < priceData.length; i++) {
+    value += priceData[i].amount * priceData[i].price;
+  }
+
+  return value;
 }
 
 export async function addRefundDeadlines(eventId, refundData, contract = eventsContract) {

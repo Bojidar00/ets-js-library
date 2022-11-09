@@ -18,12 +18,14 @@ import {
   removeTeamMember,
   addTeamMember,
   removeEvent,
+  buyTicketsFromSingleEvent,
 } from "../src/index.js";
 import {
   NFT_STORAGE_API_KEY,
   mockedMetadata,
   mockedCategoryMetadata,
   mockedContractData,
+  mockedTicketMetadata,
   EXAMPLE_ADDRESS,
   errorMessages,
   DATES,
@@ -380,6 +382,61 @@ describe("Moderator tests", function () {
     populatedTx.from = moderatorWallet.address;
 
     await expect(moderatorWallet.sendTransaction(populatedTx)).to.be.revertedWith(errorMessages.eventDoesNotExist);
+  });
+
+  it("Should buy tickets from single event", async () => {
+    mockedContractData.saleStartDate = DATES.EVENT_START_DATE;
+    mockedContractData.saleEndDate = DATES.EVENT_END_DATE;
+    const populatedTx1 = await createTicketCategory(
+      NFT_STORAGE_API_KEY,
+      tokenId,
+      mockedCategoryMetadata,
+      mockedContractData,
+      eventFacet,
+    );
+    populatedTx1.from = moderatorWallet.address;
+    const tx1 = await moderatorWallet.sendTransaction(populatedTx1);
+    await tx1.wait();
+
+    const categories = await fetchCategoriesByEventId(tokenId, eventFacet);
+    expect(categories.length).to.equal(1);
+
+    const categoryId = 2;
+
+    const priceData = [
+      {
+        amount: 2,
+        price: 10,
+      },
+    ];
+
+    const place = [
+      {
+        row: 1,
+        seat: 1,
+      },
+      {
+        row: 1,
+        seat: 2,
+      },
+    ];
+
+    mockedTicketMetadata.image = imageBlob;
+
+    const ticketsMetadata = [mockedTicketMetadata, mockedTicketMetadata];
+
+    const populatedTx = await buyTicketsFromSingleEvent(
+      NFT_STORAGE_API_KEY,
+      tokenId,
+      categoryId,
+      priceData,
+      place,
+      ticketsMetadata,
+      eventFacet,
+    );
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
+    await tx.wait();
   });
 
   it("Should listen for new Events", async () => {

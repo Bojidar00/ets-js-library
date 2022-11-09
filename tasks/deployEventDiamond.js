@@ -65,7 +65,7 @@ export async function deployEventDiamond() {
   await eventFacet.deployed();
 
   const ticketFacet = await ethers.getContractAt(ticketFacetSchema.abi, ticketDiamondAddress);
-  const ticketTx = await ticketFacet.setEventFacetAddress(eventFacet.address);
+  const ticketTx = await ticketFacet.setEventDiamondAddress(eventDiamond.address);
   await ticketTx.wait();
 
   const funcSels = getSelectors(eventFacet);
