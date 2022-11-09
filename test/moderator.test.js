@@ -19,6 +19,8 @@ import {
   addTeamMember,
   removeEvent,
   buyTicketsFromSingleEvent,
+  getAddressTicketIdsByEvent,
+  addRefundDeadline,
 } from "../src/index.js";
 import {
   NFT_STORAGE_API_KEY,
@@ -406,7 +408,7 @@ describe("Moderator tests", function () {
     const priceData = [
       {
         amount: 2,
-        price: 10,
+        price: 500000,
       },
     ];
 
@@ -437,6 +439,21 @@ describe("Moderator tests", function () {
     populatedTx.from = moderatorWallet.address;
     const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
+
+    const tickets = await getAddressTicketIdsByEvent(tokenId, moderatorWallet.address, eventFacet);
+    expect(tickets.length).to.equal(place.length);
+  });
+
+  it("Should add refund date", async () => {
+    const refundData = { date: DATES.EVENT_END_DATE, percentage: 100 };
+
+    const populatedTx = await addRefundDeadline(tokenId, refundData, eventFacet);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    const event = await eventFacet.fetchEventById(tokenId);
+    expect(event.refundData.length).to.equal(1);
   });
 
   it("Should listen for new Events", async () => {

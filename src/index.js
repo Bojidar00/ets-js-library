@@ -431,9 +431,9 @@ function calculateTotalValue(priceData) {
   return value;
 }
 
-export async function addRefundDeadlines(eventId, refundData, contract = eventsContract) {
+export async function addRefundDeadline(eventId, refundData, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.addRefundDeadlines(eventId, refundData);
+    const tx = await contract.populateTransaction.addRefundDeadline(eventId, refundData);
     return tx;
   } catch (error) {
     throw error;

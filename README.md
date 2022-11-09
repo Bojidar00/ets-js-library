@@ -842,7 +842,7 @@ const transaction = await buyTicketsFromSingleEvent(key, eventId, categoryId, pr
 3. Sign and send the transaction anyway you like.
 
 ```js
-import { addRefundDeadlines } from "ets-js-library";
+import { addRefundDeadline } from "ets-js-library";
 
 const eventId = "id of event";
 
@@ -851,7 +851,7 @@ const refundData = [
   { date: "timestamp", percentage: "percentage to return" },
 ];
 
-const transaction = await addRefundDeadlines(eventId, refundData);
+const transaction = await addRefundDeadline(eventId, refundData);
 //You need to sign and send the transaction after this.
 ```
 
@@ -864,9 +864,9 @@ const transaction = await addRefundDeadlines(eventId, refundData);
 ```js
 import { returnTicket } from "ets-js-library";
 
-const ticketParams = {eventId: 1, categoryId: 1 , ticketId: 1};
+const ticketParams = { eventId: 1, categoryId: 1, ticketId: 1 };
 
-const transaction = await refundTicket(ticketParams);
+const transaction = await returnTicket(ticketParams);
 //You need to sign and send the transaction after this.
 ```
 
@@ -893,7 +893,7 @@ const transaction = await withdrawRefund(eventId, ticketId);
 1. Import withdrawContractBalance function from the library.
 2. Execute withdrawContractBalance function.
 3. Sign and send the transaction anyway you like.
-*The maximum withdraw amount is the amount which can't be refunded from users.
+   \*The maximum withdraw amount is the amount which can't be refunded from users.
 
 ```js
 import { withdrawContractBalance } from "ets-js-library";
