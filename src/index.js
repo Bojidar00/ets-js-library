@@ -440,27 +440,36 @@ export async function addRefundDeadlines(eventId, refundData, contract = eventsC
   }
 }
 
-export async function refundTicket(eventId, categoryId, ticketId, account, contract = eventsContract) {
+export async function returnTicket(ticketParams, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.refundTicket(eventId, categoryId, ticketId, account);
+    const tx = await contract.populateTransaction.returnTicket(ticketParams);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function withdrawRefund(eventId, categoryId, ticketId, contract = eventsContract) {
+export async function withdrawRefund(eventId, ticketId, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.withdrawRefund(eventId, categoryId, ticketId);
+    const tx = await contract.populateTransaction.withdrawRefund(eventId, ticketId);
     return tx;
   } catch (error) {
     throw error;
   }
 }
 
-export async function clipTicket(eventId, categoryId, ticketId, contract = eventsContract) {
+export async function withdrawContractBalance(eventId, contract = eventsContract) {
   try {
-    const tx = await contract.populateTransaction.clipTicket(eventId, categoryId, ticketId);
+    const tx = await contract.populateTransaction.withdrawContractBalance(eventId);
+    return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function clipTicket(eventId, ticketId, contract = eventsContract) {
+  try {
+    const tx = await contract.populateTransaction.clipTicket(eventId, ticketId);
     return tx;
   } catch (error) {
     throw error;
@@ -470,15 +479,14 @@ export async function clipTicket(eventId, categoryId, ticketId, contract = event
 export async function bookTickets(
   nftStorageApiKey,
   eventId,
-  categoryId,
-  accounts,
+  categoryData,
   place,
   ticketsMetadata,
   contract = eventsContract,
 ) {
   try {
     const ticketUris = await uploadArrayToIpfs(nftStorageApiKey, ticketsMetadata);
-    const tx = await contract.populateTransaction.bookTickets(eventId, categoryId, accounts, place, ticketUris);
+    const tx = await contract.populateTransaction.bookTickets(eventId, categoryData, place, ticketUris);
     return tx;
   } catch (error) {
     throw error;
@@ -489,6 +497,23 @@ export async function sendInvitation(eventId, ticketIds, accounts, contract = ev
   try {
     const tx = await contract.populateTransaction.sendInvitation(eventId, ticketIds, accounts);
     return tx;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getAddressTicketIdsByEvent(eventId, address, contract = eventsContract) {
+  let signer;
+  if (contract.provider._network.chainId === 1337) {
+    // buddy ignore:line
+    signer = address;
+  } else {
+    signer = new ethers.VoidSigner(address, provider);
+  }
+
+  try {
+    const tickets = await contract.connect(signer).getAddressTicketIdsByEvent(eventId);
+    return tickets;
   } catch (error) {
     throw error;
   }

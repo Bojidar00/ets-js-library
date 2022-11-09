@@ -855,21 +855,18 @@ const transaction = await addRefundDeadlines(eventId, refundData);
 //You need to sign and send the transaction after this.
 ```
 
-### Refund ticket (Admin or Moderator)
+### Return ticket (Admin or Moderator)
 
-1. Import refundTicket function from the library.
-2. Execute refundTicket function.
+1. Import returnTicket function from the library.
+2. Execute returnTicket function.
 3. Sign and send the transaction anyway you like.
 
 ```js
-import { refundTicket } from "ets-js-library";
+import { returnTicket } from "ets-js-library";
 
-const eventId = "id of event";
-const categoryId = "id of category";
-const ticketId = "id of ticket";
-const account = "Address which will receive the tokens";
+const ticketParams = {eventId: 1, categoryId: 1 , ticketId: 1};
 
-const transaction = await refundTicket(eventId, categoryId, ticketId, account);
+const transaction = await refundTicket(ticketParams);
 //You need to sign and send the transaction after this.
 ```
 
@@ -885,10 +882,25 @@ This function does not send the tokens immediately to the account, but saves the
 import { withdrawRefund } from "ets-js-library";
 
 const eventId = "id of event";
-const categoryId = "id of category";
 const ticketId = "id of ticket";
 
-const transaction = await withdrawRefund(eventId, categoryId, ticketId);
+const transaction = await withdrawRefund(eventId, ticketId);
+//You need to sign and send the transaction after this.
+```
+
+### withdraw the balance of event (Cashier)
+
+1. Import withdrawContractBalance function from the library.
+2. Execute withdrawContractBalance function.
+3. Sign and send the transaction anyway you like.
+*The maximum withdraw amount is the amount which can't be refunded from users.
+
+```js
+import { withdrawContractBalance } from "ets-js-library";
+
+const eventId = "id of event";
+
+const transaction = await withdrawContractBalance(eventId);
 //You need to sign and send the transaction after this.
 ```
 
@@ -902,10 +914,9 @@ const transaction = await withdrawRefund(eventId, categoryId, ticketId);
 import { clipTicket } from "ets-js-library";
 
 const eventId = "id of event";
-const categoryId = "id of category";
 const ticketId = "id of ticket";
 
-const transaction = await clipTicket(eventId, categoryId, ticketId);
+const transaction = await clipTicket(eventId, ticketId);
 //You need to sign and send the transaction after this.
 ```
 
@@ -919,9 +930,18 @@ const transaction = await clipTicket(eventId, categoryId, ticketId);
 import { bookTickets } from "ets-js-library";
 
 const eventId = "id of event";
-const categoryId = "id of category";
-const accounts = ["0x...", "0x..."];
 const key = "API key for NFT.storage";
+
+const categoryData = [
+  {
+   categoryId: 1,
+   ticketAmount: 1
+  },
+  {
+   categoryId: 2,
+   ticketAmount: 1
+  }
+];
 
 const place = [
   {
@@ -946,7 +966,7 @@ const ticketsMetadata = [{
 ...
 ];
 
-const transaction = await bookTickets(key, eventId, categoryId, accounts, place, ticketsMetadata);
+const transaction = await bookTickets(key, eventId, categoryData, place, ticketsMetadata);
 //You need to sign and send the transaction after this.
 ```
 
@@ -965,6 +985,20 @@ const accounts = ["0x...", "0x..."];
 
 const transaction = await sendInvitation(eventId, ticketIds, accounts);
 //You need to sign and send the transaction after this.
+```
+
+### Get tickets of address for event (Admin or Moderator)
+
+1. Import getAddressTicketIdsByEvent function from the library.
+2. Execute getAddressTicketIdsByEvent function.
+
+```js
+import { getAddressTicketIdsByEvent } from "ets-js-library";
+
+const eventId = "id of event";
+const address = "0x...";
+
+const tickets = await sendInvitation(eventId, address);
 ```
 
 ## Tests
