@@ -21,6 +21,7 @@ import {
   buyTicketsFromSingleEvent,
   getAddressTicketIdsByEvent,
   addRefundDeadline,
+  clipTicket,
 } from "../src/index.js";
 import {
   NFT_STORAGE_API_KEY,
@@ -454,6 +455,18 @@ describe("Moderator tests", function () {
 
     const event = await eventFacet.fetchEventById(tokenId);
     expect(event.refundData.length).to.equal(1);
+  });
+
+  it("Should clip ticket only once", async () => {
+    const populatedTx = await clipTicket(tokenId, 1, eventFacet);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    const populatedTx2 = await clipTicket(tokenId, 1, eventFacet);
+    populatedTx2.from = moderatorWallet.address;
+
+    await expect(moderatorWallet.sendTransaction(populatedTx2)).to.be.revertedWith(errorMessages.callReverted);
   });
 
   it("Should listen for new Events", async () => {

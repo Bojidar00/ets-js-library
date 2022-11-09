@@ -101,6 +101,7 @@ const errorMessages = {
   categoryStartDateIsIncorrect: "Event: Category start date is incorrect",
   categoryEndDateIsIncorrect: "Event: Category end date is incorrect",
   categoryDoesNotExist: "Event: Category does not exist",
+  callReverted: "Event: Contract call reverted",
 };
 
 const DATES = {
