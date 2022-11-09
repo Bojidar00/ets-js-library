@@ -69,6 +69,7 @@ async function fetchSingleEventMetadata(eventId, contract = eventsContract) {
     eventMetadata.data.cid = eventUri;
     Object.assign(eventMetadata.data, contractData);
 
+
     return eventMetadata.data;
   } catch (error) {
     throw error;
