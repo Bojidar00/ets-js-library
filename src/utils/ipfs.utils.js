@@ -67,6 +67,8 @@ async function fetchSingleEventMetadata(eventId, contract = eventsContract) {
 
     eventMetadata.data.eventId = eventId;
     eventMetadata.data.cid = eventUri;
+    eventMetadata.data.startTime = contractData.startTime;
+    eventMetadata.data.endTime = contractData.endTime;
     Object.assign(eventMetadata, contractData);
 
     return eventMetadata;
