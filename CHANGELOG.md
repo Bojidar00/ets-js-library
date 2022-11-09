@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.1] - 2022-11-9
+
+### Added
+
+- Start and end time for event from smart contract in single event metadata function
+
 ## [0.14.0] - 2022-11-7
 
 ### Added

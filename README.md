@@ -963,9 +963,6 @@ const eventId = "id of event";
 const ticketIds = [1, 2, 3];
 const accounts = ["0x...", "0x..."];
 
-
-
-
 const transaction = await sendInvitation(eventId, ticketIds, accounts);
 //You need to sign and send the transaction after this.
 ```
