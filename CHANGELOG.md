@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.2] - 2022-11-9
+
+### Added
+
+- Function for fetching ticket id's owner
+
 ## [0.14.1] - 2022-11-9
 
 ### Added
