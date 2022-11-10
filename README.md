@@ -998,7 +998,7 @@ import { getAddressTicketIdsByEvent } from "ets-js-library";
 const eventId = "id of event";
 const address = "0x...";
 
-const tickets = await sendInvitation(eventId, address);
+const tickets = await getAddressTicketIdsByEvent(eventId, address);
 ```
 
 ## Tests
