@@ -1,4 +1,5 @@
-import schema from "#contract.config/EventFacet.json" assert { type: "json" };
+import eventSchema from "#contract.config/EventFacet.json" assert { type: "json" };
+import schemaTickets from "#contract.config/EventTicketControllerFacet.json" assert { type: "json" };
 import ticketFacetSchema from "#contract.config/TicketFacet.json" assert { type: "json" };
 import {
   EVENTS_CONTRACT_ADDRESS,
@@ -9,7 +10,7 @@ import {
   NET_LABEL,
 } from "#contract.config/constants.cjs";
 
-const ABI = schema.abi;
+const ABI = eventSchema.abi.concat(schemaTickets.abi);
 const TICKET_FACET_ABI = ticketFacetSchema.abi;
 const IPFS_GATEWAY_PROVIDER_URL = "https://nftstorage.link/ipfs/";
 const ETS_SERVER_URL = "http://127.0.0.1:1337";

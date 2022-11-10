@@ -70,9 +70,11 @@ const mockedCategoryMetadata = {
   },
 };
 
+const date = Math.floor(Date.now() / 1000); // buddy ignore:line
+
 const mockedContractData = {
-  saleStartDate: 1666601372, // unix timestamp
-  saleEndDate: 1666601572, // unix timestamp
+  saleStartDate: date, // unix timestamp
+  saleEndDate: date + 3000000, // buddy ignore:line
   ticketsCount: 50,
   ticketPrice: 10,
   discountsTicketsCount: [10, 5], // buddy ignore:line
@@ -83,19 +85,30 @@ const mockedContractData = {
   },
 };
 
+const mockedTicketMetadata = {
+  name: "ticket",
+  description: "ticket for event",
+  image: "null",
+  properties: {
+    note: "Note from buyer",
+    returnReason: "",
+  },
+};
+
 const errorMessages = {
   eventDoesNotExist: "Event: Event does not exist",
   callerIsNotAdmin: "Event: Caller is not an admin",
   categoryStartDateIsIncorrect: "Event: Category start date is incorrect",
   categoryEndDateIsIncorrect: "Event: Category end date is incorrect",
   categoryDoesNotExist: "Event: Category does not exist",
+  callReverted: "Event: Contract call reverted",
 };
 
 const DATES = {
-  EARLY_SALE_START_DATE: 1666601370,
-  LATE_SALE_END_DATE: 1666666666,
-  EVENT_START_DATE: 1666601372,
-  EVENT_END_DATE: 1666601572,
+  EARLY_SALE_START_DATE: date - 1000, // buddy ignore:line
+  LATE_SALE_END_DATE: date + 5000001, // buddy ignore:line
+  EVENT_START_DATE: date,
+  EVENT_END_DATE: date + 5000000, // buddy ignore:line
 };
 
 export {
@@ -106,6 +119,7 @@ export {
   mockedEventParams,
   mockedCategoryMetadata,
   mockedContractData,
+  mockedTicketMetadata,
   errorMessages,
   DATES,
 };
