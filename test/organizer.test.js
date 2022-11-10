@@ -127,7 +127,7 @@ describe("Organizer tests", function () {
   });
 
   it("Should call fetchOwnedEvents from smart contract", async () => {
-    const events = await fetchOwnedEvents(wallet, eventFacet);
+    const events = await fetchOwnedEvents(wallet.address, eventFacet);
     expect(events.length).to.equal(tokenId);
   });
 
