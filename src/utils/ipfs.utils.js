@@ -47,7 +47,7 @@ async function fetchEventsMetadata(eventIds, contract = eventsContract) {
     try {
       const eventMetadata = await fetchSingleEventMetadata(eventId, contract);
 
-      eventsMetadata.push(eventMetadata.data);
+      eventsMetadata.push(eventMetadata);
     } catch (error) {
       throw error;
     }
