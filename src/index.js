@@ -12,7 +12,7 @@ import {
   makeGatewayUrl,
 } from "#ipfs.utils";
 import { ETS_SERVER_URL, NET_RPC_URL, NET_RPC_URL_ID, TOKEN_NAME, NET_LABEL } from "#config";
-import { provider, eventsContract, ticketsContract } from "#contract";
+import { eventsContract, ticketsContract } from "#contract";
 
 export async function createEvent(nftStorageApiKey, metadata, contractData, contract = eventsContract) {
   try {
@@ -57,13 +57,7 @@ export async function fetchContractEvents(contract = eventsContract) {
 }
 
 export async function fetchOwnedEvents(address, contract = eventsContract) {
-  let signer;
-  if (contract.provider._network.chainId === 1337) {
-    // buddy ignore:line
-    signer = address;
-  } else {
-    signer = new ethers.VoidSigner(address, provider);
-  }
+  const signer = new ethers.VoidSigner(address, contract.provider);
 
   const eventIds = await contract.connect(signer).fetchOwnedEvents();
   const events = await fetchEvents(eventIds, contract);
@@ -503,15 +497,8 @@ export async function sendInvitation(eventId, ticketIds, accounts, contract = ev
 }
 
 export async function getAddressTicketIdsByEvent(eventId, address, contract = eventsContract) {
-  let signer;
-  if (contract.provider._network.chainId === 1337) {
-    // buddy ignore:line
-    signer = address;
-  } else {
-    signer = new ethers.VoidSigner(address, provider);
-  }
-
   try {
+    const signer = new ethers.VoidSigner(address, contract.provider);
     const tickets = await contract.connect(signer).getAddressTicketIdsByEvent(eventId);
     return tickets;
   } catch (error) {
