@@ -418,66 +418,66 @@ const eventIds = [1, 2, 3];
 
 ### Listen for new events (Everyone)
 
-1. Import listenForNewEvent function from the library.
+1. Import listeners from the library.
 2. Create a callback function.
-3. Supply callback function to listenForNewEvent as parameter.
+3. Supply callback function to listeners.listenForNewEvent as parameter.
 
 ```js
-import { listenForNewEvent } from "ets-js-library";
+import { listeners } from "ets-js-library";
 
 function callback(data, membersData) {
   //This function will be called when the event is emitted.
 }
 
-listenForNewEvent(callback);
+listeners.listenForNewEvent(callback);
 ```
 
 ### Listen for event update (Everyone)
 
-1. Import listenForEventUpdate function from the library.
+1. Import listeners from the library.
 2. Create a callback function.
-3. Supply callback function to listenForEventUpdate as parameter.
+3. Supply callback function to listeners.listenForEventUpdate as parameter.
 
 ```js
-import { listenForEventUpdate } from "ets-js-library";
+import { listeners } from "ets-js-library";
 
 function callback(data) {
   //This function will be called when the event is emitted.
 }
 
-listenForEventUpdate(callback);
+listeners.listenForEventUpdate(callback);
 ```
 
 ### Listen for Role Granted (Everyone)
 
-1. Import listenForRoleGrant function from the library.
+1. Import listeners from the library.
 2. Create a callback function.
-3. Supply callback function to listenForRoleGrant as parameter.
+3. Supply callback function to listeners.listenForRoleGrant as parameter.
 
 ```js
-import { listenForRoleGrant } from "ets-js-library";
+import { listeners } from "ets-js-library";
 
 function callback(data) {
   //This function will be called when the event is emitted.
 }
 
-listenForRoleGrant(callback);
+listeners.listenForRoleGrant(callback);
 ```
 
 ### Listen for Role Revoked (Everyone)
 
-1. Import listenForRoleRevoke function from the library.
+1. Import listeners from the library.
 2. Create a callback function.
-3. Supply callback function to listenForRoleRevoke as parameter.
+3. Supply callback function to listeners.listenForRoleRevoke as parameter.
 
 ```js
-import { listenForRoleRevoke } from "ets-js-library";
+import { listeners } from "ets-js-library";
 
 function callback(data) {
   //This function will be called when the event is emitted.
 }
 
-listenForRoleRevoke(callback);
+listeners.listenForRoleRevoke(callback);
 ```
 
 ### Set event cashier (Admin)
@@ -999,6 +999,86 @@ const eventId = "id of event";
 const address = "0x...";
 
 const tickets = await getAddressTicketIdsByEvent(eventId, address);
+```
+
+### Listen for Bought ticket (Everyone)
+
+1. Import listeners from the library.
+2. Create a callback function.
+3. Supply callback function to listeners.listenForBoughtTicket as parameter.
+
+```js
+import { listeners } from "ets-js-library";
+
+function callback(data) {
+  //This function will be called when the event is emitted.
+}
+
+listeners.listenForBoughtTicket(callback);
+```
+
+### Listen for Refunded ticket (Everyone)
+
+1. Import listeners from the library.
+2. Create a callback function.
+3. Supply callback function to listeners.listenForRefundedTicket as parameter.
+
+```js
+import { listeners } from "ets-js-library";
+
+function callback(data) {
+  //This function will be called when the event is emitted.
+}
+
+listeners.listenForRefundedTicket(callback);
+```
+
+### Listen for Locked ticket (Everyone)
+
+1. Import listeners from the library.
+2. Create a callback function.
+3. Supply callback function to listeners.listenForLockedTicked as parameter.
+
+```js
+import { listeners } from "ets-js-library";
+
+function callback(data) {
+  //This function will be called when the event is emitted.
+}
+
+listeners.listenForLockedTicked(callback);
+```
+
+### Listen for Unlocked ticket (Everyone)
+
+1. Import listeners from the library.
+2. Create a callback function.
+3. Supply callback function to listeners.listenForUnlockedTicket as parameter.
+
+```js
+import { listeners } from "ets-js-library";
+
+function callback(data) {
+  //This function will be called when the event is emitted.
+}
+
+listeners.listenForUnlockedTicket(callback);
+```
+
+### Listen for Ticket transfer (Everyone)
+
+1. Import listeners from the library.
+2. Create a callback function.
+3. Supply callback function to listeners.listenForTicketTransfer as parameter.
+
+```js
+import { listeners } from "ets-js-library";
+
+function callback(data) {
+  //This function will be called when the event is emitted.
+}
+
+listeners.listenForTicketTransfer(callback);
 ```
 
 ## Tests
