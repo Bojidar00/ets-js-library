@@ -28,7 +28,7 @@ npm i ets-js-library
 
 ## Listeners docs
 
-Check listeners docs:[docs/listeners.md](https://github.com/Applied-Blockchain-Lab/ets-js-library/docs/listeners.ms)
+Check listeners docs:[docs/listeners.md](https://github.com/Applied-Blockchain-Lab/ets-js-library/blob/main/docs/listeners.md)
 
 ## Available functionalities in format _Action name (who has the right)_
 
@@ -271,7 +271,8 @@ const params = {
     offset: "",
     limit: "",
   },
-  organizer: "",
+  user: "",
+  tickets: "",
 };
 
 //This parameter is optional
