@@ -454,12 +454,12 @@ describe("Moderator tests", function () {
       {
         row: 1,
         seat: 3,
-        address: EXAMPLE_ADDRESS,
+        account: EXAMPLE_ADDRESS,
       },
       {
         row: 1,
         seat: 4,
-        address: EXAMPLE_ADDRESS,
+        account: EXAMPLE_ADDRESS,
       },
     ];
     mockedTicketMetadata.image = imageBlob;
