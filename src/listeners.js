@@ -57,7 +57,7 @@ function listenForRole(contractEventName, contract, callback) {
 export function listenForBoughtTicket(callback, contract = ticketControllerContract) {
   contract.on("TicketBought", async (ticketId, account) => {
     const data = {
-      ticketId,
+      ticketContractId: ticketId,
       account,
     };
 
@@ -70,7 +70,7 @@ export function listenForRefundedTicket(callback, contract = ticketControllerCon
     const data = {
       eventId,
       categoryId,
-      ticketId,
+      ticketContractId: ticketId,
       account,
     };
 
@@ -81,7 +81,7 @@ export function listenForRefundedTicket(callback, contract = ticketControllerCon
 export function listenForLockedTicked(callback, contract = ticketsContract) {
   contract.on("Locked", async (tokenId) => {
     const data = {
-      tokenId,
+      ticketContractId: tokenId,
     };
 
     await callback(data);
@@ -91,7 +91,7 @@ export function listenForLockedTicked(callback, contract = ticketsContract) {
 export function listenForUnlockedTicket(callback, contract = ticketsContract) {
   contract.on("Unlocked", async (tokenId) => {
     const data = {
-      tokenId,
+      ticketContractId: tokenId,
     };
 
     await callback(data);
@@ -103,7 +103,7 @@ export function listenForTicketTransfer(callback, contract = ticketsContract) {
     const data = {
       from,
       to,
-      tokenId,
+      ticketContractId: tokenId,
     };
 
     await callback(data);
