@@ -19,6 +19,7 @@ import {
   getAddressTicketIdsByEvent,
   addRefundDeadline,
   clipTicket,
+  bookTickets,
 } from "../src/index.js";
 import {
   NFT_STORAGE_API_KEY,
@@ -400,9 +401,6 @@ describe("Moderator tests", function () {
     const tx1 = await moderatorWallet.sendTransaction(populatedTx1);
     await tx1.wait();
 
-    const categories = await fetchCategoriesByEventId(tokenId, eventFacet);
-    expect(categories.length).to.equal(1);
-
     const categoryId = 2;
 
     const priceData = [
@@ -442,6 +440,43 @@ describe("Moderator tests", function () {
 
     const tickets = await getAddressTicketIdsByEvent(tokenId, moderatorWallet.address, ticketControllerFacet);
     expect(tickets.length).to.equal(place.length);
+  });
+
+  it("Should book tickets", async () => {
+    const categoryData = [
+      {
+        categoryId: 1,
+        ticketAmount: 2,
+      },
+    ];
+
+    const place = [
+      {
+        row: 1,
+        seat: 3,
+      },
+      {
+        row: 1,
+        seat: 4,
+      },
+    ];
+    mockedTicketMetadata.image = imageBlob;
+    const ticketsMetadata = [mockedTicketMetadata, mockedTicketMetadata];
+
+    const populatedTx = await bookTickets(
+      NFT_STORAGE_API_KEY,
+      tokenId,
+      categoryData,
+      place,
+      ticketsMetadata,
+      ticketControllerFacet,
+    );
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    const tickets = await getAddressTicketIdsByEvent(tokenId, ticketControllerFacet.address, ticketControllerFacet);
+    expect(tickets.length).to.equal(ticketsMetadata.length);
   });
 
   it("Should add refund date", async () => {
