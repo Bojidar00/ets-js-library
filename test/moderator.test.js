@@ -473,7 +473,7 @@ describe("Moderator tests", function () {
       {
         row: 1,
         seat: 4,
-        account: 0x0,
+        account: `0x${"0".repeat(addressLength)}`,
       },
     ];
     mockedTicketMetadata.image = imageBlob;
