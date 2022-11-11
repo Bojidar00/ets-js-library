@@ -20,6 +20,7 @@ import {
   addRefundDeadline,
   clipTicket,
   bookTickets,
+  sendInvitation,
 } from "../src/index.js";
 import {
   NFT_STORAGE_API_KEY,
@@ -442,46 +443,6 @@ describe("Moderator tests", function () {
     expect(tickets.length).to.equal(place.length);
   });
 
-  it("Should book tickets", async () => {
-    const categoryData = [
-      {
-        categoryId: 2,
-        ticketAmount: 2,
-      },
-    ];
-
-   const place = [
-      {
-        row: 1,
-        seat: 3,
-        account: EXAMPLE_ADDRESS,
-      },
-      {
-        row: 1,
-        seat: 4,
-        account: EXAMPLE_ADDRESS,
-      },
-    ];
-    mockedTicketMetadata.image = imageBlob;
-    const ticketsMetadata = [mockedTicketMetadata, mockedTicketMetadata];
-
-    const populatedTx = await bookTickets(
-      NFT_STORAGE_API_KEY,
-      tokenId,
-      categoryData,
-      place,
-      ticketsMetadata,
-      ticketControllerFacet,
-    );
-    populatedTx.from = moderatorWallet.address;
-    const tx = await moderatorWallet.sendTransaction(populatedTx);
-    await tx.wait();
-/*
-    const tickets = await getAddressTicketIdsByEvent(tokenId, ticketControllerFacet.address, ticketControllerFacet);
-    expect(tickets.length).to.equal(ticketsMetadata.length);
-    */
-  });
-
   it("Should add refund date", async () => {
     const refundData = { date: DATES.EVENT_END_DATE, percentage: 100 };
 
@@ -493,6 +454,51 @@ describe("Moderator tests", function () {
     const event = await eventFacet.fetchEventById(tokenId);
     expect(event.refundData.length).to.equal(1);
   });
+
+  it("Should book tickets", async () => {
+    
+    const categoryData = [
+      {
+       categoryId: 2,
+       ticketAmount: 2
+      },
+    ];
+    
+    const place = [
+      {
+        row: 1,
+        seat: 3,
+        account: EXAMPLE_ADDRESS,
+      },
+      {
+        row: 1,
+        seat: 4,
+        account: 0x0,
+      },
+    ];
+    mockedTicketMetadata.image = imageBlob;
+    const ticketsMetadata = [mockedTicketMetadata, mockedTicketMetadata];
+    
+    const populatedTx = await bookTickets(NFT_STORAGE_API_KEY, tokenId, categoryData, place, ticketsMetadata, ticketControllerFacet);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
+    await tx.wait();
+
+    const tickets = await getAddressTicketIdsByEvent(tokenId, ticketControllerFacet.address, ticketControllerFacet);
+    expect(tickets.length).to.equal(1);
+  });
+
+  it("Should send invitation", async () => {
+const ticketIds = [3];
+const accounts = [EXAMPLE_ADDRESS];
+
+const populatedTx = await sendInvitation(tokenId, ticketIds, accounts);
+const tx = await moderatorWallet.sendTransaction(populatedTx);
+await tx.wait();
+
+const tickets = await getAddressTicketIdsByEvent(tokenId, EXAMPLE_ADDRESS, ticketControllerFacet);
+  expect(tickets.length).to.equal(2);
+   });
 
   it("Should clip ticket only once", async () => {
     const populatedTx = await clipTicket(tokenId, 1, ticketControllerFacet);
