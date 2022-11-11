@@ -25,7 +25,9 @@ Install:
 ```bash
 npm i ets-js-library
 ```
+
 ## Listeners docs
+
 Check listeners docs:[docs/listeners.md](https://github.com/Applied-Blockchain-Lab/ets-js-library/docs/listeners.ms)
 
 ## Available functionalities in format _Action name (who has the right)_
@@ -938,7 +940,6 @@ const address = "0x...";
 
 const tickets = await getAddressTicketIdsByEvent(eventId, address);
 ```
-
 
 ## Tests
 
