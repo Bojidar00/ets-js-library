@@ -473,7 +473,7 @@ describe("Moderator tests", function () {
       {
         row: 1,
         seat: 4,
-        account: "0x0000000000000000000000000000000000000000",
+        account: 0x0,
       },
     ];
     mockedTicketMetadata.image = imageBlob;
@@ -489,6 +489,8 @@ describe("Moderator tests", function () {
   });
 
   it("Should send invitation", async () => {
+    const ticketsBefore = await getAddressTicketIdsByEvent(tokenId, EXAMPLE_ADDRESS, ticketControllerFacet);
+    console.log(ticketsBefore);
 const ticketIds = [3];
 const accounts = [EXAMPLE_ADDRESS];
 
