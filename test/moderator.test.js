@@ -450,14 +450,16 @@ describe("Moderator tests", function () {
       },
     ];
 
-    const place = [
+   const place = [
       {
         row: 1,
         seat: 3,
+        address: EXAMPLE_ADDRESS,
       },
       {
         row: 1,
         seat: 4,
+        address: EXAMPLE_ADDRESS,
       },
     ];
     mockedTicketMetadata.image = imageBlob;
