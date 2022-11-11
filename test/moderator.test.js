@@ -473,7 +473,7 @@ describe("Moderator tests", function () {
       {
         row: 1,
         seat: 4,
-        account: 0x0,
+        account: "0x0000000000000000000000000000000000000000",
       },
     ];
     mockedTicketMetadata.image = imageBlob;
