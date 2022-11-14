@@ -528,7 +528,7 @@ describe("Moderator tests", function () {
       },
     ];
     mockedTicketMetadata.image = imageBlob;
-    const ticketsMetadata = [mockedTicketMetadata];
+    const ticketsMetadata = [mockedTicketMetadata, mockedTicketMetadata, mockedTicketMetadata];
 
     const populatedTx = await bookTickets(
       NFT_STORAGE_API_KEY,
