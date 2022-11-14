@@ -456,14 +456,13 @@ describe("Moderator tests", function () {
   });
 
   it("Should book tickets", async () => {
-    
     const categoryData = [
       {
-       categoryId: 2,
-       ticketAmount: 2
+        categoryId: 2,
+        ticketAmount: 2,
       },
     ];
-    
+
     const place = [
       {
         row: 1,
@@ -473,34 +472,46 @@ describe("Moderator tests", function () {
       {
         row: 1,
         seat: 4,
+        account: EXAMPLE_ADDRESS,
+      },
+      {
+        row: 1,
+        seat: 5,
         account: "0x0000000000000000000000000000000000000000",
       },
     ];
     mockedTicketMetadata.image = imageBlob;
-    const ticketsMetadata = [mockedTicketMetadata, mockedTicketMetadata];
-    
-    const populatedTx = await bookTickets(NFT_STORAGE_API_KEY, tokenId, categoryData, place, ticketsMetadata, ticketControllerFacet);
+    const ticketsMetadata = [mockedTicketMetadata, mockedTicketMetadata, mockedTicketMetadata];
+
+    const populatedTx = await bookTickets(
+      NFT_STORAGE_API_KEY,
+      tokenId,
+      categoryData,
+      place,
+      ticketsMetadata,
+      ticketControllerFacet,
+    );
+
     populatedTx.from = moderatorWallet.address;
     const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
 
     const tickets = await getAddressTicketIdsByEvent(tokenId, ticketControllerFacet.address, ticketControllerFacet);
-    expect(tickets.length).to.equal(1);
+    expect(tickets.length).to.equal(2); // buddy ignore:line
   });
 
   it("Should send invitation", async () => {
-    const ticketsBefore = await getAddressTicketIdsByEvent(tokenId, EXAMPLE_ADDRESS, ticketControllerFacet);
-    console.log(ticketsBefore);
-const ticketIds = [3];
-const accounts = [EXAMPLE_ADDRESS];
+    const ticketIds = [4]; // buddy ignore:line
+    const accounts = [EXAMPLE_ADDRESS];
 
-const populatedTx = await sendInvitation(tokenId, ticketIds, accounts);
-const tx = await moderatorWallet.sendTransaction(populatedTx);
-await tx.wait();
+    const populatedTx = await sendInvitation(tokenId, ticketIds, accounts, ticketControllerFacet);
+    populatedTx.from = moderatorWallet.address;
+    const tx = await moderatorWallet.sendTransaction(populatedTx);
+    await tx.wait();
 
-const tickets = await getAddressTicketIdsByEvent(tokenId, EXAMPLE_ADDRESS, ticketControllerFacet);
-  expect(tickets.length).to.equal(2);
-   });
+    const tickets = await getAddressTicketIdsByEvent(tokenId, EXAMPLE_ADDRESS, ticketControllerFacet);
+    expect(tickets.length).to.equal(3); // buddy ignore:line
+  });
 
   it("Should clip ticket only once", async () => {
     const populatedTx = await clipTicket(tokenId, 1, ticketControllerFacet);
