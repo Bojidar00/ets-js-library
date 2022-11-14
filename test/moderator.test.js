@@ -497,6 +497,7 @@ describe("Moderator tests", function () {
     await tx.wait();
 
     const tickets = await getAddressTicketIdsByEvent(tokenId, EXAMPLE_ADDRESS, ticketControllerFacet);
+    console.log(tickets);
     expect(tickets.length).to.equal(2); // buddy ignore:line
   });
 
