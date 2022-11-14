@@ -459,7 +459,7 @@ describe("Moderator tests", function () {
     const categoryData = [
       {
         categoryId: 2,
-        ticketAmount: 2,
+        ticketAmount: 3,
       },
     ];
 
@@ -496,7 +496,7 @@ describe("Moderator tests", function () {
     const tx = await moderatorWallet.sendTransaction(populatedTx);
     await tx.wait();
 
-    const tickets = await getAddressTicketIdsByEvent(tokenId, ticketControllerFacet.address, ticketControllerFacet);
+    const tickets = await getAddressTicketIdsByEvent(tokenId, EXAMPLE_ADDRESS, ticketControllerFacet);
     expect(tickets.length).to.equal(2); // buddy ignore:line
   });
 
